@@ -1,0 +1,10 @@
+<rx:Skin xmlns:r="http://www.imagix-interactive/2012/Rokkstar" height="28px" width="100%" xmlns:rx="http://www.imagix-interactive/2012/Rokkstar/components">
+    <r:states>
+        <rx:State name="normal"/>
+        <rx:State name="invalid"/>
+        <rx:State name="disabled"/>
+        <rx:State name="disabledAndInvalid"/>
+    </r:states>
+
+    <rx:InputBase x="0" y="0" width="100%" height="100%" id="input" class.normal="core_TextInput normal" class.invalid="core_TextInput invalid" class.disabled="core_TextInput disabled" class.disabledAndInvalid="core_TextInput disabled invalid"/>
+</rx:Skin>

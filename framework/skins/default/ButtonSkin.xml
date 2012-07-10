@@ -1,0 +1,16 @@
+<rx:Skin xmlns:r="http://www.imagix-interactive/2012/Rokkstar" width="92px" height="23px" xmlns:rx="http://www.imagix-interactive/2012/Rokkstar/components">
+    <r:states>
+        <rx:State name="up"/>
+        <rx:State name="over"/>
+        <rx:State name="down"/>
+        <rx:State name="disabled"/>
+    </r:states>
+
+    <rx:Group class.up="core_Button_Background up noSelect"  class.over="core_Button_Background noSelect over"  class.down="core_Button_Background noSelect down"  class.disabled="core_Button_Background noSelect disabled" top="0" left="0" right="0" bottom="0">
+        <r:layout>
+            <rx:HorizontalLayout verticalAlign="middle" horizontalAlign="center"/>
+        </r:layout>
+        <rx:Label class.up="core_Button_Label up noSelect"  class.over="core_Button_Label noSelect over"  class.down="core_Button_Label noSelect down"  class.disabled="core_Button_Label noSelect disabled" id="label">
+        </rx:Label>
+    </rx:Group>
+</rx:Skin>
