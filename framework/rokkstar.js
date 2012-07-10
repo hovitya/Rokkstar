@@ -1,9 +1,6 @@
 /* ROKKSTAR Framework
-    Copyright Imagix Interactive Kft. 2012 */
+ Copyright Imagix Interactive Kft. 2012 */
 "use strict";
-
-//Define global variables
-var components=[];
 
 /**
  *
@@ -25,21 +22,10 @@ Rokkstar.templates.callSuper=function(functionName){
         args.push(arguments[i]);
     }
 
-    if(this.altered==undefined){
-        //Object contains unaltered methods
-        for(var i in this){
-            if(this[i] instanceof Function && this[i].altered==undefined){
-                var func=this[i];
-                this[i]=Rokkstar.createClosure(this[i],this.absoluteSuperClass,true);
-                this[i].altered=true;
-            }
-        }
-        this.altered=true;
-    }
-    if(this.superClass[functionName]==undefined){
+    if(this.superClass.prototype[functionName]==undefined){
         throw new core.exceptions.TypeException('Requested super method missing:'+functionName);
     }
-    var ret=this.superClass[functionName].apply(this,args);
+    var ret=this.superClass.prototype[functionName].apply(this,args);
 
 
     return ret;
@@ -78,16 +64,6 @@ Rokkstar.GetRealMethods=function(object){
 }
 
 Rokkstar.createComponent=function(name){
-
-    //if(precreatedDiv==undefined){
-    //    var div=$('<div />');
-    //}else{
-    //    var div=precreatedDiv;
-    //}
-
-    //div.xComponent('init',name);
-    //div.get(0).init();
-    //return div.get(0);
     var cmp={};
     var cls=getClass(name);
     cls.apply(cmp);
@@ -149,43 +125,76 @@ function behaveAs(self,superClass){
 }
 
 /**
- * Extends the class
+ * Extends the class with the given super class
  * @param self Target object
- * @param superClass Class string
+ * @param superClass The super class name as string
+ * @param as The new class name as string
  */
 function extend(self,superClass){
-    console.log("class creation");
     if(Rokkstar.profiling.classExtension[superClass]==undefined){
         Rokkstar.profiling.classExtension[superClass]=1;
     }else{
         Rokkstar.profiling.classExtension[superClass]++;
     }
-    if(Rokkstar.classReferenceCache[superClass]==undefined){
-        var sClass={};
-        getClass(superClass).apply(sClass);
-        //Altering functions
-        if(sClass.superClass!=undefined){
-            for(var i in sClass){
+    var sClass=getClass(superClass);
 
-                if(sClass[i] instanceof Function && sClass[i].altered==undefined){
-                    var func=sClass[i];
-                    sClass[i]=Rokkstar.createClosure(sClass[i],sClass);
-                    sClass[i].altered=true;
-                }
-            }
-        }
-        Rokkstar.Extend(self,sClass);
-        Rokkstar.classReferenceCache[superClass]=sClass;
-    }else{
-        var sClass=Rokkstar.classReferenceCache[superClass];
-        Rokkstar.Extend(self,sClass);
+    if(sClass.prototype.constructed==undefined){
+        eval("new "+superClass+"('R::!!NO-CONSTRUCT!!');");
     }
-
+    Rokkstar.Extend(self,sClass.prototype);
     self.superClass=sClass;
     self.absoluteSuperClass=sClass;
     self.callSuper=Rokkstar.templates.callSuper;
     self.callSuper.altered=true;
 }
+
+/**
+ * Declare a new a class.
+ * @param {Function} structure Class structure creator function.
+ * @param {String} superClass Optional. Super class which will be extended.
+ * @param {Array} behaviours Optional. Class behaviours.
+ * @return {Function} Class declaration.
+ */
+Rokkstar.class=function(name,structure,superClass,behaviours){
+    return function(){
+        if(getClass(name).prototype.constructed==undefined){
+            var func=function(){
+                if(superClass!=undefined){
+                    extend(this,superClass);
+                }
+
+                if(behaviours!=undefined && typeof Array){
+                    for(var i in behaviours){
+                        behaveAs(this,behaviours[i]);
+                    }
+                }
+
+                //Building class structure
+                structure.apply(this);
+
+                //Altering new functions
+                for(var i in this){
+                    if(this[i] instanceof Function && this[i].altered==undefined){
+                        var func=this[i];
+                        this[i]=Rokkstar.createClosure(this[i],this);
+                        this[i].altered=true;
+                    }
+                }
+            }
+            func.apply(getClass(name).prototype);
+            getClass(name).prototype.type=name;
+            getClass(name).prototype.constructed=true;
+            func.apply(this);
+            this.type=name;
+
+
+        }
+        if(arguments.length!=1  || arguments[0]!="R::!!NO-CONSTRUCT!!"){
+            if(this.construct!=undefined){ this.construct.apply(this,arguments);}
+        }
+    }
+};
+
 
 
 Rokkstar.parseAttribute=function(val,typeForcing){
@@ -204,11 +213,11 @@ Rokkstar.parseAttribute=function(val,typeForcing){
             ret.push(val);
         }
     }else if(typeForcing=='object'){
-       if(val instanceof Object){
-          ret=val;
-       }else{
-           ret=JSON.parse(val.replace(/'/g,'"'));
-       }
+        if(val instanceof Object){
+            ret=val;
+        }else{
+            ret=JSON.parse(val.replace(/'/g,'"'));
+        }
     }else{
         ret=val;
     }
@@ -312,6 +321,7 @@ Rokkstar.init=function(){
     //Application bootstrap
     Rokkstar.parseDOM($('body').get(0));
 }
+
 
 $(function(){
     Rokkstar.init();
