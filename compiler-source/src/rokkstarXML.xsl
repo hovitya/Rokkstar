@@ -82,7 +82,7 @@
             <xsl:value-of select="."/>
         </xsl:for-each>
 
-        <xsl:text>}</xsl:text>
+        <xsl:text>};</xsl:text>
     </xsl:template>
 
     <xsl:template name="process">
