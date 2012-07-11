@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 /**
  * @augments core.SkinnableContainer
  * @borrows core.behaviours.FormItemBehaviour#_refreshLabel
@@ -8,9 +12,7 @@
  * @borrows core.behaviours.FormItemBehaviour#labelNode
  * @constructor
  */
-core.Form=function(){
-    extend(this,'core.SkinnableContainer','core.Form');
-    behaveAs(this,'core.behaviours.FormItemBehaviour');
+core.Form=Rokkstar.class('core.Form','core.SkinnableContainer',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
@@ -22,4 +24,4 @@ core.Form=function(){
         this.formItemInit();
     }
 
-}
+},['core.behaviours.FormItemBehaviour']);

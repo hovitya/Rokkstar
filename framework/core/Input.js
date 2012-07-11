@@ -1,9 +1,12 @@
-/**
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+ /**
  * @augments core.abstract.FormItem
  * @constructor
  */
-core.Input=function(){
-    extend(this,'core.abstract.FormItem','core.Input');
+core.Input=Rokkstar.class('core.Input','core.abstract.FormItem',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
@@ -15,6 +18,4 @@ core.Input=function(){
         this.setSkinClass('core.skins.InputSkin');
     }
 
-
-
-}
+});

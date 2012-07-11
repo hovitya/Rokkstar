@@ -1,13 +1,15 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 /**
  * Create base layout object.
  * @author Horváth Viktor
- * @class Base layout class.
+ * @classdef All Layout classes have to extend this class.
  * @augments core.Component
  * @constructor
  */
-core.Layout = function () {
-    extend(this, 'core.Component');
-
+core.Layout =Rokkstar.class('core.Layout','core.Component',function () {
 
     this.lastDiv = null;
     this.createAttributes=function(){
@@ -88,4 +90,4 @@ core.Layout = function () {
     }
 
 
-}
+});

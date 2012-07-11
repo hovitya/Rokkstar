@@ -9,9 +9,7 @@
  * @augments core.Component
  * @constructor
  */
-core.VisualComponent = function () {
-    extend(this, "core.Component");
-
+core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',function () {
 
     /**
      *
@@ -340,4 +338,4 @@ core.VisualComponent = function () {
         event.stopPropagation();
         $(this.domElement).css(this.getCssStyle());
     }
-}
+});

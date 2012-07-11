@@ -37,9 +37,7 @@
  * @borrows core.behaviours.SkinnableBehaviour#_changeSkin as _changeSkin
  * @constructor
  */
-core.SkinnableContainer=function(){
-    extend(this,"core.VisualContainer");
-    behaveAs(this,'core.behaviours.SkinnableBehaviour');
+core.SkinnableContainer=Rokkstar.class('core.SkinnableContainer','core.VisualContainer',function(){
 
     /**
      * @protected
@@ -180,4 +178,4 @@ core.SkinnableContainer=function(){
     }
 
 
-}
+},['core.behaviours.SkinnableBehaviour']);

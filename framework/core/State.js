@@ -2,8 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
- core.State=function(){
-    extend(this,"core.Component");
+/**
+ * @augments core.Component
+ * @constructor
+ */
+core.State=Rokkstar.class('core.State','core.Component',function(){
 
     this.createAttributes=function(){
         this.createAttribute("stateName");
@@ -22,4 +25,4 @@
             target["set"+this.properties[i].property.capitalize()].apply(target,[this.properties[i].value]);
         }
     }
-}
+});

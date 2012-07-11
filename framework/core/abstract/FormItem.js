@@ -1,3 +1,8 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
 /**
  * Abstract base class for form input elements
  * @augments core.SkinnableComponent
@@ -9,9 +14,7 @@
  * @borrows core.behaviours.FormItemBehaviour#labelNode
  * @constructor
  */
-core.abstract.FormItem=function(){
-    extend(this,'core.SkinnableComponent','core.FormItem');
-    behaveAs(this,'core.behaviours.FormItemBehaviour');
+core.abstract.FormItem=Rokkstar.class('core.abstract.FormItem','core.SkinnableComponent',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
@@ -32,4 +35,4 @@ core.abstract.FormItem=function(){
             return 'normal';
         }
     }
-}
+},['core.behaviours.FormItemBehaviour']);

@@ -1,7 +1,8 @@
-core.ConstraintLayout=function(){
-    extend(this,'core.Layout');
-
-
+/**
+ * @augments core.Layout
+ * @construct
+ */
+core.ConstraintLayout=Rokkstar.class('core.ConstraintLayout','core.Layout',function(){
     /**
      *
      * @param {core.VisualComponent} div Target component
@@ -31,4 +32,4 @@ core.ConstraintLayout=function(){
 
         }
     }
-}
+});

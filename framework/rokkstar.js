@@ -143,7 +143,9 @@ function extend(self,superClass){
     }
     Rokkstar.Extend(self,sClass.prototype);
     self.superClass=sClass;
+    self.superClass.altered=true;
     self.absoluteSuperClass=sClass;
+    self.absoluteSuperClass.altered=true;
     self.callSuper=Rokkstar.templates.callSuper;
     self.callSuper.altered=true;
 }
@@ -155,7 +157,7 @@ function extend(self,superClass){
  * @param {Array} behaviours Optional. Class behaviours.
  * @return {Function} Class declaration.
  */
-Rokkstar.class=function(name,structure,superClass,behaviours){
+Rokkstar.class=function(name,superClass,structure,behaviours){
     return function(){
         if(getClass(name).prototype.constructed==undefined){
             var func=function(){
@@ -176,7 +178,10 @@ Rokkstar.class=function(name,structure,superClass,behaviours){
                 for(var i in this){
                     if(this[i] instanceof Function && this[i].altered==undefined){
                         var func=this[i];
-                        this[i]=Rokkstar.createClosure(this[i],this);
+                        if(superClass!=undefined){
+                            this[i]=Rokkstar.createClosure(this[i],getClass(superClass));
+                        }
+
                         this[i].altered=true;
                     }
                 }
@@ -255,7 +260,6 @@ String.prototype.uncapitalize = function() {
                 if(cls==undefined) console.log("Fatal error: Class missing "+className);
                 eval(className+".apply(this);");
 
-                components.push(this);
 
             });
             return this.get(0);

@@ -9,8 +9,8 @@
  * @augments core.EventDispatcher
  * @constructor
  */
-core.Component=function(){
-    extend(this,"core.EventDispatcher");
+core.Component=Rokkstar.class('core.Component','core.EventDispatcher',function(){
+
     /**
      * Get XML attribute
      * @description
@@ -225,4 +225,4 @@ core.Component=function(){
 
 
 
-}
+});

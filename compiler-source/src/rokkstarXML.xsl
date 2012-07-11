@@ -16,8 +16,7 @@
              match="*[namespace::*[not(. = ../../namespace::*)]]"
              use="namespace::*[not(. = ../../namespace::*)]"/>
     <xsl:template match="/">
-        <xsl:text>{{instance_name}}=function(){
-            extend(this,'</xsl:text>
+        <xsl:text>{{instance_name}}=Rokkstar.class('{{instance_name}}','</xsl:text>
         <xsl:for-each select="/*">
             <xsl:choose>
                 <xsl:when test="namespace-uri(.)=$rxNS">
@@ -32,7 +31,7 @@
             </xsl:choose>
             <xsl:text>.</xsl:text>
             <xsl:value-of select="local-name()"/>
-        </xsl:for-each><xsl:text>','{{instance_name}}');</xsl:text>
+        </xsl:for-each><xsl:text>',function(){</xsl:text>
 
 
         <!-- defining states -->
@@ -82,7 +81,7 @@
             <xsl:value-of select="."/>
         </xsl:for-each>
 
-        <xsl:text>};</xsl:text>
+        <xsl:text>});&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template name="process">

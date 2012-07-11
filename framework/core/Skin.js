@@ -6,7 +6,7 @@
  * @augments core.Group
  * @constructor
  */
-core.Skin=function(){
+core.Skin=Rokkstar.class('core.Skin','core.Group',function(){
     extend(this,'core.Group');
     /**
      * Host component
@@ -21,9 +21,10 @@ core.Skin=function(){
 
     this.init=function(){
         this.callSuper('init');
+        //Set properties to fill the component item
         this.setLeft(0);
         this.setRight(0);
         this.setTop(0);
         this.setBottom(0);
     }
-}
+});

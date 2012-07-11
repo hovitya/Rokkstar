@@ -1,7 +1,12 @@
-core.Button=function(){
-    extend(this,'core.SkinnableComponent','core.Button');
-    behaveAs(this,'core.behaviours.ButtonBehaviour');
-    behaveAs(this,'core.behaviours.FocusableBehaviour');
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/**
+ * @augments core.SkinnableComponent
+ * @constructor
+ */
+core.Button=Rokkstar.class('core.Button','core.SkinnableComponent',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
@@ -47,4 +52,5 @@ core.Button=function(){
     this.cStateChanged=function(event){
          this.invalidateSkinState();
     }
-}
+
+},['core.behaviours.ButtonBehaviour','core.behaviours.FocusableBehaviour']);

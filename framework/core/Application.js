@@ -1,6 +1,4 @@
-core.Application=function(){
-    extend(this,'core.VisualContainer');
-
+core.Application=Rokkstar.class('core.Application','core.VisualContainer',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
@@ -50,4 +48,4 @@ core.Application=function(){
             console.log("Tack time:",Rokkstar.GetMicrotime()-time);
         }
     }
-}
+});

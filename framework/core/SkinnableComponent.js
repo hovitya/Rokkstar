@@ -9,10 +9,7 @@
  * @borrows core.behaviours.SkinnableBehaviour#declareSkinPart
  * @constructor
  */
-core.SkinnableComponent=function(){
-    extend(this,'core.VisualComponent');
-    behaveAs(this,'core.behaviours.SkinnableBehaviour');
-
+core.SkinnableComponent=Rokkstar.class('core.SkinnableComponent','core.VisualComponent',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
@@ -47,4 +44,4 @@ core.SkinnableComponent=function(){
 
 
 
-}
+},['core.behaviours.SkinnableBehaviour']);

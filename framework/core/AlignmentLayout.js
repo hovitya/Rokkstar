@@ -2,8 +2,7 @@
  * @augments core.Layout
  * @constructor
  */
-core.AlignmentLayout=function(){
-    extend(this,'core.Layout');
+core.AlignmentLayout=Rokkstar.class('core.AlignmentLayout','core.Layout',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
@@ -26,4 +25,4 @@ core.AlignmentLayout=function(){
         this.createEventListener('horizontalAlignPropertyChanged',this.selfRefreshLayout,this);
     }
 
-}
+});

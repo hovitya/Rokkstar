@@ -1,5 +1,5 @@
-core.BorderLayout=function(){
-    extend(this,'core.Layout');
+core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
+
     this.createAttributes=function(){
         this.callSuper('createAttributes');
         this.createAttribute('gap', '5');
@@ -288,4 +288,4 @@ core.BorderLayout=function(){
 
     this.handleUpProxy= $.proxy(this.handleUp,this);
 
-}
+} );

@@ -8,7 +8,7 @@
  * @augments core.VisualComponent
  * @constructor
  */
-core.VisualContainer=function(){
+core.VisualContainer=Rokkstar.class('core.VisualContainer','core.VisualComponent',function(){
     extend(this,'core.VisualComponent');
 
     this.elements=[];
@@ -164,4 +164,4 @@ core.VisualContainer=function(){
             }
         }
     }
-}
+});

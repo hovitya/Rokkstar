@@ -6,8 +6,7 @@
  * @augments core.Panel
  * @constructor
  */
-core.TitlePanel=function(){
-    extend(this,"core.Panel");
+core.TitlePanel=Rokkstar.class('core.TitlePanel','core.Panel',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
@@ -36,4 +35,4 @@ core.TitlePanel=function(){
     }
 
 
-}
+});

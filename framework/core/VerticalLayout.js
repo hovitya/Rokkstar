@@ -6,8 +6,7 @@
  * @augments core.AlignmentLayout
  * @constructor
  */
-core.VerticalLayout=function(){
-    extend(this,"core.AlignmentLayout");
+core.VerticalLayout=Rokkstar.class('core.VerticalLayout','core.AlignmentLayout',function(){
     /**
      * 
      * @param {core.VisualComponent} div parent div
@@ -97,4 +96,4 @@ core.VerticalLayout=function(){
 
         }
     }
-}
+});

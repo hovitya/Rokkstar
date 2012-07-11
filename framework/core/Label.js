@@ -1,10 +1,12 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 /**
  * @augments core.VisualComponent
  * @constructor
  */
-core.Label=function(){
-    extend(this,"core.VisualComponent");
-
+core.Label=Rokkstar.class('core.Label','core.VisualComponent',function(){
     this.createAttributes=function(){
         this.callSuper('createAttributes');
         this.createAttribute('text','');
@@ -27,4 +29,4 @@ core.Label=function(){
             this.invalidateSize();
         }
     }
-}
+});

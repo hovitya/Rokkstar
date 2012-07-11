@@ -1,9 +1,12 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 /**
  * @augments core.Layout
  * @constructor
  */
-core.FormLayout=function(){
-    extend(this,'core.Layout','core.FormLayout');
+core.FormLayout=Rokkstar.class('core.FormLayout','core.Layout',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
@@ -97,4 +100,4 @@ core.FormLayout=function(){
 
         }
     }
-}
+});
