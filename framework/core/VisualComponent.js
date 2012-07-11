@@ -96,14 +96,6 @@ core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',fu
      * @private
      */
     this._buildDOM = function () {
-        /*if(this['xmlContent']!=undefined){
-         var divs=$('<div>'+this['xmlContent'].replace(/\{instance_id\}/g,$(this).attr('id'))+'</div>');
-         divs.children().appendTo(this);
-         Rokkstar.parseDOM(this,this);
-         var defs=$(this).find('.xDefinitions');
-         defs.prependTo('body');
-
-         }*/
         this.buildDOM();
     }
 
@@ -176,8 +168,8 @@ core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',fu
     this.measure = function () {
         var mW=this.measuredWidth;
         var mH=this.measuredHeight;
-        this.measuredWidth = $(this.domElement).width();
-        this.measuredHeight = $(this.domElement).height();
+        this.measuredWidth = this.domElement.clientWidth;
+        this.measuredHeight =this.domElement.clientHeight;
         if ((mH!=this.measuredHeight || mW!=this.measuredWidth) && this.parent != null) {
             this.parent.invalidateLayout();
         }

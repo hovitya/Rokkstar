@@ -1,6 +1,8 @@
-/* ROKKSTAR Framework
- Copyright Imagix Interactive Kft. 2012 */
-"use strict";
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+ "use strict";
 
 /**
  *
@@ -36,7 +38,7 @@ Rokkstar.createClosure=function(func,sCls,absolute){
         return function(){
             var sClass=sCls;
             var oldSuper=this.superClass;
-            this.superClass=sClass.superClass;
+            this.superClass=sClass.prototype.superClass;
             var ret=func.apply(this,arguments);
             this.superClass=oldSuper;
             return ret;};
@@ -64,9 +66,7 @@ Rokkstar.GetRealMethods=function(object){
 }
 
 Rokkstar.createComponent=function(name){
-    var cmp={};
-    var cls=getClass(name);
-    cls.apply(cmp);
+    var cmp=eval('var x=new '+name+'();x');
     cmp.init();
     return cmp;
 }
@@ -151,7 +151,7 @@ function extend(self,superClass){
 }
 
 /**
- * Declare a new a class.
+ * Creates a new a class.
  * @param {Function} structure Class structure creator function.
  * @param {String} superClass Optional. Super class which will be extended.
  * @param {Array} behaviours Optional. Class behaviours.
@@ -179,21 +179,41 @@ Rokkstar.class=function(name,superClass,structure,behaviours){
                     if(this[i] instanceof Function && this[i].altered==undefined){
                         var func=this[i];
                         if(superClass!=undefined){
-                            this[i]=Rokkstar.createClosure(this[i],getClass(superClass));
+                            this[i]=Rokkstar.createClosure(this[i],getClass(name));
                         }
 
                         this[i].altered=true;
                     }
                 }
             }
+
             func.apply(getClass(name).prototype);
             getClass(name).prototype.type=name;
             getClass(name).prototype.constructed=true;
-            func.apply(this);
-            this.type=name;
 
 
         }
+        //Set type
+        this.type=name;
+
+        //Create local variables
+        var cls=getClass(name);
+        for(var i in cls.prototype){
+            if(!$.isFunction(cls.prototype[i])){
+                if(typeof cls.prototype[i]=='string' || typeof cls.prototype[i]=='number' ||  typeof cls.prototype[i]=='boolean' || typeof cls.prototype[i]=='undefined'){
+                    this[i]=cls.prototype[i];
+                }else if(cls.prototype[i] === null){
+                    this[i]=null;
+                }else if(cls.prototype[i] instanceof Array){
+                    if(cls.prototype[i].length!=0) throw new core.exceptions.TypeException('Cannot initialize object property with complex type (array with elements). Use empty array instead and fill with variables from the constructor. Property name: '+name+'#'+i+".",900);
+                    this[i]=[];
+                }else if(cls.prototype[i] instanceof Object){
+                    if(!$.isEmptyObject(cls.prototype[i])) core.exceptions.TypeException('Cannot initialize object property with complex type (non-empty object). Use empty object ({}) or null. Property name: '+name+'#'+i+".",900);
+                    this[i]={};
+                }
+            }
+        }
+
         if(arguments.length!=1  || arguments[0]!="R::!!NO-CONSTRUCT!!"){
             if(this.construct!=undefined){ this.construct.apply(this,arguments);}
         }
@@ -287,24 +307,15 @@ String.prototype.uncapitalize = function() {
 Rokkstar.parseDOM=function(element,owner){
     var comps=[];
     $(element).find('.xComp').each(function(index, element) {
-        this.parentApplication=window;
-        var component=$(this).xComponent('init',$(this).data('class'));
-        $(this).removeClass('xComp');
-        comps.push(component);
-        if(owner!=undefined && component.getXMLData('id',undefined)!=undefined){
-            owner[component.getXMLData('id',undefined)]=component;
-        }
+        var component = Rokkstar.createComponent($(this).data('class'));
+        $(this).append(component.domElement);
+        if(window.RokkstarApps==undefined) window.RokkstarApps=[];
+        window.RokkstarApps.push(component);
 
     });
-    $(comps).each(function(i,e){
-        console.log('init');
-        if(this['initialized']==undefined){
-            this.init();
-            $(this).append(this.domElement);
-            this.start();
-        }
-        this['initialized']=true;
-    });
+    for(var i in window.RokkstarApps){
+        window.RokkstarApps[i].start();
+    }
 }
 
 /**
