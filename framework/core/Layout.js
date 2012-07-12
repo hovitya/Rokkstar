@@ -54,21 +54,17 @@ core.Layout =Rokkstar.class('core.Layout','core.Component',function () {
     this.doLayout = function (div) {
         this.lastDiv = div;
         //Remove previously created attributes
-        $(div.domElement).children().each(function () {
-            $(this).css(
-                {
-                    'left':'',
-                    'right':'',
-                    'top':'',
-                    'bottom':'',
-                    'width':'',
-                    'height':'',
-                    'box-sizing': 'border-box',
-                    '-moz-box-sizing': 'border-box',
-                    '-webkit-box-sizing': 'border-box'
-                }
-            );
-        });
+        for(var i in div.elements){
+            var elem=div.elements[i].domElement;
+            elem.style.left='';
+            elem.style.position='absolute';
+            elem.style.right='';
+            elem.style.top='';
+            elem.style.bottom='';
+            elem.style.width='';
+            elem.style.height='';
+            elem.style[Modernizr.prefixed('boxSizing')]='border-box';
+        }
     }
 
 
@@ -82,7 +78,8 @@ core.Layout =Rokkstar.class('core.Layout','core.Component',function () {
             var padding=Math.round((((parseFloat(paddingA)+parseFloat(paddingB))/parseFloat(referenceValue)))*100);
             return (p-padding)+'%';
         }else if(pxRegexp.test(data)){
-            return parseInt(data.replace('px',''));
+            //return parseInt(data.replace('px',''));
+            return data;
         }else{
             return parseInt(data);
         }

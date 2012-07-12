@@ -27,10 +27,10 @@ core.ParallaxLayout=Rokkstar.class('core.ParallaxLayout','core.Layout',function(
         this.callSuper('doLayout',div);
         for(var i in div.elements){
             var elem=div.elements[i];
-            if(elem.getWidth()!=undefined && elem.getWidth()!=null) $(elem.domElement).css('width',(this.stringToPixel(elem.getWidth(),div.measuredWidth,this.getPaddingLeft(),this.getPaddingRight())));
-            else $(elem.domElement).css('width','100%');
-            if(elem.getHeight()!=undefined && elem.getHeight()!=null) $(elem.domElement).css('height',(this.stringToPixel(elem.getHeight(),div.measuredHeight,this.getPaddingTop(),this.getPaddingBottom())));
-            else $(elem.domElement).css('height','100%');
+            if(elem.getWidth()!=undefined && elem.getWidth()!=null) elem.domElement.style.width=this.stringToPixel(elem.getWidth(),div.measuredWidth,this.getPaddingLeft(),this.getPaddingRight());
+            else elem.domElement.style.width='100%';
+            if(elem.getHeight()!=undefined && elem.getHeight()!=null) elem.domElement.style.height=this.stringToPixel(elem.getHeight(),div.measuredHeight,this.getPaddingTop(),this.getPaddingBottom());
+            else elem.domElement.style.height='100%';
             var distance=elem.getDistance();
             var distanceX=elem.getDistanceX();
             var distanceY=elem.getDistanceY();
@@ -42,7 +42,9 @@ core.ParallaxLayout=Rokkstar.class('core.ParallaxLayout','core.Layout',function(
             else var x=this.getPositionX()*xMod;
             if(elem.getY()!=undefined) var y=elem.getY()+this.getPositionY()*yMod;
             else var y=this.getPositionY()*xMod;
-            $(elem.domElement).css({left:x+'px',top:y+'px',position:'absolute'});
+            elem.domElement.style.left=x+'px';
+            elem.domElement.style.top=y+'px';
+            elem.domElement.style.position='absolute';
             elem.measure();
         }
 

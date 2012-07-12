@@ -101,28 +101,25 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
         var topPosition=topPadding;
         if(topSlot!=null){
 
-            $(topSlot.domElement).css({
-                position:'absolute',
-                top:topPadding+'px',
-                left:leftPadding+'px',
-                right:rightPadding+'px',
-                height:this.stringToPixel(topSlot.getHeight(),div.measuredHeight,topPadding,bottomPadding)
-            });
+            topSlot.domElement.style.position='absolute';
+            topSlot.domElement.style.top=topPadding+'px';
+            topSlot.domElement.style.left=leftPadding+'px';
+            topSlot.domElement.style.right=rightPadding+'px';
+            topSlot.domElement.style.height=this.stringToPixel(topSlot.getHeight(),div.measuredHeight,topPadding,bottomPadding);
             topSlot.measure();
 
             //Create top gap
-            var handle=$('<div class="coreTopBorderHandle coreUpDownHandle"/>');
-            handle.appendTo(div.domElement);
+            handle=document.createElement('div');
+            handle.className="coreTopBorderHandle coreUpDownHandle";
+            div.domElement.appendChild(handle);
 
-            handle.css({
-                position:'absolute',
-                top:(parseInt(topPadding)+parseInt(topSlot.measuredHeight))+'px',
-                left:leftPadding+'px',
-                right:rightPadding+'px',
-                height:topGap+"px"
-            });
-            handle.get(0).parentPanel=topSlot;
-            handle.mousedown(this.handleClickedProxy);
+            handle.style.position='absolute';
+            handle.style.top=(parseInt(topPadding)+parseInt(topSlot.measuredHeight))+'px';
+            handle.style.left=leftPadding+'px';
+            handle.style.right=rightPadding+'px';
+            handle.style.height=topGap+"px";
+            handle.parentPanel=topSlot;
+            handle.addEventListener('mousedown',this.handleClickedProxy);
             topPosition=parseInt(topPadding)+parseInt(topSlot.measuredHeight)+parseInt(topGap);
         }
 
@@ -131,54 +128,56 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
         //Create bottom element
         var bottomPosition=bottomPadding;
         if(bottomSlot!=null){
-            $(bottomSlot.domElement).css({
-                position:'absolute',
-                bottom:bottomPadding+'px',
-                left:leftPadding+'px',
-                right:rightPadding+'px',
-                height:this.stringToPixel(bottomSlot.getHeight(),div.measuredHeight,topPadding,bottomPadding)
-            });
+
+            bottomSlot.domElement.style.position='absolute';
+            bottomSlot.domElement.style.bottom=bottomPadding+'px';
+            bottomSlot.domElement.style.left=leftPadding+'px';
+            bottomSlot.domElement.style.right=rightPadding+'px';
+            bottomSlot.domElement.style.height=this.stringToPixel(bottomSlot.getHeight(),div.measuredHeight,topPadding,bottomPadding);
+
             bottomSlot.measure();
 
             //Create bottom gap
-            var handle=$('<div class="coreBottomBorderHandle coreUpDownHandle"/>');
-            handle.appendTo(div.domElement);
-            handle.css({
-                position:'absolute',
-                bottom:(parseInt(bottomPadding)+parseInt(bottomSlot.measuredHeight))+'px',
-                left:leftPadding+'px',
-                right:rightPadding+'px',
-                height:bottomGap+"px"
-            });
-            handle.get(0).parentPanel=bottomSlot;
-            handle.mousedown(this.handleClickedProxy);
+            handle=document.createElement('div');
+            handle.className="coreBottomBorderHandle coreUpDownHandle";
+            div.domElement.appendChild(handle);
+
+            handle.style.position='absolute';
+            handle.style.bottom=(parseInt(bottomPadding)+parseInt(bottomSlot.measuredHeight))+'px';
+            handle.style.left=leftPadding+'px';
+            handle.style.right=rightPadding+'px';
+            handle.style.height=bottomGap+"px";
+
+            handle.parentPanel=bottomSlot;
+            handle.addEventListener('mousedown',this.handleClickedProxy);
             bottomPosition=parseInt(bottomPadding)+parseInt(bottomSlot.measuredHeight)+parseInt(bottomGap);
         }
 
         //Create left element
         var leftPosition=leftPadding;
         if(leftSlot!=null){
-            $(leftSlot.domElement).css({
-                position:'absolute',
-                bottom:bottomPosition+'px',
-                left:leftPadding+'px',
-                top:topPosition+'px',
-                width:this.stringToPixel(leftSlot.getWidth(),div.measuredWidth,leftPadding,rightPadding)
-            });
+
+            leftSlot.domElement.style.position='absolute';
+            leftSlot.domElement.style.bottom=bottomPosition+'px';
+            leftSlot.domElement.style.left=leftPadding+'px';
+            leftSlot.domElement.style.top=topPosition+'px';
+            leftSlot.domElement.style.width=this.stringToPixel(leftSlot.getWidth(),div.measuredWidth,leftPadding,rightPadding);
+
             leftSlot.measure();
 
             //Create bottom gap
-            var handle=$('<div class="coreLeftBorderHandle coreLeftRightHandle"/>');
-            handle.appendTo(div.domElement);
-            handle.css({
-                position:'absolute',
-                bottom:bottomPosition+'px',
-                left:(parseInt(leftPadding)+parseInt(leftSlot.measuredWidth))+'px',
-                top:topPosition+'px',
-                width:leftGap+"px"
-            });
-            handle.get(0).parentPanel=leftSlot;
-            handle.mousedown(this.handleClickedProxy);
+            handle=document.createElement('div');
+            handle.className="coreLeftBorderHandle coreLeftRightHandle";
+            div.domElement.appendChild(handle);
+
+            handle.style.position='absolute';
+            handle.style.bottom=bottomPosition+'px';
+            handle.style.left=(parseInt(leftPadding)+parseInt(leftSlot.measuredWidth))+'px';
+            handle.style.top=topPosition+'px';
+            handle.style.width=leftGap+"px";
+
+            handle.parentPanel=leftSlot;
+            handle.addEventListener('mousedown',this.handleClickedProxy);
             leftPosition=parseInt(leftPadding)+parseInt(leftSlot.measuredWidth)+parseInt(leftGap);
         }
 
@@ -186,39 +185,40 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
         var rightPosition=rightPadding;
         if(rightSlot!=null){
 
-            $(rightSlot.domElement).css({
-                position:'absolute',
-                bottom:bottomPosition+'px',
-                right:rightPadding+'px',
-                top:topPosition+'px',
-                width:this.stringToPixel(rightSlot.getWidth(),div.measuredWidth,leftPadding,rightPadding)
-            });
+
+            rightSlot.domElement.style.position='absolute';
+            rightSlot.domElement.style.bottom=bottomPosition+'px';
+            rightSlot.domElement.style.right=rightPadding+'px';
+            rightSlot.domElement.style.top=topPosition+'px';
+            rightSlot.domElement.style.width=this.stringToPixel(rightSlot.getWidth(),div.measuredWidth,leftPadding,rightPadding);
+
             rightSlot.measure();
 
-            //Create bottom gap
-            var handle=$('<div class="coreRightBorderHandle coreLeftRightHandle"/>');
-            handle.appendTo(div.domElement);
-            handle.css({
-                position:'absolute',
-                bottom:bottomPosition+'px',
-                right:(parseInt(rightPadding)+parseInt(rightSlot.measuredWidth))+'px',
-                top:topPosition+'px',
-                width:rightGap+"px"
-            });
-            handle.get(0).parentPanel=rightSlot;
-            handle.mousedown(this.handleClickedProxy);
+            //Create right gap
+            handle=document.createElement('div');
+            handle.className="coreRightBorderHandle coreLeftRightHandle";
+            div.domElement.appendChild(handle);
+
+
+            handle.style.position='absolute';
+            handle.style.bottom=bottomPosition+'px';
+            handle.style.right=(parseInt(rightPadding)+parseInt(rightSlot.measuredWidth))+'px';
+            handle.style.top=topPosition+'px';
+            handle.style.width=rightGap+"px";
+
+            handle.parentPanel=rightSlot;
+            handle.addEventListener('mousedown',this.handleClickedProxy);
             rightPosition=parseInt(rightPadding)+parseInt(rightSlot.measuredWidth)+parseInt(rightGap);
         }
 
         if(centerSlot!=null){
 
-            $(centerSlot.domElement).css({
-                position:'absolute',
-                left:leftPosition+'px',
-                right:rightPosition+'px',
-                top:topPosition+'px',
-                bottom:bottomPosition+'px'
-            });
+            centerSlot.domElement.style.position='absolute';
+            centerSlot.domElement.style.left=leftPosition+'px';
+            centerSlot.domElement.style.right=rightPosition+'px';
+            centerSlot.domElement.style.top=topPosition+'px';
+            centerSlot.domElement.style.bottom=bottomPosition+'px';
+
             centerSlot.measure();
         }
 

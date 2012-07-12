@@ -48,10 +48,12 @@ core.FormLayout=Rokkstar.class('core.FormLayout','core.Layout',function(){
         var labels=[];
         for(var i=0;i<div.getElementsNum();i++){
             var label=document.createElement('label');
-            $(div.domElement).append(label);
+            div.domElement.appendChild(label);
             labels.push(label);
             label.className="core_FormLabel";
-            $(label).css({position:'absolute',width:'auto',height:'auto'});
+            label.style.position='absolute';
+            label.style.width='auto';
+            label.style.height='auto';
             if(div.getElementAt(i).getLabel!=undefined){
                 label.innerHTML=div.getElementAt(i).getLabel();
                 div.getElementAt(i).labelNode=label;
@@ -68,35 +70,37 @@ core.FormLayout=Rokkstar.class('core.FormLayout','core.Layout',function(){
         var elementWidth=div.measuredWidth-this.maxLabelWidth;
         for(var i=0;i<div.getElementsNum();i++){
             //Fix label position
-            $(labels[i]).css({top:currentTop+"px"});
+            labels[i].style.top=currentTop+"px";
             if(this.getLabelPosition()=='center'){
                 var position=this.maxLabelWidth;
                 position=Math.round((position-$(labels[i]).width())/2);
-                $(labels[i]).css({left:position+"px"});
+                labels[i].style.left=position+"px";
             }else if(this.getLabelPosition()=='left'){
-                $(labels[i]).css({left:this.getLabelPaddingLeft()+"px"});
+                labels[i].style.left=this.getLabelPaddingLeft()+"px";
             }else if(this.getLabelPosition()=='right'){
                 var position=this.maxLabelWidth;
                 position=Math.round(position-this.getLabelPaddingRight()-$(labels[i]).width());
-                $(labels[i]).css({left:position+"px"});
+                labels[i].style.left=position+"px";
             }
             //Create and position element
-            var comp=div.getElementAt(i);
-            var el=div.getElementAt(i).domElement;
-            $(el).css({position:'absolute',top:currentTop+"px"});
-            $(el).css({width:this.stringToPixel(comp.getWidth(),div.measuredWidth,parseFloat(this.getElementPaddingLeft())+this.maxLabelWidth,this.getElementPaddingRight()),height:this.stringToPixel(comp.getHeight(),div.measuredHeight,0,0)});
+            var comp=div.elements[i];
+            var el=div.elements[i].domElement;
+            el.style.position='absolute';
+            el.style.top=currentTop+"px";
+            el.style.width=this.stringToPixel(comp.getWidth(),div.measuredWidth,parseFloat(this.getElementPaddingLeft())+this.maxLabelWidth,this.getElementPaddingRight());
+            el.style.height=this.stringToPixel(comp.getHeight(),div.measuredHeight,0,0);
             comp.measure();
             if(this.getElementPosition()=='left'){
-                $(el).css({left:(this.maxLabelWidth+this.getElementPaddingLeft())+"px"});
+                el.style.left=(this.maxLabelWidth+this.getElementPaddingLeft())+"px";
             }else if(this.getElementPosition()=='center'){
                 var position=elementWidth;
                 position=Math.round((position-$(el).width())/2);
-                $(el).css({left:position+"px"});
+                el.style.left=position+"px";
             }else{
-                $(el).css({right:this.getElementPaddingRight()+"px"});
+                el.style.right=this.getElementPaddingRight()+"px";
             }
 
-            currentTop=currentTop+Math.max($(labels[i]).height(),comp.measuredHeight)+this.getGap();
+            currentTop=currentTop+Math.max(labels[i].clientHeight,comp.measuredHeight)+this.getGap();
 
         }
     }

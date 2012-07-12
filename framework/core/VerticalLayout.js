@@ -9,7 +9,7 @@
 core.VerticalLayout=Rokkstar.class('core.VerticalLayout','core.AlignmentLayout',function(){
     /**
      * 
-     * @param {core.VisualComponent} div parent div
+     * @param {core.VisualContainer} div Parent div
      */
     this.doLayout=function(div){
         this.callSuper('doLayout',div);
@@ -23,63 +23,47 @@ core.VerticalLayout=Rokkstar.class('core.VerticalLayout','core.AlignmentLayout',
         var currentTop=this.getPaddingTop();
         if(verticalAlign=='top' || verticalAlign=='middle'){
             for(var i in elements){
-                $(div.elements[i].domElement).css({
-                    'position':'absolute',
-                    'width':layout.stringToPixel(div.elements[i].getWidth(),containerWidth,layout.getPaddingLeft(),layout.getPaddingRight()),
-                    'height':layout.stringToPixel(div.elements[i].getHeight(),containerHeight,layout.getPaddingTop(),layout.getPaddingBottom())
-                });
+                div.elements[i].domElement.style.position='absolute';
+                div.elements[i].domElement.style.width=layout.stringToPixel(div.elements[i].getWidth(),containerWidth,layout.getPaddingLeft(),layout.getPaddingRight());
+                div.elements[i].domElement.style.height=layout.stringToPixel(div.elements[i].getHeight(),containerHeight,layout.getPaddingTop(),layout.getPaddingBottom());
                 div.elements[i].measure();
 
                 var width=div.elements[i].measuredWidth;
                 var height=div.elements[i].measuredHeight;
                 
                 if(this.getHorizontalAlign()=='left'){
-                    $(div.elements[i].domElement).css({
-                        top:currentTop+'px',
-                        left:this.getPaddingLeft()+'px'
-                    });
+                    div.elements[i].domElement.style.top=currentTop+'px';
+                    div.elements[i].domElement.style.left=this.getPaddingLeft()+'px';
                 }else if(this.getHorizontalAlign()=='right'){
-                    $(div.elements[i].domElement).css({
-                        top:currentTop+'px',
-                        right:this.getPaddingRight()+'px'
-                    });
+                    div.elements[i].domElement.style.top=currentTop+'px';
+                    div.elements[i].domElement.style.right=this.getPaddingRight()+'px';
                 }else{
                     var space=Math.round((parseInt(containerWidth)-parseInt(this.getPaddingLeft())-parseInt(this.getPaddingRight())-parseInt(width))/2);
-                    $(div.elements[i].domElement).css({
-                        top:currentTop+'px',
-                        left:space+'px'
-                    });
+                    div.elements[i].domElement.style.top=currentTop+'px';
+                    div.elements[i].domElement.style.left=space+'px';
                 }
                 currentTop=parseInt(currentTop)+parseInt(height)+parseInt(gap);
             }
         }else if(verticalAlign=='bottom'){
             var currentBottom=this.getPaddingBottom();
             for(var i=elements.length-1;i>=0;i--){
-                $(div.elements[i].domElement).css({
-                    'position':'absolute',
-                    'width':layout.stringToPixel(div.elements[i].getWidth(),containerWidth,layout.getPaddingLeft(),layout.getPaddingRight()),
-                    'height':layout.stringToPixel(div.elements[i].getHeight(),containerHeight,layout.getPaddingTop(),layout.getPaddingBottom())
-                });
+                div.elements[i].domElement.style.position='absolute';
+                div.elements[i].domElement.style.width=layout.stringToPixel(div.elements[i].getWidth(),containerWidth,layout.getPaddingLeft(),layout.getPaddingRight());
+                div.elements[i].domElement.style.height=layout.stringToPixel(div.elements[i].getHeight(),containerHeight,layout.getPaddingTop(),layout.getPaddingBottom());
                 div.elements[i].measure();
                 var width=div.elements[i].measuredWidth;
                 var height=div.elements[i].measuredHeight;
 
                 if(this.getHorizontalAlign()=='left'){
-                    $(div.elements[i].domElement).css({
-                        bottom:currentBottom+'px',
-                        left:this.getPaddingLeft()+'px'
-                    });
+                    div.elements[i].domElement.style.bottom=currentBottom+'px';
+                    div.elements[i].domElement.style.left=this.getPaddingLeft()+'px';
                 }else if(this.getHorizontalAlign()=='right'){
-                    $(div.elements[i].domElement).css({
-                        bottom:currentBottom+'px',
-                        right:this.getPaddingRight()+'px'
-                    });
+                    div.elements[i].domElement.style.bottom=currentBottom+'px';
+                    div.elements[i].domElement.style.right=this.getPaddingRight()+'px';
                 }else{
                     var space=Math.round((parseInt(containerWidth)-parseInt(this.getPaddingLeft())-parseInt(this.getPaddingRight())-parseInt(width))/2);
-                    $(div.elements[i].domElement).css({
-                        bottom:currentBottom+'px',
-                        left:space+'px'
-                    });
+                    div.elements[i].domElement.style.bottom=currentBottom+'px';
+                    div.elements[i].domElement.style.left=space+'px';
                 }
                 currentBottom=parseInt(currentBottom)+parseInt(height)+parseInt(gap);
             }
@@ -91,7 +75,8 @@ core.VerticalLayout=Rokkstar.class('core.VerticalLayout','core.AlignmentLayout',
             var correction=containerHeight-currentTop;
             correction=Math.round(correction/2);
             for(var i in elements){
-                $(elements[i].domElement).css('top',parseInt($(elements[i].domElement).css('top'))+correction);
+
+                elements[i].domElement.style.top=(parseInt(elements[i].domElement.style.top)+correction)+"px";
             }
 
         }

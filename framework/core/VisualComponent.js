@@ -166,13 +166,13 @@ core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',fu
     }
 
     this.measure = function () {
-        var mW=this.measuredWidth;
-        var mH=this.measuredHeight;
+        //var mW=this.measuredWidth;
+        //var mH=this.measuredHeight;
         this.measuredWidth = this.domElement.clientWidth;
         this.measuredHeight =this.domElement.clientHeight;
-        if ((mH!=this.measuredHeight || mW!=this.measuredWidth) && this.parent != null) {
-            this.parent.invalidateLayout();
-        }
+        //if ((mH!=this.measuredHeight || mW!=this.measuredWidth) && this.parent != null) {
+        //    this.invalidateLayout();
+        //}
 
     }
 
