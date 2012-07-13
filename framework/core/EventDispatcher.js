@@ -29,23 +29,10 @@ core.EventDispatcher=Rokkstar.class('core.EventDispatcher','core.JQueryProxy',fu
      */
     this.createEventListener=function(event,listenerF,scope){
         if(this.domElement==null) this.createDomElement();
-        var listener=null;
         if(this.handlers[event]==undefined){
             this.handlers[event]=[];
-        }else{
-            for(var i in this.handlers[event]){
-                if(this.handlers[event][i].func===listenerF && this.handlers[event][i].scope===scope){
-                    listener=this.handlers[event][i].alteredFunc;
-                    break;
-                }
-            }
         }
-        if(listener==null){
-            listener=$.proxy(listenerF,scope);
-            this.handlers[event].push(new core.EventFunction(event,listenerF,scope,listener));
-        }
-
-        this.domElement.addEventListener(event,listener,false);
+        this.handlers[event].push({func:listenerF,scope:scope});
     }
 
     /**
@@ -59,11 +46,16 @@ core.EventDispatcher=Rokkstar.class('core.EventDispatcher','core.JQueryProxy',fu
      */
     this.triggerEvent=function(event,bubbling,cancellable){
         if(this.domElement==null) this.createDomElement();
-        if(bubbling==undefined) bubbling=false;
-        if(cancellable==undefined) cancellable=true;
-        var evt = document.createEvent('Event');
-        evt.initEvent(event,bubbling,cancellable);
-        this.domElement.dispatchEvent(evt);
+        if(event instanceof String){
+            event=$.Event(event);
+        }
+        var handlers=this.handlers[event.type];
+        if(handlers!=undefined){
+            var i=handlers.length;
+            while(--i>=0){
+                handlers[i].func.apply(handlers[i].scope,event);
+            }
+        }
     }
 
     /**
@@ -79,7 +71,7 @@ core.EventDispatcher=Rokkstar.class('core.EventDispatcher','core.JQueryProxy',fu
         if(this.handlers[event]!=undefined){
             for(var i in this.handlers[event]){
                 if(this.handlers[event][i].func===listener && this.handlers[event][i].scope===scope){
-                    this.domElement.removeEventListener(event,this.handlers[event][i].alteredFunc,false);
+                    this.handlers=this.handlers.splice(i,1);
                 }
             }
         }
@@ -89,15 +81,9 @@ core.EventDispatcher=Rokkstar.class('core.EventDispatcher','core.JQueryProxy',fu
 
     this.createDomElement=function(){
         this.domElement=document.createElement('div');
+        this.domElement.style[Modernizr.prefixed('boxSizing')]='border-box';
+        this.domElement.style.position='absolute';
     }
 
 
 });
-
-core.EventFunction=function(event,func,scope,af){
-    this.event=event;
-    this.func=func;
-    this.scope=scope;
-    this.alteredFunc=af;
-}
-
