@@ -29,7 +29,7 @@ core.TitlePanel=Rokkstar.class('core.TitlePanel','core.Panel',function(){
     }
 
     this.updateLabel=function(){
-        if(this.getSkinPart('label')!=null){
+        if(this.hasSkinPart('label')){
             this.getSkinPart('label').setText(this.getTitleLabel());
         }
     }

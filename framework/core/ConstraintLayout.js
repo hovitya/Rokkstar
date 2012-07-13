@@ -21,12 +21,12 @@ core.ConstraintLayout=Rokkstar.class('core.ConstraintLayout','core.Layout',funct
         
         while(--i>=0){
             var element=div.elements[i];
-            var left=parseInt(element.getLeft());
-            var right=parseInt(element.getRight());
-            var top=parseInt(element.getLeft());
-            var bottom=parseInt(element.getRight());
-            var x=parseInt(element.getX());
-            var y=parseInt(element.getY());
+            var left=element.getLeft();
+            var right=element.getRight();
+            var top=element.getTop();
+            var bottom=element.getBottom();
+            var x=element.getX();
+            var y=element.getY();
             var width=element.getWidth();
             var height=element.getHeight();
             position.clear();
@@ -45,7 +45,7 @@ core.ConstraintLayout=Rokkstar.class('core.ConstraintLayout','core.Layout',funct
             if(bottom!=undefined && bottom!=null) position.bottom=bottom+paddingBottom;
             //if(w!=$(element).width() || h!=$(element).height()){
             position.apply(element);
-            element.measure();
+            element.measure(position.getPredictedWidth(),position.getPredictedHeight());
             //}
 
         }

@@ -143,10 +143,10 @@ core.VisualContainer=Rokkstar.class('core.VisualContainer','core.VisualComponent
         this.layoutInvalid=true;
     }
 
-    this.measure=function(){
+    this.measure=function(predictedWidth,predictedHeight){
         var mW=this.measuredWidth;
         var mH=this.measuredHeight;
-        this.callSuper('measure');
+        this.callSuper('measure',predictedWidth,predictedHeight);
         if(this.measuredHeight!=mH || this.measuredWidth!=mW){
             this.invalidateLayout();
         }

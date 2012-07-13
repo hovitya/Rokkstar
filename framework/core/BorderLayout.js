@@ -38,6 +38,8 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
         var topPadding=this.getPaddingTop();
         var bottomPadding=this.getPaddingBottom();
 
+        var position=new core.helpers.LayoutPosition();
+
         if(leftGap==undefined){
             leftGap=gap;
         }
@@ -55,7 +57,8 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
         var rightSlot=null;
         var bottomSlot=null;
         var centerSlot=null;
-        for(var i in div.elements){
+        var i=div.elements.length;
+        while(--i>=0){
             var element=div.elements[i];
             switch(element.getPosition()){
                 case 'center':
@@ -100,24 +103,25 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
         //Create top element
         var topPosition=topPadding;
         if(topSlot!=null){
-
-            topSlot.domElement.style.position='absolute';
-            topSlot.domElement.style.top=topPadding+'px';
-            topSlot.domElement.style.left=leftPadding+'px';
-            topSlot.domElement.style.right=rightPadding+'px';
-            topSlot.domElement.style.height=this.stringToPixel(topSlot.getHeight(),div.measuredHeight,topPadding,bottomPadding);
+            position.clear();
+            position.top=topPadding;
+            position.left=leftPadding;
+            position.right=rightPadding;
+            position.height=this.stringToPixel(topSlot.getHeight(),div.measuredHeight,topPadding,bottomPadding);
+            position.apply(topSlot);
             topSlot.measure();
 
             //Create top gap
             handle=document.createElement('div');
             handle.className="coreTopBorderHandle coreUpDownHandle";
-            div.domElement.appendChild(handle);
+
 
             handle.style.position='absolute';
             handle.style.top=(parseInt(topPadding)+parseInt(topSlot.measuredHeight))+'px';
             handle.style.left=leftPadding+'px';
             handle.style.right=rightPadding+'px';
-            handle.style.height=topGap+"px";
+            handle.style.height=topGap+'px';
+            div.domElement.appendChild(handle);
             handle.parentPanel=topSlot;
             handle.addEventListener('mousedown',this.handleClickedProxy);
             topPosition=parseInt(topPadding)+parseInt(topSlot.measuredHeight)+parseInt(topGap);
@@ -128,26 +132,25 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
         //Create bottom element
         var bottomPosition=bottomPadding;
         if(bottomSlot!=null){
-
-            bottomSlot.domElement.style.position='absolute';
-            bottomSlot.domElement.style.bottom=bottomPadding+'px';
-            bottomSlot.domElement.style.left=leftPadding+'px';
-            bottomSlot.domElement.style.right=rightPadding+'px';
-            bottomSlot.domElement.style.height=this.stringToPixel(bottomSlot.getHeight(),div.measuredHeight,topPadding,bottomPadding);
-
+            position.clear();
+            position.bottom=bottomPadding;
+            position.left=leftPadding;
+            position.right=rightPadding;
+            position.height=this.stringToPixel(bottomSlot.getHeight(),div.measuredHeight,topPadding,bottomPadding);
+            position.apply(bottomSlot);
             bottomSlot.measure();
 
             //Create bottom gap
             handle=document.createElement('div');
             handle.className="coreBottomBorderHandle coreUpDownHandle";
-            div.domElement.appendChild(handle);
+
 
             handle.style.position='absolute';
             handle.style.bottom=(parseInt(bottomPadding)+parseInt(bottomSlot.measuredHeight))+'px';
             handle.style.left=leftPadding+'px';
             handle.style.right=rightPadding+'px';
             handle.style.height=bottomGap+"px";
-
+            div.domElement.appendChild(handle);
             handle.parentPanel=bottomSlot;
             handle.addEventListener('mousedown',this.handleClickedProxy);
             bottomPosition=parseInt(bottomPadding)+parseInt(bottomSlot.measuredHeight)+parseInt(bottomGap);
@@ -156,27 +159,27 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
         //Create left element
         var leftPosition=leftPadding;
         if(leftSlot!=null){
-
-            leftSlot.domElement.style.position='absolute';
-            leftSlot.domElement.style.bottom=bottomPosition+'px';
-            leftSlot.domElement.style.left=leftPadding+'px';
-            leftSlot.domElement.style.top=topPosition+'px';
-            leftSlot.domElement.style.width=this.stringToPixel(leftSlot.getWidth(),div.measuredWidth,leftPadding,rightPadding);
-
+            position.clear();
+            position.bottom=bottomPosition;
+            position.left=leftPadding;
+            position.top=topPosition;
+            position.width=this.stringToPixel(leftSlot.getWidth(),div.measuredWidth,leftPadding,rightPadding);
+            position.apply(leftSlot);
             leftSlot.measure();
 
             //Create bottom gap
             handle=document.createElement('div');
             handle.className="coreLeftBorderHandle coreLeftRightHandle";
-            div.domElement.appendChild(handle);
+
 
             handle.style.position='absolute';
             handle.style.bottom=bottomPosition+'px';
             handle.style.left=(parseInt(leftPadding)+parseInt(leftSlot.measuredWidth))+'px';
             handle.style.top=topPosition+'px';
             handle.style.width=leftGap+"px";
-
+            div.domElement.appendChild(handle);
             handle.parentPanel=leftSlot;
+
             handle.addEventListener('mousedown',this.handleClickedProxy);
             leftPosition=parseInt(leftPadding)+parseInt(leftSlot.measuredWidth)+parseInt(leftGap);
         }
@@ -185,19 +188,18 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
         var rightPosition=rightPadding;
         if(rightSlot!=null){
 
-
-            rightSlot.domElement.style.position='absolute';
-            rightSlot.domElement.style.bottom=bottomPosition+'px';
-            rightSlot.domElement.style.right=rightPadding+'px';
-            rightSlot.domElement.style.top=topPosition+'px';
-            rightSlot.domElement.style.width=this.stringToPixel(rightSlot.getWidth(),div.measuredWidth,leftPadding,rightPadding);
-
+            position.clear();
+            position.bottom=bottomPosition;
+            position.right=rightPadding;
+            position.top=topPosition;
+            position.width=this.stringToPixel(rightSlot.getWidth(),div.measuredWidth,leftPadding,rightPadding);
+            position.apply(rightSlot);
             rightSlot.measure();
 
             //Create right gap
             handle=document.createElement('div');
             handle.className="coreRightBorderHandle coreLeftRightHandle";
-            div.domElement.appendChild(handle);
+
 
 
             handle.style.position='absolute';
@@ -205,20 +207,19 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
             handle.style.right=(parseInt(rightPadding)+parseInt(rightSlot.measuredWidth))+'px';
             handle.style.top=topPosition+'px';
             handle.style.width=rightGap+"px";
-
+            div.domElement.appendChild(handle);
             handle.parentPanel=rightSlot;
             handle.addEventListener('mousedown',this.handleClickedProxy);
             rightPosition=parseInt(rightPadding)+parseInt(rightSlot.measuredWidth)+parseInt(rightGap);
         }
 
         if(centerSlot!=null){
-
-            centerSlot.domElement.style.position='absolute';
-            centerSlot.domElement.style.left=leftPosition+'px';
-            centerSlot.domElement.style.right=rightPosition+'px';
-            centerSlot.domElement.style.top=topPosition+'px';
-            centerSlot.domElement.style.bottom=bottomPosition+'px';
-
+            position.clear();
+            position.left=leftPosition;
+            position.right=rightPosition;
+            position.top=topPosition;
+            position.bottom=bottomPosition;
+            position.apply(centerSlot);
             centerSlot.measure();
         }
 

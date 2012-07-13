@@ -114,12 +114,12 @@ core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',fu
         this.callSuper('createAttributes');
         this.createAttribute('currentState', undefined);
         this.createAttribute('class');
-        this.createAttribute('x',undefined ,'integer');
-        this.createAttribute('y',undefined, 'integer');
-        this.createAttribute('left',undefined, 'integer');
-        this.createAttribute('right',undefined, 'integer');
-        this.createAttribute('top',undefined, 'integer');
-        this.createAttribute('bottom',undefined, 'integer');
+        this.createAttribute('x',undefined,'integer');
+        this.createAttribute('y',undefined,'integer');
+        this.createAttribute('left',undefined,'integer');
+        this.createAttribute('right',undefined,'integer');
+        this.createAttribute('top',undefined,'integer');
+        this.createAttribute('bottom',undefined,'integer');
         this.createAttribute('position', 'center');
         this.createAttribute('height', undefined);
         this.createAttribute('width', undefined);
@@ -165,11 +165,22 @@ core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',fu
         this.triggerEvent(event.type);
     }
 
-    this.measure = function () {
+    this.measure = function (predictedWidth,predictedHeight) {
         //var mW=this.measuredWidth;
         //var mH=this.measuredHeight;
-        this.measuredWidth = this.domElement.clientWidth;
-        this.measuredHeight =this.domElement.clientHeight;
+        if(predictedWidth!=undefined){
+            this.measuredWidth = predictedWidth;
+        }else{
+            this.measuredWidth = this.domElement.clientWidth;
+        }
+
+        if(predictedHeight!=undefined){
+            this.measuredHeight = predictedHeight;
+        }else{
+            this.measuredHeight = this.domElement.clientHeight;
+        }
+
+
         //if ((mH!=this.measuredHeight || mW!=this.measuredWidth) && this.parent != null) {
         //    this.invalidateLayout();
         //}

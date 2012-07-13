@@ -46,14 +46,14 @@ core.EventDispatcher=Rokkstar.class('core.EventDispatcher','core.JQueryProxy',fu
      */
     this.triggerEvent=function(event,bubbling,cancellable){
         if(this.domElement==null) this.createDomElement();
-        if(event instanceof String){
+        if(typeof event === "string"){
             event=$.Event(event);
         }
         var handlers=this.handlers[event.type];
         if(handlers!=undefined){
             var i=handlers.length;
             while(--i>=0){
-                handlers[i].func.apply(handlers[i].scope,event);
+                handlers[i].func.apply(handlers[i].scope,[event]);
             }
         }
     }

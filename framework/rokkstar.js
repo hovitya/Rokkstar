@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
- "use strict";
+"use strict";
 
 /**
  *
@@ -123,9 +123,13 @@ function getClass(className){
     }
     var classPath=className.split('.');
     var base=window;
-    for(var i in classPath){
+    var length=classPath.length;
+    for(var i=0;i<length;i++){
         base=base[classPath[i]];
-        if(base==undefined) throw new core.exceptions.TypeException('Class not found: '+className,1);
+        if(base==undefined){
+
+            throw new core.exceptions.TypeException('Class not found: '+className,1);
+        }
     }
 
     //Caching class reference for faster look up
@@ -156,11 +160,11 @@ function extend(self,superClass){
         Rokkstar.profiling.classExtension[superClass]++;
     }
     var sClass=getClass(superClass);
+    sClass.apply(self,['R::!!NO-CONSTRUCT!!']);
 
-    if(sClass.prototype.constructed==undefined){
-        eval("new "+superClass+"('R::!!NO-CONSTRUCT!!');");
-    }
-    Rokkstar.Extend(self,sClass.prototype);
+
+    //Rokkstar.Extend(self,sClass.prototype);
+
     self.superClass=sClass;
     self.superClass.altered=true;
     self.absoluteSuperClass=sClass;
@@ -168,6 +172,7 @@ function extend(self,superClass){
     self.callSuper=Rokkstar.templates.callSuper;
     self.callSuper.altered=true;
 }
+
 
 /**
  * Creates a new a class.
@@ -178,71 +183,89 @@ function extend(self,superClass){
  */
 Rokkstar.class=function(name,superClass,structure,behaviours){
     return function(){
-        if(getClass(name).prototype.constructed==undefined){
-            var func=function(){
-                if(superClass!=undefined){
-                    extend(this,superClass);
+        var cls=getClass(name);
+        if(cls.prototype.constructed==undefined){
+
+            cls.prototype._object_scope=[];
+
+            //constructing prototype
+            var reference={};
+
+            if(superClass!=undefined){
+                var superCls=getClass(superClass);
+                //Copy prototypes
+                //Check is super class initilized
+                if(superCls.constructed==undefined){
+                    superCls.apply({},["R::!!NO-CONSTRUCT!!"]);
                 }
+                Rokkstar.Extend(cls.prototype,superCls.prototype);
+                //Copy object variables
+                cls.prototype._object_scope=cls.prototype._object_scope.concat(superCls.prototype._object_scope);
+                cls.prototype.superClass=superCls;
+            }else{
+                cls.prototype.callSuper=Rokkstar.templates.callSuper;
+                cls.prototype.callSuper.altered=true;
+            }
 
-                if(behaviours!=undefined && typeof Array){
-                    for(var i in behaviours){
-                        behaveAs(this,behaviours[i]);
-                    }
+            if(behaviours!=undefined && typeof Array){
+                for(var i in behaviours){
+                    behaveAs(reference,behaviours[i]);
                 }
+            }
 
-                //Building class structure
-                structure.apply(this);
 
-                //Altering new functions
-                for(var i in this){
-                    if(this[i] instanceof Function && this[i].altered==undefined){
-                        var func=this[i];
-                        if(superClass!=undefined){
-                            this[i]=Rokkstar.createClosure(this[i],getClass(name));
+            //Building class structure
+            structure.apply(reference);
+
+            //Altering new functions
+            for(var i in reference){
+                if(reference.hasOwnProperty(i)){
+                    var refValue=reference[i];
+                    if(refValue instanceof Function){
+                        if(refValue.altered==undefined){
+
+                            if(superClass!=undefined){
+                                refValue=Rokkstar.createClosure(refValue,cls);
+                            }
+
+                            refValue.altered=true;
+
                         }
-
-                        this[i].altered=true;
+                        cls.prototype[i]=refValue;
+                    }else{
+                        cls.prototype._object_scope.push({name:i,val:refValue});
                     }
                 }
             }
-
-
-
-            var cls=getClass(name);
-            func.apply(cls.prototype);
-            //Cache local variables
-            Rokkstar.objectVariablesCache[name]={};
-            for(var i in cls.prototype){
-                if(typeof(cls.prototype[i]) != "function"){
-                    if(typeof cls.prototype[i]=='string' || typeof cls.prototype[i]=='number' ||  typeof cls.prototype[i]=='boolean' || typeof cls.prototype[i]=='undefined'){
-                        Rokkstar.objectVariablesCache[name][i]=cls.prototype[i];
-                    }else if(cls.prototype[i] === null){
-                        Rokkstar.objectVariablesCache[name][i]=null;
-                    }else if(cls.prototype[i] instanceof Array){
-                        if(cls.prototype[i].length!=0) throw new core.exceptions.TypeException('Cannot initialize object property with complex type (array with elements). Use empty array instead and fill with variables from the constructor. Property name: '+name+'#'+i+".",900);
-                        Rokkstar.objectVariablesCache[name][i]=[];
-                    }else if(cls.prototype[i] instanceof Object){
-                        if(!$.isEmptyObject(cls.prototype[i])) core.exceptions.TypeException('Cannot initialize object property with complex type (non-empty object). Use empty object ({}) or null. Property name: '+name+'#'+i+".",900);
-                        Rokkstar.objectVariablesCache[name][i]={};
-                    }
-                }
-            }
-
-            getClass(name).prototype.type=name;
-            getClass(name).prototype.constructed=true;
+            cls.prototype.constructed=true;
 
 
         }
+
         //Set type
         this.type=name;
 
-        var cache=Rokkstar.objectVariablesCache[name];
-        Rokkstar.Extend(this,cache);
+        var j=cls.prototype._object_scope.length;
+        while(--j>=0){
+            var prop=cls.prototype._object_scope[j];
+            if(typeof prop.val == 'object'){
+                if(prop.val==null){
+                    this[prop.name]=null;
+                }else if(Object.prototype.toString.call(prop.val ) === '[object Array]'){
+                    this[prop.name]=[];
+                }else{
+                    this[prop.name]={};
+                }
+            }else{
+                this[prop.name]=prop.val;
+            }
+        }
 
 
         if(arguments.length!=1  || arguments[0]!="R::!!NO-CONSTRUCT!!"){
             if(this.construct!=undefined){ this.construct.apply(this,arguments);}
         }
+
     }
 };
 
@@ -250,6 +273,7 @@ Rokkstar.class=function(name,superClass,structure,behaviours){
 
 Rokkstar.parseAttribute=function(val,typeForcing){
     var ret;
+    if(val==undefined) return val;
     if(typeForcing=='boolean'){
         if(val!=undefined) ret=!(val=='false' || val==false);
         else ret=val;
@@ -333,7 +357,9 @@ String.prototype.uncapitalize = function() {
 Rokkstar.parseDOM=function(element,owner){
     var comps=[];
     $(element).find('.xComp').each(function(index, element) {
+        console.profile();
         var component = Rokkstar.createComponent($(this).data('class'));
+        console.profileEnd();
         $(this).append(component.domElement);
         if(window.RokkstarApps==undefined) window.RokkstarApps=[];
         window.RokkstarApps.push(component);
