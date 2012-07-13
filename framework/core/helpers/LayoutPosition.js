@@ -115,7 +115,7 @@ core.helpers.LayoutPosition=Rokkstar.class('core.helpers.LayoutPosition',undefin
                 element.domElement.style.right='';
             }
         }else{
-            var cssStyle="";
+            var cssStyle="position:absolute;-moz-box-sizing:border-box;";
             if(this.width!=undefined){
                 cssStyle=cssStyle.concat('width:',this.width,';');
             }
