@@ -24,6 +24,8 @@ core.InputBase=Rokkstar.class('core.InputBase','core.VisualComponent',function()
 
     this.createDomElement=function(){
         this.domElement=document.createElement('input');
+        this.domElement.style[Modernizr.prefixed('boxSizing')]='border-box';
+        this.domElement.style.position='absolute';
     }
 
     this._valueChanged=function(){

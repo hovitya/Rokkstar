@@ -7,9 +7,9 @@ core.Application=Rokkstar.class('core.Application','core.VisualContainer',functi
 
     this.init=function(){
 
-        $(this).css({position:'absolute',left:'0px',right:'0px',top:'0px',bottom:'0px'});
-        this.callSuper('init');
 
+        this.callSuper('init');
+        $(this.domElement).css({left:'0px',right:'0px',top:'0px',bottom:'0px'});
         this.invalidateSize();
         var target=this;
         this.callTick=function(){
@@ -34,9 +34,9 @@ core.Application=Rokkstar.class('core.Application','core.VisualContainer',functi
 
     this.tick=function(){
         var time=Rokkstar.GetMicrotime();
-        console.profile();
+
         this.tack();
-        console.profileEnd();
+
         var elapsed=(Rokkstar.GetMicrotime()-time)*1000.0;
         this.processId=setTimeout(this.callTick,Math.round(1000.0/parseFloat(this.getFps())-elapsed));
     }
@@ -45,9 +45,9 @@ core.Application=Rokkstar.class('core.Application','core.VisualContainer',functi
 
     this.tack=function(){
         if(this.componentInvalid){
-            var time=Rokkstar.GetMicrotime();
+            console.profile();
             this.callSuper('tack');
-            console.log("Tack time:",Rokkstar.GetMicrotime()-time);
+            console.profileEnd();
         }
     }
 });

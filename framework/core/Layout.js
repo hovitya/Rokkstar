@@ -14,10 +14,10 @@ core.Layout =Rokkstar.class('core.Layout','core.Component',function () {
     this.lastDiv = null;
     this.createAttributes=function(){
         this.callSuper('createAttributes');
-        this.createAttribute('paddingLeft', '0');
-        this.createAttribute('paddingRight', '0');
-        this.createAttribute('paddingTop', '0');
-        this.createAttribute('paddingBottom', '0');
+        this.createAttribute('paddingLeft', 0, 'integer');
+        this.createAttribute('paddingRight', 0, 'integer');
+        this.createAttribute('paddingTop', 0, 'integer');
+        this.createAttribute('paddingBottom', 0, 'integer');
     }
 
 
@@ -53,18 +53,7 @@ core.Layout =Rokkstar.class('core.Layout','core.Component',function () {
      */
     this.doLayout = function (div) {
         this.lastDiv = div;
-        //Remove previously created attributes
-        for(var i in div.elements){
-            var elem=div.elements[i].domElement;
-            elem.style.left='';
-            elem.style.position='absolute';
-            elem.style.right='';
-            elem.style.top='';
-            elem.style.bottom='';
-            elem.style.width='';
-            elem.style.height='';
-            elem.style[Modernizr.prefixed('boxSizing')]='border-box';
-        }
+
     }
 
 

@@ -12,60 +12,87 @@ core.VerticalLayout=Rokkstar.class('core.VerticalLayout','core.AlignmentLayout',
      * @param {core.VisualContainer} div Parent div
      */
     this.doLayout=function(div){
-        this.callSuper('doLayout',div);
-        
-        var containerWidth=div.measuredWidth;
-        var containerHeight=div.measuredHeight;
+        //this.callSuper('doLayout',div);
+        this.lastDiv=div;
+
+        var containerWidth=parseInt(div.measuredWidth);
+        var containerHeight=parseInt(div.measuredHeight);
         var layout=this;
         var elements=div.elements;
         var verticalAlign=this.getVerticalAlign();
-        var gap=this.getGap();
-        var currentTop=this.getPaddingTop();
-        if(verticalAlign=='top' || verticalAlign=='middle'){
-            for(var i in elements){
-                div.elements[i].domElement.style.position='absolute';
-                div.elements[i].domElement.style.width=layout.stringToPixel(div.elements[i].getWidth(),containerWidth,layout.getPaddingLeft(),layout.getPaddingRight());
-                div.elements[i].domElement.style.height=layout.stringToPixel(div.elements[i].getHeight(),containerHeight,layout.getPaddingTop(),layout.getPaddingBottom());
-                div.elements[i].measure();
+        var gap=parseInt(this.getGap());
+        
+        var horizontalAlign=this.getHorizontalAlign();
+        var paddingLeft=parseInt(this.getPaddingLeft());
+        var paddingRight=parseInt(this.getPaddingRight());
+        var paddingTop=parseInt(this.getPaddingTop());
+        var paddingBottom=parseInt(this.getPaddingBottom());
+        var elementsLength=elements.length;
+        var position=new core.helpers.LayoutPosition(containerWidth,containerHeight,paddingLeft,paddingRight,paddingTop,paddingBottom);
 
-                var width=div.elements[i].measuredWidth;
-                var height=div.elements[i].measuredHeight;
+        var i=0;
+        if(verticalAlign=='top' || verticalAlign=='middle'){
+            var currentTop=paddingTop;
+            i=elementsLength;
+            while(--i>=0){
+                var element=div.elements[i];
+                var domElement=element.domElement;
+                var widthString=element.getWidth();
+                var heightString=element.getHeight();
+                position.clear();
+                position.width=layout.stringToPixel(widthString,containerWidth,paddingLeft,paddingRight);
+                position.height=layout.stringToPixel(heightString,containerHeight,paddingTop,paddingBottom);
+
+
+                var width=position.getPredictedWidth();
+                var height=position.getPredictedHeight();
                 
-                if(this.getHorizontalAlign()=='left'){
-                    div.elements[i].domElement.style.top=currentTop+'px';
-                    div.elements[i].domElement.style.left=this.getPaddingLeft()+'px';
-                }else if(this.getHorizontalAlign()=='right'){
-                    div.elements[i].domElement.style.top=currentTop+'px';
-                    div.elements[i].domElement.style.right=this.getPaddingRight()+'px';
+                if(horizontalAlign=='left'){
+                    position.top=currentTop;
+                    position.left=paddingLeft;
+                }else if(horizontalAlign=='right'){
+                    position.top=currentTop;
+                    position.right=paddingRight;
                 }else{
-                    var space=Math.round((parseInt(containerWidth)-parseInt(this.getPaddingLeft())-parseInt(this.getPaddingRight())-parseInt(width))/2);
-                    div.elements[i].domElement.style.top=currentTop+'px';
-                    div.elements[i].domElement.style.left=space+'px';
+                    var space=Math.round((containerWidth-paddingLeft-paddingRight-width)/2);
+                    position.top=currentTop;
+                    position.left=space;
                 }
-                currentTop=parseInt(currentTop)+parseInt(height)+parseInt(gap);
+                currentTop=currentTop+height+gap;
+                position.apply(element);
+                element.measure();
             }
         }else if(verticalAlign=='bottom'){
-            var currentBottom=this.getPaddingBottom();
-            for(var i=elements.length-1;i>=0;i--){
-                div.elements[i].domElement.style.position='absolute';
-                div.elements[i].domElement.style.width=layout.stringToPixel(div.elements[i].getWidth(),containerWidth,layout.getPaddingLeft(),layout.getPaddingRight());
-                div.elements[i].domElement.style.height=layout.stringToPixel(div.elements[i].getHeight(),containerHeight,layout.getPaddingTop(),layout.getPaddingBottom());
-                div.elements[i].measure();
-                var width=div.elements[i].measuredWidth;
-                var height=div.elements[i].measuredHeight;
+            var currentBottom=paddingBottom;
+            i=elementsLength;
+            while(--i>=0){
+                var element=div.elements[i];
+                var domElement=element.domElement;
+                var widthString=element.getWidth();
+                var heightString=element.getHeight();
+                position.clear();
+                
 
-                if(this.getHorizontalAlign()=='left'){
-                    div.elements[i].domElement.style.bottom=currentBottom+'px';
-                    div.elements[i].domElement.style.left=this.getPaddingLeft()+'px';
+                position.width=layout.stringToPixel(widthString,containerWidth,paddingLeft,paddingRight);
+                position.height=layout.stringToPixel(heightString,containerHeight,paddingTop,paddingBottom);
+
+                var width=position.getPredictedWidth();
+                var height=position.getPredictedWidth();
+
+                if(horizontalAlign=='left'){
+                    position.bottom=currentBottom;
+                    position.left=paddingLeft;
                 }else if(this.getHorizontalAlign()=='right'){
-                    div.elements[i].domElement.style.bottom=currentBottom+'px';
-                    div.elements[i].domElement.style.right=this.getPaddingRight()+'px';
+                    position.bottom=currentBottom;
+                    position.right=paddingRight;
                 }else{
-                    var space=Math.round((parseInt(containerWidth)-parseInt(this.getPaddingLeft())-parseInt(this.getPaddingRight())-parseInt(width))/2);
-                    div.elements[i].domElement.style.bottom=currentBottom+'px';
-                    div.elements[i].domElement.style.left=space+'px';
+                    var space=Math.round((containerWidth-paddingLeft-paddingRight-width)/2);
+                    position.bottom=currentBottom;
+                    position.left=space;
                 }
-                currentBottom=parseInt(currentBottom)+parseInt(height)+parseInt(gap);
+                currentBottom=currentBottom+height+gap;
+                position.apply(element);
+                element.measure();
             }
         }
         
@@ -74,9 +101,10 @@ core.VerticalLayout=Rokkstar.class('core.VerticalLayout','core.AlignmentLayout',
             currentTop-=parseInt(gap);
             var correction=containerHeight-currentTop;
             correction=Math.round(correction/2);
-            for(var i in elements){
-
-                elements[i].domElement.style.top=(parseInt(elements[i].domElement.style.top)+correction)+"px";
+            i=elementsLength;
+            while(--i>=0){
+                element=elements[i];
+                element.domElement.style.top=(parseInt(elements[i].domElement.style.top)+correction)+"px";
             }
 
         }

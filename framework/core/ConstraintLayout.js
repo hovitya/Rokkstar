@@ -10,22 +10,42 @@ core.ConstraintLayout=Rokkstar.class('core.ConstraintLayout','core.Layout',funct
     this.doLayout=function(div){
         this.callSuper('doLayout',div);
         var layout=this;
-        for(var i in div.elements){
-            if(div.elements[i].getLeft()==undefined || div.elements[i].getRight()==undefined){
-                if(div.elements[i].getWidth()!=undefined && div.elements[i].getWidth()!=null) div.elements[i].domElement.style.width=layout.stringToPixel(div.elements[i].getWidth(),div.measuredWidth,layout.getPaddingLeft(),layout.getPaddingRight());
+        var i=div.elements.length;
+        var containerWidth=parseInt(div.measuredWidth);
+        var containerHeight=parseInt(div.measuredHeight);
+        var paddingLeft=parseInt(this.getPaddingLeft());
+        var paddingRight=parseInt(this.getPaddingRight());
+        var paddingTop=parseInt(this.getPaddingTop());
+        var paddingBottom=parseInt(this.getPaddingBottom());
+        var position=new core.helpers.LayoutPosition(containerWidth,containerHeight,paddingLeft,paddingRight,paddingTop,paddingBottom);
+        
+        while(--i>=0){
+            var element=div.elements[i];
+            var left=parseInt(element.getLeft());
+            var right=parseInt(element.getRight());
+            var top=parseInt(element.getLeft());
+            var bottom=parseInt(element.getRight());
+            var x=parseInt(element.getX());
+            var y=parseInt(element.getY());
+            var width=element.getWidth();
+            var height=element.getHeight();
+            position.clear();
+            if(left==undefined || right==undefined){
+                if(width!=undefined && width!=null) position.width=layout.stringToPixel(width,containerWidth,paddingLeft,paddingRight);
             }
-            if(div.elements[i].getTop()==undefined || div.elements[i].getBottom()==undefined){
-                if(div.elements[i].getHeight()!=undefined && div.elements[i].getHeight()!=null) div.elements[i].domElement.style.height=layout.stringToPixel(div.elements[i].getHeight(),div.measuredHeight,layout.getPaddingTop(),layout.getPaddingBottom());
+            if(top==undefined || bottom==undefined){
+                if(height!=undefined && height!=null) position.height=layout.stringToPixel(height,containerHeight,paddingTop,paddingBottom);
             }
-            if(div.elements[i].getX()!=undefined && div.elements[i].getX()!=null) div.elements[i].domElement.style.left=(parseInt(div.elements[i].getX())+parseInt(layout.getPaddingLeft()))+'px';
-            if(div.elements[i].getY()!=undefined && div.elements[i].getY()!=null) div.elements[i].domElement.style.top=(parseInt(div.elements[i].getY())+parseInt(layout.getPaddingTop()))+'px';
+            if(x!=undefined && x!=null) position.left=x+paddingLeft;
+            if(y!=undefined && y!=null) position.top=y+paddingTop;
 
-            if(div.elements[i].getLeft()!=undefined && div.elements[i].getLeft()!=null) div.elements[i].domElement.style.left=(parseInt(div.elements[i].getLeft())+parseInt(layout.getPaddingLeft()))+"px";
-            if(div.elements[i].getRight()!=undefined && div.elements[i].getRight()!=null) div.elements[i].domElement.style.right=(parseInt(div.elements[i].getRight())+parseInt(layout.getPaddingRight()))+"px";
-            if(div.elements[i].getTop()!=undefined && div.elements[i].getTop()!=null) div.elements[i].domElement.style.top=(parseInt(div.elements[i].getTop())+parseInt(layout.getPaddingTop()))+"px";
-            if(div.elements[i].getBottom()!=undefined && div.elements[i].getBottom()!=null) div.elements[i].domElement.style.bottom=(parseInt(div.elements[i].getBottom())+parseInt(layout.getPaddingBottom()))+"px";
-            //if(w!=$(div.elements[i]).width() || h!=$(div.elements[i]).height()){
-            div.elements[i].measure();
+            if(left!=undefined && left!=null) position.left=left+paddingLeft;
+            if(right!=undefined && right!=null) position.right=right+paddingRight;
+            if(top!=undefined && top!=null) position.top=top+paddingTop;
+            if(bottom!=undefined && bottom!=null) position.bottom=bottom+paddingBottom;
+            //if(w!=$(element).width() || h!=$(element).height()){
+            position.apply(element);
+            element.measure();
             //}
 
         }

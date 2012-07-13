@@ -114,12 +114,12 @@ core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',fu
         this.callSuper('createAttributes');
         this.createAttribute('currentState', undefined);
         this.createAttribute('class');
-        this.createAttribute('x');
-        this.createAttribute('y');
-        this.createAttribute('left');
-        this.createAttribute('right');
-        this.createAttribute('top');
-        this.createAttribute('bottom');
+        this.createAttribute('x',undefined ,'integer');
+        this.createAttribute('y',undefined, 'integer');
+        this.createAttribute('left',undefined, 'integer');
+        this.createAttribute('right',undefined, 'integer');
+        this.createAttribute('top',undefined, 'integer');
+        this.createAttribute('bottom',undefined, 'integer');
         this.createAttribute('position', 'center');
         this.createAttribute('height', undefined);
         this.createAttribute('width', undefined);
