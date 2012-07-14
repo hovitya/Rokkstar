@@ -4,7 +4,7 @@
  * @param parentWidth
  * @param parentHeight
  */
-core.helpers.LayoutPosition=Rokkstar.class('core.helpers.LayoutPosition',undefined,function(){
+core.helpers.LayoutPosition=Rokkstar.createClass('core.helpers.LayoutPosition',undefined,function(){
     this.left=undefined;
     this.right=undefined;
     this.top=undefined;
@@ -78,7 +78,7 @@ core.helpers.LayoutPosition=Rokkstar.class('core.helpers.LayoutPosition',undefin
      * @param {core.VisualComponent} element
      */
     this.apply=function(element){
-        if(BrowserDetect.browser!="Firefox"){
+        //if(BrowserDetect.browser!="Firefox"){
             if(this.width!=undefined){
                 element.domElement.style.width=this.width;
             }else{
@@ -114,7 +114,7 @@ core.helpers.LayoutPosition=Rokkstar.class('core.helpers.LayoutPosition',undefin
             }else{
                 element.domElement.style.right='';
             }
-        }else{
+        /*}else{
             var cssStyle="position:absolute;-moz-box-sizing:border-box;";
             if(this.width!=undefined){
                 cssStyle=cssStyle.concat('width:',this.width,';');
@@ -140,8 +140,8 @@ core.helpers.LayoutPosition=Rokkstar.class('core.helpers.LayoutPosition',undefin
                 cssStyle=cssStyle.concat('right:',this.right,'px;');
             }
             //console.log(cssStyle);
-            element.domElement.style.cssText=cssStyle;
-        }
+            //element.domElement.style.cssText=cssStyle;
+        }  */
     }
 
 });

@@ -6,19 +6,7 @@
  * @augments core.Layout
  * @constructor
  */
-core.FormLayout=Rokkstar.class('core.FormLayout','core.Layout',function(){
-
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('labelPosition','left','string');
-        this.createAttribute('gap',5,'integer');
-        this.createAttribute('labelPaddingLeft',5,'integer');
-        this.createAttribute('labelPaddingRight',5,'integer');
-        this.createAttribute('elementPaddingLeft',5,'integer');
-        this.createAttribute('elementPaddingRight',5,'integer');
-        this.createAttribute('elementPosition','left','string');
-    }
-
+core.FormLayout=Rokkstar.createClass('core.FormLayout','core.Layout',function(){
 
     this.init=function(){
         this.callSuper('init');
@@ -104,4 +92,4 @@ core.FormLayout=Rokkstar.class('core.FormLayout','core.Layout',function(){
 
         }
     }
-});
+},[new Attr('labelPosition','left','string'),new Attr('gap',5,'integer'),new Attr('labelPaddingLeft',5,'integer'),new Attr('labelPaddingRight',5,'integer'),new Attr('elementPaddingLeft',5,'integer'),new Attr('elementPaddingRight',5,'integer'),new Attr('elementPosition','left','string')]);

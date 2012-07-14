@@ -2,13 +2,7 @@
  * @augments core.Layout
  * @constructor
  */
-core.AlignmentLayout=Rokkstar.class('core.AlignmentLayout','core.Layout',function(){
-
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('horizontalAlign','left');
-        this.createAttribute('verticalAlign','top');
-    }
+core.AlignmentLayout=Rokkstar.createClass('core.AlignmentLayout','core.Layout',function(){
 
     this.init=function(){
         this.callSuper('init');
@@ -17,12 +11,10 @@ core.AlignmentLayout=Rokkstar.class('core.AlignmentLayout','core.Layout',functio
     }
 
     this.init=function(){
-
-        this.createAttribute('gap',0);
         this.callSuper('init');
         this.createEventListener('gapPropertyChanged',this.selfRefreshLayout,this);
         this.createEventListener('verticalAlignPropertyChanged',this.selfRefreshLayout,this);
         this.createEventListener('horizontalAlignPropertyChanged',this.selfRefreshLayout,this);
     }
 
-});
+},[new Attr('horizontalAlign','left'),new Attr('verticalAlign','top'),new Attr('gap',0)]);

@@ -1,9 +1,5 @@
-core.Application=Rokkstar.class('core.Application','core.VisualContainer',function(){
+core.Application=Rokkstar.createClass('core.Application','core.VisualContainer',function(){
 
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('fps',24);
-    }
 
     this.init=function(){
 
@@ -50,4 +46,4 @@ core.Application=Rokkstar.class('core.Application','core.VisualContainer',functi
             console.profileEnd();
         }
     }
-});
+},[new Attr('fps',24)]);

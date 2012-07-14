@@ -6,12 +6,7 @@
  * @augments core.VisualContainer
  * @constructor
  */
-core.Group=Rokkstar.class('core.Group','core.VisualContainer',function(){
-
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('clipAndEnableScrolling',false,'boolean');
-    }
+core.Group=Rokkstar.createClass('core.Group','core.VisualContainer',function(){
 
     this.init=function(){
         this.callSuper('init');
@@ -38,4 +33,4 @@ core.Group=Rokkstar.class('core.Group','core.VisualContainer',function(){
     }
 
 
-});
+},[new Attr('clipAndEnableScrolling',false,'boolean')]);

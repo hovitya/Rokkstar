@@ -6,11 +6,7 @@
  * @augments core.Component
  * @constructor
  */
-core.State=Rokkstar.class('core.State','core.Component',function(){
-
-    this.createAttributes=function(){
-        this.createAttribute("stateName");
-    }
+core.State=Rokkstar.createClass('core.State','core.Component',function(){
 
     this.properties=[];
 
@@ -25,4 +21,4 @@ core.State=Rokkstar.class('core.State','core.Component',function(){
             target["set"+this.properties[i].property.capitalize()].apply(target,[this.properties[i].value]);
         }
     }
-});
+},[new Attr("stateName")]);

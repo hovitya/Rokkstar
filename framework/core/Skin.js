@@ -6,7 +6,7 @@
  * @augments core.Group
  * @constructor
  */
-core.Skin=Rokkstar.class('core.Skin','core.Group',function(){
+core.Skin=Rokkstar.createClass('core.Skin','core.Group',function(){
     extend(this,'core.Group');
     /**
      * Host component

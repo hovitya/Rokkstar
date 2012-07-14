@@ -6,15 +6,11 @@
  * @augments core.SkinnableComponent
  * @constructor
  */
-core.Button=Rokkstar.class('core.Button','core.SkinnableComponent',function(){
+core.Button=Rokkstar.createClass('core.Button','core.SkinnableComponent',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
         this.buttonCreateAttributes();
-        this.focusableCreateAttributes();
-        this.createAttribute('enabled',true,'boolean');
-        this.createAttribute('label','Button');
-        this.declareSkinPart('label',false,'core.Label');
     }
 
     this.init=function(){
@@ -53,4 +49,6 @@ core.Button=Rokkstar.class('core.Button','core.SkinnableComponent',function(){
          this.invalidateSkinState();
     }
 
-},['core.behaviours.ButtonBehaviour','core.behaviours.FocusableBehaviour']);
+},
+    [new Attr('enabled',true,'boolean'),new Attr('label','Button'),new Attr('label',false,'core.Label'),new Attr('tabIndex',0,'integer')],
+    ['core.behaviours.ButtonBehaviour','core.behaviours.FocusableBehaviour']);

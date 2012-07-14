@@ -8,7 +8,7 @@
  * @augments core.VisualComponent
  * @constructor
  */
-core.VisualContainer=Rokkstar.class('core.VisualContainer','core.VisualComponent',function(){
+core.VisualContainer=Rokkstar.createClass('core.VisualContainer','core.VisualComponent',function(){
     extend(this,'core.VisualComponent');
 
     this.elements=[];
@@ -32,6 +32,9 @@ core.VisualContainer=Rokkstar.class('core.VisualContainer','core.VisualComponent
 
     this.removeElement=function(element){
         if(this.getElementIndex(element)!=-1){
+            if(this.domElement==element.domElement.parentNode){
+                this.domElement.removeChild(element.domElement);
+            }
             this.elements.splice(this.elements.indexOf(element),1);
             this.deactivateElement(element);
             element.parent=null;
@@ -42,6 +45,9 @@ core.VisualContainer=Rokkstar.class('core.VisualContainer','core.VisualComponent
 
     this.removeElementAt=function(position){
         if(position>=0 && position<=this.elements.length){
+            if(this.domElement==this.elements[position].domElement.parentNode){
+                this.domElement.removeChild(this.elements[position].domElement);
+            }
             this.deactivateElement(this.elements[position]);
             this.elements[position].parent=null;
             this.elements[position].triggerEvent("parentChanged");
@@ -67,12 +73,15 @@ core.VisualContainer=Rokkstar.class('core.VisualContainer','core.VisualComponent
                 element.parent.removeElement(element);
             }
             this.elements.push(element);
+            this.domElement.appendChild(element.domElement);
             this.activateElement(element);
             element.parent=this;
             element.triggerEvent("parentChanged");
         }else{
             this.elements.splice(this.getElementIndex(element),1);
             this.elements.push(element);
+            this.domElement.appendChild(element.domElement);
+
         }
         this.triggerEvent('elementsPropertyChanged');
     }
@@ -82,6 +91,11 @@ core.VisualContainer=Rokkstar.class('core.VisualContainer','core.VisualComponent
             if(element.parent!=null){
                 element.parent.removeElement(element);
             }
+            if(position<this.elements.length-1){
+                this.domElement.insertBefore(this.elements[position+1].domElement,element.domElement);
+            }else{
+                this.domElement.appendChild(element.domElement);
+            }
             this.elements.splice(position,0,element);
             this.activateElement(element);
             element.parent=this;
@@ -89,16 +103,16 @@ core.VisualContainer=Rokkstar.class('core.VisualContainer','core.VisualComponent
         }else{
             this.elements.splice(this.getElementIndex(element),1);
             this.elements.splice(position,0,element);
+            if(position<this.elements.length-1){
+                this.domElement.insertBefore(this.elements[position+1].domElement,element.domElement);
+            }else{
+                this.domElement.appendChild(element.domElement);
+            }
         }
         this.triggerEvent('elementsPropertyChanged');
     }
 
 
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('layout',null);
-
-    }
 
     this.init=function(){
         this.callSuper('init');
@@ -111,14 +125,6 @@ core.VisualContainer=Rokkstar.class('core.VisualContainer','core.VisualComponent
     }
 
     this.elementsChanged=function(event){
-
-        $(this.domElement).empty();
-        for(var i in this.elements){
-            if(this.elements[i].domElement==undefined){
-                throw new core.exceptions.TypeException("You can add visual components only.");
-            }
-            $(this.domElement).append(this.elements[i].domElement);
-        }
         this.invalidateLayout();
     }
 
@@ -164,4 +170,4 @@ core.VisualContainer=Rokkstar.class('core.VisualContainer','core.VisualComponent
             }
         }
     }
-});
+},[new Attr('layout',null)]);

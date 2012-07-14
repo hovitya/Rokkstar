@@ -9,16 +9,9 @@
  * @augments core.Component
  * @constructor
  */
-core.Layout =Rokkstar.class('core.Layout','core.Component',function () {
+core.Layout =Rokkstar.createClass('core.Layout','core.Component',function () {
 
     this.lastDiv = null;
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('paddingLeft', 0, 'integer');
-        this.createAttribute('paddingRight', 0, 'integer');
-        this.createAttribute('paddingTop', 0, 'integer');
-        this.createAttribute('paddingBottom', 0, 'integer');
-    }
 
 
     this.init = function () {
@@ -76,4 +69,4 @@ core.Layout =Rokkstar.class('core.Layout','core.Component',function () {
     }
 
 
-});
+},[new Attr('paddingLeft', 0, 'integer'),new Attr('paddingRight', 0, 'integer'),new Attr('paddingTop', 0, 'integer'),new Attr('paddingBottom', 0, 'integer')]);

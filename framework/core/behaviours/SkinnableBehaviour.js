@@ -188,9 +188,7 @@ core.behaviours.SkinnableBehaviour=function(){
         if(this.skin!=null && this.skin!=undefined) this.skin.tack();
     }
 
-    this.skinnableCreateAttributes=function(){
-        this.createAttribute('skinClass',undefined);
-    }
+
 
 
     this.skinnableInit=function(){

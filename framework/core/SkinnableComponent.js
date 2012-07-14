@@ -9,12 +9,7 @@
  * @borrows core.behaviours.SkinnableBehaviour#declareSkinPart
  * @constructor
  */
-core.SkinnableComponent=Rokkstar.class('core.SkinnableComponent','core.VisualComponent',function(){
-
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.skinnableCreateAttributes();
-    }
+core.SkinnableComponent=Rokkstar.createClass('core.SkinnableComponent','core.VisualComponent',function(){
 
 
     this.init=function(){
@@ -44,4 +39,4 @@ core.SkinnableComponent=Rokkstar.class('core.SkinnableComponent','core.VisualCom
 
 
 
-},['core.behaviours.SkinnableBehaviour']);
+},[new Attr('skinClass',undefined)],['core.behaviours.SkinnableBehaviour']);

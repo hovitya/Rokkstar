@@ -2,7 +2,7 @@
  * @augments core.Layout
  * @construct
  */
-core.ConstraintLayout=Rokkstar.class('core.ConstraintLayout','core.Layout',function(){
+core.ConstraintLayout=Rokkstar.createClass('core.ConstraintLayout','core.Layout',function(){
     /**
      *
      * @param {core.VisualComponent} div Target component
@@ -46,6 +46,7 @@ core.ConstraintLayout=Rokkstar.class('core.ConstraintLayout','core.Layout',funct
             //if(w!=$(element).width() || h!=$(element).height()){
             position.apply(element);
             element.measure(position.getPredictedWidth(),position.getPredictedHeight());
+
             //}
 
         }

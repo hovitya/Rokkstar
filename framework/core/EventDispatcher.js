@@ -5,7 +5,7 @@
  * @augments core.JQueryProxy
  * @constructor
  */
-core.EventDispatcher=Rokkstar.class('core.EventDispatcher','core.JQueryProxy',function(){
+core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryProxy',function(){
 
     /**
      * @private

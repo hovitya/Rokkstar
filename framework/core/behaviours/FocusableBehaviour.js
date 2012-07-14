@@ -4,9 +4,6 @@
  * @constructor
  */
 core.behaviours.FocusableBehaviour=function(){
-    this.focusableCreateAttributes=function(){
-        this.createAttribute('tabIndex',0,'integer');
-    }
 
     this.focusableInit=function(){
         this.createEventListener('tabIndexPropertyChanged',this.tabIndexChanged,this);

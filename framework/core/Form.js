@@ -12,16 +12,11 @@
  * @borrows core.behaviours.FormItemBehaviour#labelNode
  * @constructor
  */
-core.Form=Rokkstar.class('core.Form','core.SkinnableContainer',function(){
-
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.formItemCreateAttributes();
-    }
+core.Form=Rokkstar.createClass('core.Form','core.SkinnableContainer',function(){
 
     this.init=function(){
         this.callSuper('init');
         this.formItemInit();
     }
 
-},['core.behaviours.FormItemBehaviour']);
+},[new Attr('label','','string'),new Attr('disabled',false,'boolean')],['core.behaviours.FormItemBehaviour']);

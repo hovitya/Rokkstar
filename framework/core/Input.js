@@ -3,10 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
  /**
- * @augments core.abstract.FormItem
+ * @augments core.helpers.FormItem
  * @constructor
  */
-core.Input=Rokkstar.class('core.Input','core.abstract.FormItem',function(){
+core.Input=Rokkstar.createClass('core.Input','core.helpers.FormItem',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');

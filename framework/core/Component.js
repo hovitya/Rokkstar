@@ -9,7 +9,7 @@
  * @augments core.EventDispatcher
  * @constructor
  */
-core.Component=Rokkstar.class('core.Component','core.EventDispatcher',function(){
+core.Component=Rokkstar.createClass('core.Component','core.EventDispatcher',function(){
 
     /**
      * Get XML attribute
@@ -68,84 +68,7 @@ core.Component=Rokkstar.class('core.Component','core.EventDispatcher',function()
     this._attributes=[];
     this._attributeTypes={};
 
-    /**
-     * Create attribute for this object. Generate getter and setter and also initialize xml attributes.
-     * @description
-     * Use this method to generate standard getters setters with a single line. This method has to be called in
-     * the createAttributes method.
-     * @example
-     * <pre><code>
-     *      my.NewComponent=function(){
-     *          extend(this,'core.Component');
-     *
-     *          this.createAttribute('width',200);
-     *
-     *          this.init(){
-     *              this.callSuper('init');
-     *              this.getWidth(); //This will return 200, if it is not overridden in the layout xml
-     *              this.setWidth(350); //This will set width parameter 350 and fires widthPropertyChanged event
-     *              this.getWidth(); //Returns 350
-     *          }
-     *      }
-     * </code></pre>
-     * This method looking for default value amongst the xml attributes for the first place. So if this component is
-     * included into a layout xml this way <code><my:NewComponent width="900"/></code> then the first getWidth() call
-     * will return 900 instead of 200.
-     * @param {String} property Property name
-     * @param {*} defaultValue Property default value
-     */
-    this.createAttribute=function(property,defaultValue,typeForcing){
-        this._attributes.push({name:property,type:typeForcing});
-        this._attributeTypes[property]=typeForcing;
-        if(this[property]!=undefined){
-            var val=this[property];
-            this[property]=this.extractValue(val,typeForcing);
-        }else{
-            if(defaultValue!=null){
-                this[property]=defaultValue;
-            }
-        }
 
-        //Parsing state params
-        /*if(this.master!=undefined && this.master.states!=undefined){
-            for(var i in this.master.states){
-                var name=this.master.states[i].stateName;
-                if(this.master._stateAttributes[name]==undefined){
-                    this.master._stateAttributes[name]=[];
-                }
-
-                if(this.getXMLData(property+'.'+name,undefined)!=undefined){
-                    this.master._stateAttributes[name].push({property:property,target:this,value:this.extractValue(this.getXMLData(property+'.'+name,undefined),typeForcing)});
-                }else{
-                    this.master._stateAttributes[name].push({property:property,value:this[property],target:this});
-                }
-            }
-        }*/
-
-        //generating getters and setters
-        var getterName='get'+property.capitalize();
-        var setterName='set'+property.capitalize();
-        if(this[setterName]==undefined){
-            if(Rokkstar.setterGetterCache[setterName]==undefined){
-                Rokkstar.profiling.sgGeneration++;
-                Rokkstar.setterGetterCache[setterName]=function(v){
-                    this.set(property,v);
-                };
-            }
-
-            this[setterName]=Rokkstar.setterGetterCache[setterName];
-        }
-        if(this[getterName]==undefined){
-            if(Rokkstar.setterGetterCache[getterName]==undefined){
-                Rokkstar.profiling.sgGeneration++;
-                Rokkstar.setterGetterCache[getterName]=function(){
-                    return this.get(property);
-                };
-            }
-
-            this[getterName]=Rokkstar.setterGetterCache[getterName];
-        }
-    }
     
     
     this.extractValue=function(val,typeForcing){
@@ -174,17 +97,7 @@ core.Component=Rokkstar.class('core.Component','core.EventDispatcher',function()
      * @param {String} property Property name
      * @param {*} value New property value
      */
-    this.set=function(property,value){
-        var target;
-        if(this.propertyRedirections.hasOwnProperty(property) && this.propertyRedirections[property]!=null){
-            target=this.propertyRedirections[property];
-            target.set(property,value);
-        }else{
-            target=this;
-            target[property]=Rokkstar.parseAttribute(value,this._attributeTypes[property]);
-            target.triggerEvent(property+'PropertyChanged')
-        }
-    }
+
     /**
      * General attribute getter.
      * @description
@@ -195,9 +108,7 @@ core.Component=Rokkstar.class('core.Component','core.EventDispatcher',function()
      * @see core.Component#createAttribute
      * @param {String} property Property name
      */
-    this.get=function(property){
-        return this[property];
-    }
+
 
 
     /**

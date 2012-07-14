@@ -6,11 +6,10 @@
  * @augments core.Panel
  * @constructor
  */
-core.TitlePanel=Rokkstar.class('core.TitlePanel','core.Panel',function(){
+core.TitlePanel=Rokkstar.createClass('core.TitlePanel','core.Panel',function(){
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
-        this.createAttribute('titleLabel','');
         this.declareSkinPart('label',false,'core.Label');
     }
 
@@ -35,4 +34,4 @@ core.TitlePanel=Rokkstar.class('core.TitlePanel','core.Panel',function(){
     }
 
 
-});
+},[new Attr('titleLabel','')]);

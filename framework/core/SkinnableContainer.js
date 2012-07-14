@@ -37,7 +37,7 @@
  * @borrows core.behaviours.SkinnableBehaviour#_changeSkin as _changeSkin
  * @constructor
  */
-core.SkinnableContainer=Rokkstar.class('core.SkinnableContainer','core.VisualContainer',function(){
+core.SkinnableContainer=Rokkstar.createClass('core.SkinnableContainer','core.VisualContainer',function(){
 
     /**
      * @protected
@@ -145,7 +145,6 @@ core.SkinnableContainer=Rokkstar.class('core.SkinnableContainer','core.VisualCon
 
     this.createAttributes=function(){
         this.callSuper('createAttributes');
-        this.skinnableCreateAttributes();
         this.declareSkinPart('content',true,'core.Container');
     }
 
@@ -178,4 +177,4 @@ core.SkinnableContainer=Rokkstar.class('core.SkinnableContainer','core.VisualCon
     }
 
 
-},['core.behaviours.SkinnableBehaviour']);
+},[new Attr('skinClass',undefined)],['core.behaviours.SkinnableBehaviour']);

@@ -1,13 +1,5 @@
-core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
+core.BorderLayout=Rokkstar.createClass('core.BorderLayout','core.Layout',function(){
 
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('gap', '5');
-        this.createAttribute('gapRight', undefined);
-        this.createAttribute('gapTop', undefined);
-        this.createAttribute('gapBottom', undefined);
-        this.createAttribute('gapLeft', undefined);
-    }
 
     this.init=function(){
         this.callSuper('init');
@@ -289,4 +281,4 @@ core.BorderLayout=Rokkstar.class('core.BorderLayout','core.Layout',function(){
 
     this.handleUpProxy= $.proxy(this.handleUp,this);
 
-} );
+},[new Attr('gap', '5'),new Attr('gapRight', undefined),new Attr('gapTop', undefined),new Attr('gapBottom', undefined),new Attr('gapLeft', undefined)]);

@@ -14,12 +14,7 @@
  * @borrows core.behaviours.FormItemBehaviour#labelNode
  * @constructor
  */
-core.abstract.FormItem=Rokkstar.class('core.abstract.FormItem','core.SkinnableComponent',function(){
-
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.formItemCreateAttributes();
-    }
+core.helpers.FormItem=Rokkstar.createClass('core.helpers.FormItem','core.SkinnableComponent',function(){
 
     this.init=function(){
         this.callSuper('init');
@@ -35,4 +30,4 @@ core.abstract.FormItem=Rokkstar.class('core.abstract.FormItem','core.SkinnableCo
             return 'normal';
         }
     }
-},['core.behaviours.FormItemBehaviour']);
+},[new Attr('label','','string'),new Attr('disabled',false,'boolean')],['core.behaviours.FormItemBehaviour']);

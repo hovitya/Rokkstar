@@ -6,13 +6,7 @@
  *
  * @constructor
  */
-core.ParallaxLayout=Rokkstar.class('core.ParallaxLayout','core.Layout',function(){
-
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('positionX',0,'integer');
-        this.createAttribute('positionY',0,'integer');
-    }
+core.ParallaxLayout=Rokkstar.createClass('core.ParallaxLayout','core.Layout',function(){
 
     this.init=function(){
         this.callSuper('init');
@@ -49,4 +43,4 @@ core.ParallaxLayout=Rokkstar.class('core.ParallaxLayout','core.Layout',function(
         }
 
     }
-});
+},[new Attr('positionX',0,'integer'),new Attr('positionY',0,'integer')]);

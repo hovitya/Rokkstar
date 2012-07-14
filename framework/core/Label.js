@@ -6,12 +6,7 @@
  * @augments core.VisualComponent
  * @constructor
  */
-core.Label=Rokkstar.class('core.Label','core.VisualComponent',function(){
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('text','');
-    }
-
+core.Label=Rokkstar.createClass('core.Label','core.VisualComponent',function(){
     this.init=function(){
         this.callSuper('init');
         this.createEventListener('textPropertyChanged',this._updateText,this);
@@ -29,4 +24,4 @@ core.Label=Rokkstar.class('core.Label','core.VisualComponent',function(){
             this.invalidateSize();
         }
     }
-});
+},[new Attr('text','')]);

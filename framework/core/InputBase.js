@@ -7,13 +7,7 @@
  * @augments core.VisualComponent
  * @constructor
  */
-core.InputBase=Rokkstar.class('core.InputBase','core.VisualComponent',function(){
-
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('value',"",'string');
-        this.createAttribute('disabled',false,'boolean');
-    }
+core.InputBase=Rokkstar.createClass('core.InputBase','core.VisualComponent',function(){
 
     this.init=function(){
         this.callSuper('init');
@@ -40,4 +34,4 @@ core.InputBase=Rokkstar.class('core.InputBase','core.VisualComponent',function()
         this.domElement.disabled=this.getDisabled();
     }
 
-});
+},[new Attr('value',"",'string'),new Attr('disabled',false,'boolean')]);

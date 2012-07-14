@@ -9,7 +9,7 @@
  * @augments core.Component
  * @constructor
  */
-core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',function () {
+core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Component',function () {
 
     /**
      *
@@ -109,29 +109,10 @@ core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',fu
 
     this.xmlContentArray = [];
 
-
-    this.createAttributes = function () {
-        this.callSuper('createAttributes');
-        this.createAttribute('currentState', undefined);
-        this.createAttribute('class');
-        this.createAttribute('x',undefined,'integer');
-        this.createAttribute('y',undefined,'integer');
-        this.createAttribute('left',undefined,'integer');
-        this.createAttribute('right',undefined,'integer');
-        this.createAttribute('top',undefined,'integer');
-        this.createAttribute('bottom',undefined,'integer');
-        this.createAttribute('position', 'center');
-        this.createAttribute('height', undefined);
-        this.createAttribute('width', undefined);
-        this.createAttribute('distance', 0, 'integer');
-        this.createAttribute('distanceX', undefined, 'integer');
-        this.createAttribute('distanceY', undefined, 'integer');
-        this.createAttribute('cssStyle', {}, 'object');
-    }
-
     this.states={};
 
     this.init = function () {
+        if(this.domElement==null) this.createDomElement();
         this.callSuper('init');
         this._buildDOM();
 
@@ -151,7 +132,7 @@ core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',fu
         this.createEventListener('classPropertyChanged', this.classChanged, this);
         this.createEventListener('currentStatePropertyChanged', this.stateChanged, this);
         this.createEventListener('cssStylePropertyChanged', this.styleChanged, this);
-        if(this.domElement==null) this.createDomElement();
+
         $(this.domElement).mouseenter($.proxy(this.triggerJQEvent,this));
         $(this.domElement).mouseleave($.proxy(this.triggerJQEvent,this));
     }
@@ -341,4 +322,6 @@ core.VisualComponent = Rokkstar.class('core.VisualComponent','core.Component',fu
         event.stopPropagation();
         $(this.domElement).css(this.getCssStyle());
     }
-});
+},[new Attr('currentState', undefined),new Attr('class'),new Attr('x',undefined,'integer'),new Attr('y',undefined,'integer'),new Attr('left',undefined,'integer'),new Attr('right',undefined,'integer'),new Attr('top',undefined,'integer'),new Attr('bottom',undefined,'integer'),new Attr('position', 'center'),new Attr('height', undefined),
+new Attr('width', undefined), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('cssStyle', {}, 'object')]);
+

@@ -16,7 +16,7 @@
              match="*[namespace::*[not(. = ../../namespace::*)]]"
              use="namespace::*[not(. = ../../namespace::*)]"/>
     <xsl:template match="/">
-        <xsl:text>{{instance_name}}=Rokkstar.class('{{instance_name}}','</xsl:text>
+        <xsl:text>{{instance_name}}=Rokkstar.createClass('{{instance_name}}','</xsl:text>
         <xsl:for-each select="/*">
             <xsl:choose>
                 <xsl:when test="namespace-uri(.)=$rxNS">

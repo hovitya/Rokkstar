@@ -1,8 +1,4 @@
 core.behaviours.FormItemBehaviour=function(){
-    this.formItemCreateAttributes=function(){
-        this.createAttribute('label','','string');
-        this.createAttribute('disabled',false,'boolean');
-    }
 
     this.formItemInit=function(){
         this.createEventListener('labelPropertyChanged',this._refreshLabel,this);

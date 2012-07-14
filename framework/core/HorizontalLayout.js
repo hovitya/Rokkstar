@@ -6,7 +6,7 @@
  * @augments core.AlignmentLayout
  * @constructor
  */
-core.HorizontalLayout=Rokkstar.class('core.HorizontalLayout','core.AlignmentLayout',function(){
+core.HorizontalLayout=Rokkstar.createClass('core.HorizontalLayout','core.AlignmentLayout',function(){
     /**
      * 
      * @param {core.VisualComponent} div Parent component

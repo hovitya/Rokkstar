@@ -6,7 +6,7 @@
  * Creates new JQueryProxy object.
  * @constructor
  */
-core.JQueryProxy=Rokkstar.class('core.JQueryProxy',undefined,function(){
+core.JQueryProxy=Rokkstar.createClass('core.JQueryProxy',undefined,function(){
     this.findById=function(id){
         return $(this).find('#'+id).get(0);
     }

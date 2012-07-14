@@ -6,7 +6,7 @@
  * @augments core.AlignmentLayout
  * @constructor
  */
-core.VerticalLayout=Rokkstar.class('core.VerticalLayout','core.AlignmentLayout',function(){
+core.VerticalLayout=Rokkstar.createClass('core.VerticalLayout','core.AlignmentLayout',function(){
     /**
      * 
      * @param {core.VisualContainer} div Parent div
@@ -60,7 +60,7 @@ core.VerticalLayout=Rokkstar.class('core.VerticalLayout','core.AlignmentLayout',
                 }
                 currentTop=currentTop+height+gap;
                 position.apply(element);
-                element.measure();
+                element.measure(width,height);
             }
         }else if(verticalAlign=='bottom'){
             var currentBottom=paddingBottom;
@@ -92,7 +92,7 @@ core.VerticalLayout=Rokkstar.class('core.VerticalLayout','core.AlignmentLayout',
                 }
                 currentBottom=currentBottom+height+gap;
                 position.apply(element);
-                element.measure();
+                element.measure(width,height);
             }
         }
         

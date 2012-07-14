@@ -6,14 +6,7 @@
  * @augments core.SkinnableContainer
  * @constructor
  */
-core.Panel=Rokkstar.class('core.Panel','core.SkinnableContainer',function(){
-
-    this.createAttributes=function(){
-        this.callSuper('createAttributes');
-        this.createAttribute('controlBarContent',[],'array');
-        this.createAttribute('showControlBar','auto');
-        this.declareSkinPart('controlBar',false,'core.VisualContainer');
-    }
+core.Panel=Rokkstar.createClass('core.Panel','core.SkinnableContainer',function(){
 
     this.init=function(){
         this.callSuper('init');
@@ -55,4 +48,4 @@ core.Panel=Rokkstar.class('core.Panel','core.SkinnableContainer',function(){
     }
 
 
-});
+},[new Attr('controlBarContent',[],'array'),new Attr('showControlBar','auto'),new Attr('controlBar',false,'core.VisualContainer')]);
