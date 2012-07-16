@@ -129,12 +129,17 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         this.createEventListener('topPropertyChanged', this.topChanged, this);
         this.createEventListener('bottomPropertyChanged', this.bottomChanged, this);
         this.createEventListener('positionPropertyChanged', this.positionChanged, this);
-        this.createEventListener('classPropertyChanged', this.classChanged, this);
+        this.createEventListener('classPropertyChanged', this.classChanged, this)
+        this.createEventListener('matrixPropertyChanged', this._matrixChanged, this);
+        this.createEventListener('rotationPropertyChanged', this._createMatrix, this);
+        this.createEventListener('scaleXPropertyChanged', this._createMatrix, this);
+        this.createEventListener('scaleYPropertyChanged', this._createMatrix, this);
+        this.createEventListener('skewXPropertyChanged', this._createMatrix, this);
+        this.createEventListener('skewYPropertyChanged', this._createMatrix, this);
+        this.createEventListener('translateXPropertyChanged', this._createMatrix, this);
+        this.createEventListener('translateYPropertyChanged', this._createMatrix, this);
         this.createEventListener('currentStatePropertyChanged', this.stateChanged, this);
         this.createEventListener('cssStylePropertyChanged', this.styleChanged, this);
-
-        $(this.domElement).mouseenter($.proxy(this.triggerJQEvent,this));
-        $(this.domElement).mouseleave($.proxy(this.triggerJQEvent,this));
     }
 
 
@@ -163,7 +168,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
 
 
         //if ((mH!=this.measuredHeight || mW!=this.measuredWidth) && this.parent != null) {
-        //    this.invalidateLayout();
+        //    this.parent.invalidateLayout();
         //}
 
     }
@@ -193,7 +198,10 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
     }
 
     this.commitProperties = function () {
-
+        if(this._matrixInvalid){
+            this._matrixInvalid=false;
+            this.domElement.style[Modernizr.prefixed('transform')]=this.getMatrix().toString();
+        }
     }
 
     this.tack = function () {
@@ -322,6 +330,25 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         event.stopPropagation();
         $(this.domElement).css(this.getCssStyle());
     }
+
+    this._matrixInvalid=false;
+
+
+
+    this._matrixChanged=function(event){
+        this._matrixInvalid=true;
+        this.invalidateProperties();
+    }
+
+    this._createMatrix=function(){
+        var m=new core.Matrix();
+        m.translate(this.getTranslateX(),this.getTranslateY());
+        m.shear(this.getSkewX()/100.0,this.getSkewY()/100.0);
+        m.scale(this.getScaleX(),this.getScaleY());
+        m.rotate(this.getRotation());
+        this.setMatrix(m);
+    }
+
 },[new Attr('currentState', undefined),new Attr('class'),new Attr('x',undefined,'integer'),new Attr('y',undefined,'integer'),new Attr('left',undefined,'integer'),new Attr('right',undefined,'integer'),new Attr('top',undefined,'integer'),new Attr('bottom',undefined,'integer'),new Attr('position', 'center'),new Attr('height', undefined),
-new Attr('width', undefined), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('cssStyle', {}, 'object')]);
+new Attr('width', undefined), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('cssStyle', {}, 'object'), new Attr('matrix', undefined), new Attr('rotation', 0,'float'), new Attr('scaleX', 1.0,'float'), new Attr('scaleY', 1.0,'float'), new Attr('skewX', 0,'float'), new Attr('skewY', 0,'float'),new Attr('translateX', 0,'integer'), new Attr('translateY', 0,'integer')]);
 
