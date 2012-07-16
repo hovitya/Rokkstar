@@ -53,7 +53,7 @@ core.behaviours.SkinnableBehaviour=function(){
      * @return {*}
      */
     this.hasSkinPart=function(name){
-        if(this.skinParts[name]===undefined) throw new core.exceptions.SkinException("Skin part is not declared ("+name+").");
+        if(this.skinParts[name]===undefined) return false;
         return this.skinParts[name]!=null;
     }
 

@@ -8,22 +8,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /**
+ * @classdef Empty fill.
  * @class
  */
-core.graphics.Fill = Rokkstar.createClass('core.graphics.Fill', 'core.Component', function () {
-    /**
-     *
-     * @param {CanvasRenderingContext2D} graphics
-     */
-    this.applyFill=function(graphics){
+core.graphics.NoneFill = Rokkstar.createClass('core.graphics.NoneFill', 'core.graphics.Fill', function () {
 
-    }
-
-    /**
-     *
-     * @param {CanvasRenderingContext2D} graphics
-     */
-    this.callFill=function(graphics){
-
-    }
 });

@@ -293,8 +293,10 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours){
                         target.set(property,value);
                     }else{
                         target=this;
+                        var oldValue=target[property];
                         target[property]=Rokkstar.parseAttribute(value,this._attributeTypes[property]);
-                        target.triggerEvent(property+'PropertyChanged')
+                        var event=$.Event(property+'PropertyChanged',{oldValue:oldValue,newValue:value});
+                        target.triggerEvent(event);
                     }
                 }
 
@@ -406,9 +408,9 @@ Rokkstar.parseAttribute=function(val,typeForcing){
         ret=val;
     }
     return ret;
-}
+};
 
-Rokkstar.requestAnimationFrame = Modernizr.prefixed('requestAnimationFrame', window) || function(callback){ window.setTimeout(callback, 1000 / 60); }
+Rokkstar.requestAnimationFrame = Modernizr.prefixed('requestAnimationFrame', window) || function(callback){ window.setTimeout(callback, 1000 / 60); };
 
 // Creating prototypes
 String.prototype.capitalize = function() {
@@ -429,6 +431,15 @@ Rokkstar.toRadians=function(degree) {
     var pi = Math.PI;
     var rad = degree*(pi/180);
     return Number(rad);
+};
+
+Rokkstar.hexToRgb=function(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
 };
 
 

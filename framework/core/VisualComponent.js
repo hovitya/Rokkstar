@@ -117,9 +117,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         this._buildDOM();
 
 
-        //this.xmlContentArray = $(this).children().toArray();
-        //$(this).empty();
-        //$(this).stateManager(this.states);
+        //Registering event listeners
         this.createEventListener('widthPropertyChanged', this.widthChanged, this);
         this.createEventListener('heightPropertyChanged', this.heightChanged, this);
         this.createEventListener('xPropertyChanged', this.xChanged, this);
@@ -138,6 +136,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         this.createEventListener('skewYPropertyChanged', this._createMatrix, this);
         this.createEventListener('translateXPropertyChanged', this._createMatrix, this);
         this.createEventListener('translateYPropertyChanged', this._createMatrix, this);
+        this.createEventListener('visiblePropertyChanged', this._visibilityChanged, this);
         this.createEventListener('currentStatePropertyChanged', this.stateChanged, this);
         this.createEventListener('cssStylePropertyChanged', this.styleChanged, this);
     }
@@ -201,6 +200,14 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         if(this._matrixInvalid){
             this._matrixInvalid=false;
             this.domElement.style[Modernizr.prefixed('transform')]=this.getMatrix().toString();
+        }
+        if(this._visibilityInvalid){
+            this._visibilityInvalid=false;
+            if(this.getVisible()){
+                this.domElement.style.display='block';
+            }else{
+                this.domElement.style.display='none';
+            }
         }
     }
 
@@ -349,6 +356,14 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         this.setMatrix(m);
     }
 
+    this._visibilityInvalid=false;
+
+    this._visibilityChanged=function(event){
+        this._visibilityInvalid=true;
+        this.invalidateProperties();
+    }
+
 },[new Attr('currentState', undefined),new Attr('class'),new Attr('x',undefined,'integer'),new Attr('y',undefined,'integer'),new Attr('left',undefined,'integer'),new Attr('right',undefined,'integer'),new Attr('top',undefined,'integer'),new Attr('bottom',undefined,'integer'),new Attr('position', 'center'),new Attr('height', undefined),
-new Attr('width', undefined), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('cssStyle', {}, 'object'), new Attr('matrix', undefined), new Attr('rotation', 0,'float'), new Attr('scaleX', 1.0,'float'), new Attr('scaleY', 1.0,'float'), new Attr('skewX', 0,'float'), new Attr('skewY', 0,'float'),new Attr('translateX', 0,'integer'), new Attr('translateY', 0,'integer')]);
+new Attr('width', undefined), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('cssStyle', {}, 'object'), new Attr('matrix', undefined), new Attr('rotation', 0,'float'), new Attr('scaleX', 1.0,'float'), new Attr('scaleY', 1.0,'float'), new Attr('skewX', 0,'float'), new Attr('skewY', 0,'float'),new Attr('translateX', 0,'integer'), new Attr('translateY', 0,'integer'),
+new Attr('visible',true,'boolean')]);
 

@@ -9,6 +9,11 @@ core.graphics.GraphicsElement=Rokkstar.createClass('core.graphics.GraphicsElemen
 
     this.canvasSizeChanged=false;
 
+    this.init=function(){
+        this.callSuper('init');
+        this.createEventListener('filtersPropertyChanged',this._filtersChanged,this);
+    }
+
     this.measure=function(){
         var mw=this.measuredWidth;
         var mh=this.measuredHeight;
@@ -16,10 +21,15 @@ core.graphics.GraphicsElement=Rokkstar.createClass('core.graphics.GraphicsElemen
         //Repaint graphics
         if(mw!=this.measuredWidth || mh!=this.measuredHeight){
             //Reset size
-            this.domElement.width=this.measuredWidth;
-            this.domElement.height=this.measuredHeight;
+            var outerPadding=this.getCanvasOuterPadding();
+            this.canvas.width=this.measuredWidth+2*outerPadding;
+            this.canvas.height=this.measuredHeight+2*outerPadding;
             this.invalidateDrawing();
         }
+    }
+
+    this.sizeReset=function(){
+
     }
 
     this.invalidateDrawing=function(){
@@ -32,8 +42,15 @@ core.graphics.GraphicsElement=Rokkstar.createClass('core.graphics.GraphicsElemen
         if(this.drawingInvalid){
             if(this.drawProxy==null){
                 this.drawProxy=$.proxy(function(){
+                    var outerPadding=this.getCanvasOuterPadding();
                     this.clearGraphics();
-                    this.draw(this.graphics);
+                    this.draw(this.graphics,outerPadding,outerPadding,this.measuredWidth,this.measuredHeight);
+                    //Apply filters
+                    var filters=this.getFilters();
+                    var i=filters.length;
+                    while(--i>=0){
+                        filters[i].apply(this.canvas);
+                    }
                 },this);
             }
             //Call drawing during next animation frame
@@ -44,7 +61,25 @@ core.graphics.GraphicsElement=Rokkstar.createClass('core.graphics.GraphicsElemen
     this.drawProxy=null;
 
     this.clearGraphics=function(){
-        this.graphics.clearRect(0,0,this.domElement.width,this.domElement.height);
+        this.graphics.clearRect(0,0,this.canvas.width,this.canvas.height);
+    }
+
+    this._filtersChanged=function(event){
+        var oldFilters=event.oldValue;
+        var i=oldFilters.length;
+        while(--i>=0){
+            oldFilters[i].deleteEventListener('change',this.invalidateFilters,this);
+        }
+
+        var newFilters=this.getFilters();
+        var j=newFilters.length;
+        while(--j>=0){
+            newFilters[j].createEventListener('change',this.invalidateFilters,this);
+        }
+    }
+
+    this.invalidateFilters=function(){
+        this.invalidateDrawing();
     }
 
     /**
@@ -55,4 +90,4 @@ core.graphics.GraphicsElement=Rokkstar.createClass('core.graphics.GraphicsElemen
 
     }
 
-});
+},[new Attr('filters',[],'array')]);

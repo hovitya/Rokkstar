@@ -9,18 +9,14 @@
 
 /**
  * @class
- * @augments core.graphics.GraphicsElement
+ * @augments core.graphics.ClosedGraphicsElement
  */
-core.graphics.Ellipse = Rokkstar.createClass('core.graphics.Ellipse', 'core.graphics.GraphicsElement', function () {
+core.graphics.Ellipse = Rokkstar.createClass('core.graphics.Ellipse', 'core.graphics.ClosedGraphicsElement', function () {
     /**
      *
      * @param {CanvasRenderingContext2D} graphics
      */
-    this.draw=function(graphics){
-        var x=0;
-        var y=0;
-        var w=this.measuredWidth;
-        var h=this.measuredHeight;
+    this.drawPath=function(graphics,x,y,w,h){
         var kappa = .5522848;
         var ox = (w / 2) * kappa,
             oy = (h / 2) * kappa,
@@ -36,6 +32,5 @@ core.graphics.Ellipse = Rokkstar.createClass('core.graphics.Ellipse', 'core.grap
         graphics.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
         graphics.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
         graphics.closePath();
-        graphics.stroke();
     }
 });

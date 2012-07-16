@@ -10,12 +10,12 @@
 /**
  * @class
  */
-core.graphics.Fill = Rokkstar.createClass('core.graphics.Fill', 'core.Component', function () {
+core.graphics.Stroke = Rokkstar.createClass('core.graphics.Stroke', 'core.Component', function () {
     /**
      *
      * @param {CanvasRenderingContext2D} graphics
      */
-    this.applyFill=function(graphics){
+    this.applyStroke=function(graphics){
 
     }
 
@@ -23,7 +23,7 @@ core.graphics.Fill = Rokkstar.createClass('core.graphics.Fill', 'core.Component'
      *
      * @param {CanvasRenderingContext2D} graphics
      */
-    this.callFill=function(graphics){
+    this.callStroke=function(graphics){
 
     }
 });

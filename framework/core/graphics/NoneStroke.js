@@ -8,22 +8,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /**
+ * @classdef Empty stroke.
  * @class
  */
-core.graphics.Fill = Rokkstar.createClass('core.graphics.Fill', 'core.Component', function () {
-    /**
-     *
-     * @param {CanvasRenderingContext2D} graphics
-     */
-    this.applyFill=function(graphics){
+core.graphics.NoneStroke = Rokkstar.createClass('core.graphics.NoneStroke', 'core.graphics.Stroke', function () {
 
-    }
-
-    /**
-     *
-     * @param {CanvasRenderingContext2D} graphics
-     */
-    this.callFill=function(graphics){
-
-    }
 });

@@ -32,10 +32,14 @@ core.DrawableComponent = Rokkstar.createClass('core.DrawableComponent', 'core.Vi
         this.canvas=document.createElement('canvas');
         this.canvas.style[Modernizr.prefixed('boxSizing')]='border-box';
         this.canvas.style.position='absolute';
+        var outerPadding=this.getCanvasOuterPadding();
+        this.canvas.style.left="-"+outerPadding+"px";
+        this.canvas.style.top="-"+outerPadding+"px";
+        this.canvas.style.right=outerPadding+"px";
+        this.canvas.style.bottom=outerPadding+"px";
+        this.domElement.appendChild(this.canvas);
 
-
-
-        this.graphics=this.domElement.getContext('2d');
+        this.graphics=this.canvas.getContext('2d');
     }
 
 },[new Attr('canvasOuterPadding',20,'integer')]);
