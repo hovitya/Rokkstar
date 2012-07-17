@@ -43,10 +43,10 @@ core.graphics.ClosedGraphicsElement=Rokkstar.createClass('core.graphics.ClosedGr
 
     this.draw=function(graphics,x,y,width,height){
         if(this.getFill()!=null){
-            this.getFill().applyFill(graphics);
+            this.getFill().applyFill(graphics,x,y,width,height);
         }
         if(this.getStroke()!=null){
-            this.getStroke().applyStroke(graphics);
+            this.getStroke().applyStroke(graphics,x,y,width,height);
         }
         if(this.getShadow()){
             var rgb=Rokkstar.hexToRgb(this.getShadowColor());
@@ -60,7 +60,7 @@ core.graphics.ClosedGraphicsElement=Rokkstar.createClass('core.graphics.ClosedGr
         this.drawPath(graphics,x,y,width,height);
         if(this.getFill()!=null){
             this.getFill().callFill(graphics);
-            //Turn off shadow if fill generated
+            //Turn off shadow if already drawn under fill
             graphics.shadowColor="rgba(0,0,0,0.0)";
         }
         if(this.getStroke()!=null) this.getStroke().callStroke(graphics);

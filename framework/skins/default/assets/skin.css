@@ -161,7 +161,7 @@
     background: -webkit-linear-gradient(top,  #666666 0%,#606060 45%,#484848 46%,#333333 100%);
     background: -o-linear-gradient(top,  #666666 0%,#606060 45%,#484848 46%,#333333 100%);
     background: -ms-linear-gradient(top,  #666666 0%,#606060 45%,#484848 46%,#333333 100%);
-    background: linear-gradient(to bottom,  #666666 0%,#606060 45%,#484848 46%,#333333 100%);
+    background: linear-gradient(to bottom,  );
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#666666', endColorstr='#333333',GradientType=0 );
     -webkit-border-bottom-left-radius: 0px;
     -webkit-border-bottom-right-radius: 0px;

@@ -13,9 +13,17 @@
             <rg:SolidColorFill color="#FFFFFF"/>
         </r:fill>
     </rg:Rectangle>
-    <rx:Group class="core_TitlePanel_Titlebar noSelect" top="0" left="0" right="0" height="28px">
-        <rx:Label text="" class="core_TitlePanel_Title" id="label" top="0" left="12" right="0" bottom="0"/>
-    </rx:Group>
+    <rg:Rectangle top="0" left="0" right="0" height="29px" corner="0" topLeftCorner="5" topRightCorner="5">
+        <r:fill>
+            <rg:LinearGradientFill>
+                <rg:GradientStop ratio="0.0" color="#666666"/>
+                <rg:GradientStop ratio="0.4" color="#606060"/>
+                <rg:GradientStop ratio="0.41" color="#484848"/>
+                <rg:GradientStop ratio="1.0" color="#333333"/>
+            </rg:LinearGradientFill>
+        </r:fill>
+    </rg:Rectangle>
+    <rx:Label text="" class="core_TitlePanel_Title" id="label" top="0" left="12" right="0" bottom="0"/>
     <rx:Group class="core_TitlePanel_Content noSelect" top="29" left="1" right="1" bottom.normal="1" bottom.normalWithControlBar="51" id="content">
     </rx:Group>
     <rg:Rectangle height="50px" left="0" right="0" bottom="0" corner="5" topLeftCorner="0" topRightCorner="0" visible.normal="false" visible.normalWithControlBar="true">

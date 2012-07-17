@@ -391,6 +391,9 @@ Rokkstar.parseAttribute=function(val,typeForcing){
     }else if(typeForcing=='integer'){
         if(val!=undefined) ret=parseInt(val);
         else ret=val;
+    }else if(typeForcing=='float'){
+        if(val!=undefined) ret=parseFloat(val);
+        else ret=val;
     }else if(typeForcing=='array'){
         if(val instanceof Array){
             ret=val;
