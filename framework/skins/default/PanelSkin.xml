@@ -4,13 +4,12 @@
         <rx:State name="normalWithControlBar"/>
     </r:states>
 
-    <rx:VisualComponent class="core_Panel_Background noSelect" top="0" left="0" right="0" bottom="0">
-    </rx:VisualComponent>
+    <rx:Box backgroundColor="#FFFFFF" borderColor="#CCCCCC" top="0" left="0" right="0" bottom="0" shadow="true" shadowOffsetX="1" shadowOffsetY="1" shadowBlur="8.0" corner="5"/>
     <rx:Group class="core_Panel_Content noSelect" top="1" left="1" right="1" bottom.normal="1" bottom.normalWithControlBar="51" id="content">
     </rx:Group>
-    <rx:Group class="core_Panel_ControlBar noSelect" bottom="0" left="0" right="0" height="50px" id="controlBar" cssStyle.normal="{'display':'none'}" cssStyle.normalWithControlBar="{'display':'block'}">
+    <rx:BoxContainer class="noSelect" borderColor="#CCCCCC" backgroundColor="#F3F3F3" height="50px" left="0" right="0" bottom="0" corner="5" topLeftCorner="0" topRightCorner="0" id="controlBar" visible.normal="false" visible.normalWithControlBar="true">
         <r:layout>
             <rx:HorizontalLayout horizontalAlign="right" paddingRight="12" verticalAlign="middle" gap="5"/>
         </r:layout>
-    </rx:Group>
+    </rx:BoxContainer>
 </rx:Skin>
