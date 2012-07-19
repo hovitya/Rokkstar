@@ -200,8 +200,8 @@ core.behaviours.SkinnableBehaviour=function(){
 
     this.skinnableCommitProperties=function(){
         if(this.skinInvalid){
-            this.skinInvalid=true;
             this._changeSkin();
+            this.skinInvalid=false;
         }
     }
 

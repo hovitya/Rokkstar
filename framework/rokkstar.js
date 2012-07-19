@@ -548,3 +548,6 @@ $(function(){
 
     Rokkstar.init();
 });
+
+
+Rokkstar.globals.DOMEvents=['mouseover','mouseout','mousemove','blur','mouseup','mousedown','touchend','touchstart','keyup','keydown'];

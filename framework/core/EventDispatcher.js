@@ -13,6 +13,9 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
      */
     this.handlers={};
 
+    this.registeredDOMEvents=[];
+
+
     /**
      * Register new event handler.
      * @description
@@ -28,11 +31,29 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
      * @param {Object} scope Scope for callback function
      */
     this.createEventListener=function(event,listenerF,scope){
+        if(Rokkstar.globals.DOMEvents.indexOf(event)!=-1){
+            this.registerDOMEvent(event);
+        }
         if(this.domElement==null) this.createDomElement();
         if(this.handlers[event]==undefined){
             this.handlers[event]=[];
         }
         this.handlers[event].push({func:listenerF,scope:scope});
+    }
+
+    this.registerDOMEvent=function(event){
+        if(this.registeredDOMEvents.indexOf(event)==-1){
+            this.domElement.addEventListener(event, $.proxy(this.triggerDOMEvent,this));
+            this.registeredDOMEvents.push(event);
+        }
+    }
+
+    /**
+     *
+     * @param {Event} event
+     */
+    this.triggerDOMEvent=function(event){
+        this.triggerEvent(event);
     }
 
     /**

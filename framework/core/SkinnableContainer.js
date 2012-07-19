@@ -136,7 +136,7 @@ core.SkinnableContainer=Rokkstar.createClass('core.SkinnableContainer','core.Vis
 
 
     this.removeSkin=function(skin){
-        this.callSuper('addElement',skin);
+        this.callSuper('removeElement',skin);
     }
 
     this.addSkin=function(skin){
