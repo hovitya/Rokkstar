@@ -43,6 +43,7 @@ core.behaviours.ButtonBehaviour=function(){
 
     this.buttonMouseUp=function(event){
         this.setCurrentState('over');
+        this.triggerEvent('click');
     }
 
     this.buttonKeyDown=function(event){
@@ -56,6 +57,7 @@ core.behaviours.ButtonBehaviour=function(){
         var key = event.keyCode;
         if(key==32 || key==13){
             this.setCurrentState('up');
+            this.triggerEvent('click');
         }
     }
 }

@@ -46,6 +46,7 @@ core.Label=Rokkstar.createClass('core.Label','core.VisualComponent',function(){
             this.domElement.style.fontFamily=this.getFontFamily();
             this.domElement.style.fontSize=this.getFontSize().toString()+"px";
             this.domElement.style.color=this.getFontColor();
+            this.domElement.style.textAlign=this.getTextAlign();
         }
     }
-},[new Attr('text',''),new Attr('fontFamily','PTSansRegular','string'),new Attr('fontColor','#000000','string'),new Attr('fontSize',12,'integer')]);
+},[new Attr('text',''),new Attr('fontFamily','PTSansRegular','string'),new Attr('fontColor','#000000','string'),new Attr('fontSize',12,'integer'),new Attr('textAlign','left','string')]);
