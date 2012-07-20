@@ -157,6 +157,22 @@
                             <xsl:call-template name="process"/>
                         </xsl:for-each>
                     </xsl:if>
+                    <xsl:if test="count(*)&gt;1">
+                    	<xsl:text>var propArray=[];</xsl:text>
+                    	<xsl:for-each select="./*">
+                    	    <xsl:text disable-output-escaping="yes">currentParent.push(</xsl:text><xsl:call-template
+                                name="createComponent"/><xsl:text disable-output-escaping="yes">);</xsl:text><xsl:text>&#10;</xsl:text>
+							<xsl:text>propArray.push(currentParent[currentParent.length-1]);</xsl:text>
+                          
+                    	<xsl:call-template name="process"/>
+                    	</xsl:for-each>
+                    	<xsl:if test="not(contains($propName,'.'))">
+                                <xsl:text>currentParent[currentParent.length-1].set('</xsl:text><xsl:value-of select="$propName"/><xsl:text disable-output-escaping="yes">',propArray);</xsl:text><xsl:text>&#10;</xsl:text>
+                            </xsl:if>
+                            <xsl:if test="contains($propName,'.')">
+                                <xsl:text>this.states["</xsl:text><xsl:value-of select="substring-after($propName,'.')"/><xsl:text>"].addProperty(currentParent[currentParent.length-1],"</xsl:text><xsl:value-of select="substring-before($propName,'.')"/><xsl:text>",propArray);&#10;</xsl:text>
+                            </xsl:if>
+                    </xsl:if>
                 </xsl:if>
 
             </xsl:if>

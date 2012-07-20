@@ -8,6 +8,11 @@
  */
 core.Panel=Rokkstar.createClass('core.Panel','core.SkinnableContainer',function(){
 
+    this.createAttributes=function(){
+        this.callSuper('createAttributes');
+        this.declareSkinPart('controlBar',false,'core.Group');
+    }
+
     this.init=function(){
         this.callSuper('init');
         this.setSkinClass("core.skins.PanelSkin");

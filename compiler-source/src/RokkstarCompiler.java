@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+
+import static java.nio.file.StandardCopyOption.*;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -32,6 +35,7 @@ public class RokkstarCompiler {
 	public String sourceDir=null;
 	public String skinDir="skins"+File.separator+"default";
 	public String templateFile=null;
+	protected String cssValue="";
 	
 	public RokkstarCompiler(CommandLine line) {
 		if(line.hasOption("source")){
@@ -143,7 +147,7 @@ public class RokkstarCompiler {
 					output=output.concat(this.compileXML(child,packageName));
 					break;
 				default:
-					output=output.concat(this.compileAsset(child, packageName));
+					this.cssValue+=this.compileAsset(child, packageName);
 					break;
 				}
 	
@@ -179,7 +183,7 @@ public class RokkstarCompiler {
 					output=output.concat(this.compileXML(child,packageName));
 					break;
 				default:
-					output=output.concat(this.compileAsset(child, packageName+dir.getName()));
+					this.cssValue+=this.compileAsset(child, packageName+dir.getName());
 					break;
 				}
 
@@ -280,15 +284,7 @@ public class RokkstarCompiler {
 	    File inputFile = file;
 	    File outputFile = new File(this.targetDir+File.separator+AsImplodedString+File.separator+file.getName());
 
-	    FileReader in = new FileReader(inputFile);
-	    FileWriter out = new FileWriter(outputFile);
-	    int c;
-
-	    while ((c = in.read()) != -1)
-	      out.write(c);
-
-	    in.close();
-	    out.close();
+	    Files.copy(inputFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);
 		//Include CSS
 	    String name=file.getName();
 		int pos=name.lastIndexOf('.');
@@ -296,7 +292,7 @@ public class RokkstarCompiler {
 		ext=ext.toLowerCase();
 		if(ext.equals("css")){
 			String relativePath=this.implode(parts, "/");
-			return "\nModernizr.load(['"+relativePath+"/"+file.getName()+"']);\n";
+			return "\n@import url('"+relativePath+"/"+file.getName()+"');\n";
 		}
 		
 		}catch(IOException ex){
@@ -328,6 +324,7 @@ public class RokkstarCompiler {
 		String template=stringBuilder.toString();
 		template=template.replaceAll("\\{\\{app_file\\}\\}", this.targetFile);
 		template=template.replaceAll("\\{\\{app_class\\}\\}", this.appClass);
+		template=template.replaceAll("\\{\\{css_import\\}\\}", this.cssValue);
 		FileWriter fw=new FileWriter(this.targetDir+File.separator+file.getName());
 		fw.write(template);
 		fw.flush();

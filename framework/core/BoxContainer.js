@@ -14,6 +14,11 @@ core.BoxContainer=Rokkstar.createClass('core.BoxContainer','core.Group',function
         //Background listeners
         this.createEventListener('backgroundColorPropertyChanged',this.invalidateBackground,this);
         this.createEventListener('backgroundAlphaPropertyChanged',this.invalidateBackground,this);
+        this.createEventListener('gradientModePropertyChanged',this.invalidateBackground,this);
+        this.createEventListener('gradientStartPropertyChanged',this.invalidateBackground,this);
+        this.createEventListener('gradientEndPropertyChanged',this.invalidateBackground,this);
+        this.createEventListener('gradientAlphaStartPropertyChanged',this.invalidateBackground,this);
+        this.createEventListener('gradientAlphaEndPropertyChanged',this.invalidateBackground,this);
 
         //Border listeners
         this.createEventListener('borderColorPropertyChanged',this.invalidateBorder,this);
@@ -77,7 +82,28 @@ core.BoxContainer=Rokkstar.createClass('core.BoxContainer','core.Group',function
     }
 
     this.refreshBackground=function(){
-        if(this.getBackgroundAlpha()==0.0){
+        if(this.getGradientMode()){
+            var colorRgb=Rokkstar.hexToRgb(this.getGradientStart());
+            var startStr="rgba("+colorRgb.r+","+colorRgb.g+","+colorRgb.b+","+this.getGradientAlphaStart().toString()+")";
+            colorRgb=Rokkstar.hexToRgb(this.getGradientEnd());
+            var endStr="rgba("+colorRgb.r+","+colorRgb.g+","+colorRgb.b+","+this.getGradientAlphaEnd().toString()+")";
+            if(BrowserDetect.browser=="Firefox"){
+                this.domElement.style.background="-moz-linear-gradient(top,  "+startStr+",  "+endStr+")";
+            }else if(BrowserDetect.browser=="Opera"){
+                this.domElement.style.background="-o-linear-gradient(top,  "+startStr+",  "+endStr+")";
+            }else if(BrowserDetect.browser=="Explorer"){
+                //Convert to ARGB
+                var colorRgb=Rokkstar.hexToRgb(this.getGradientStart());
+                var opacity=this.getGradientAlphaStart()*255;
+                var color1='#'+colorRgb.r.toString(16)+colorRgb.g.toString(16)+colorRgb.b.toString(16)+opacity.toString(16);
+                colorRgb=Rokkstar.hexToRgb(this.getGradientEnd());
+                opacity=this.getGradientAlphaEnd()*255;
+                var color2='#'+colorRgb.r.toString(16)+colorRgb.g.toString(16)+colorRgb.b.toString(16)+opacity.toString(16);
+                this.domElement.style[Modernizr.prefixed('filter')]="progid:DXImageTransform.Microsoft.gradient(startColorstr="+color1+", endColorstr="+color2+")";
+            }else{
+                this.domElement.style.background="-webkit-gradient(linear, left top, left bottom,  from("+startStr+"),  to("+endStr+"))";
+            }
+        }else if(this.getBackgroundAlpha()==0.0){
             this.domElement.style.background='none';
         }else{
             var rgb=Rokkstar.hexToRgb(this.getBackgroundColor());
@@ -121,5 +147,5 @@ core.BoxContainer=Rokkstar.createClass('core.BoxContainer','core.Group',function
     }
 
 },[new Attr('shadow',false,'boolean'),new Attr('shadowOffsetX',2,'integer'),new Attr('shadowOffsetY',2,'integer'),new Attr('shadowBlur',2.0,'float'),new Attr('shadowColor','#000000','string'),new Attr('shadowAlpha',0.5,'float'),new Attr('shadowInset',false,'boolean'),new Attr('shadowSpread',0,'integer'),
-    new Attr('borderAlpha',1.0,'float'),new Attr('borderColor','#000000','string'),new Attr('borderWidth',1,'integer'),new Attr('backgroundColor','#FFFFFF','string'),new Attr('backgroundAlpha',1.0,'float'),
+    new Attr('borderAlpha',1.0,'float'),new Attr('borderColor','#000000','string'),new Attr('borderWidth',1,'integer'),new Attr('backgroundColor','#FFFFFF','string'),new Attr('backgroundAlpha',1.0,'float'),new Attr('gradientMode',false,'boolean'),new Attr('gradientStart','#FFFFFF','string'),new Attr('gradientEnd','#000000','string'),new Attr('gradientAlphaStart',1.0,'float'),new Attr('gradientAlphaEnd',1.0,'string'),
     new Attr('corner',0,'integer'),new Attr('topLeftCorner',undefined,'integer'),new Attr('topRightCorner',undefined,'integer'),new Attr('bottomLeftCorner',undefined,'integer'),new Attr('bottomRightCorner',undefined,'integer')]);

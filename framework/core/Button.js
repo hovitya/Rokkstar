@@ -11,6 +11,7 @@ core.Button=Rokkstar.createClass('core.Button','core.SkinnableComponent',functio
     this.createAttributes=function(){
         this.callSuper('createAttributes');
         this.buttonCreateAttributes();
+        this.declareSkinPart('label',false,'core.Label');
     }
 
     this.init=function(){
