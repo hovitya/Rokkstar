@@ -19,6 +19,10 @@ core.BorderLayout=Rokkstar.createClass('core.BorderLayout','core.Layout',functio
     this.doLayout=function(div){
         this.callSuper('doLayout',div);
 
+        if(div._registeredHandles==undefined){
+            div._registeredHandles={};
+        }
+
         var gap=this.getGap();
         var leftGap=this.getGapLeft();
         var rightGap=this.getGapRight();
@@ -104,7 +108,10 @@ core.BorderLayout=Rokkstar.createClass('core.BorderLayout','core.Layout',functio
             topSlot.measure();
 
             //Create top gap
-            handle=document.createElement('div');
+            if(div._registeredHandles.top==undefined){
+                div._registeredHandles.top=document.createElement('div');
+            }
+            var handle=div._registeredHandles.top;
             handle.className="coreTopBorderHandle coreUpDownHandle";
 
 
@@ -133,7 +140,10 @@ core.BorderLayout=Rokkstar.createClass('core.BorderLayout','core.Layout',functio
             bottomSlot.measure();
 
             //Create bottom gap
-            handle=document.createElement('div');
+            if(div._registeredHandles.bottom==undefined){
+                div._registeredHandles.bottom=document.createElement('div');
+            }
+            handle=div._registeredHandles.bottom;
             handle.className="coreBottomBorderHandle coreUpDownHandle";
 
 
@@ -159,8 +169,12 @@ core.BorderLayout=Rokkstar.createClass('core.BorderLayout','core.Layout',functio
             position.apply(leftSlot);
             leftSlot.measure();
 
-            //Create bottom gap
+            //Create left gap
             handle=document.createElement('div');
+            if(div._registeredHandles.left==undefined){
+                div._registeredHandles.left=document.createElement('div');
+            }
+            var handle=div._registeredHandles.left;
             handle.className="coreLeftBorderHandle coreLeftRightHandle";
 
 
@@ -189,7 +203,10 @@ core.BorderLayout=Rokkstar.createClass('core.BorderLayout','core.Layout',functio
             rightSlot.measure();
 
             //Create right gap
-            handle=document.createElement('div');
+            if(div._registeredHandles.right==undefined){
+                div._registeredHandles.right=document.createElement('div');
+            }
+            handle=div._registeredHandles.right;
             handle.className="coreRightBorderHandle coreLeftRightHandle";
 
 

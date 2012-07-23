@@ -151,8 +151,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
     }
 
     this.measure = function (predictedWidth,predictedHeight) {
-        //var mW=this.measuredWidth;
-        //var mH=this.measuredHeight;
+        var mW=this.measuredWidth;
+        var mH=this.measuredHeight;
         if(predictedWidth!=undefined){
             this.measuredWidth = predictedWidth;
         }else{
@@ -166,9 +166,9 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         }
 
 
-        //if ((mH!=this.measuredHeight || mW!=this.measuredWidth) && this.parent != null) {
-        //    this.parent.invalidateLayout();
-        //}
+        if ((mH!=this.measuredHeight || mW!=this.measuredWidth) && this.parent != null) {
+            this.parent.invalidateLayout();
+        }
 
     }
 

@@ -79,7 +79,7 @@ Rokkstar.createComponent=function(name){
 
     var cls=getClass(name);
     var cmp=new cls;
-    cmp.init();
+    //cmp.init();
     return cmp;
 }
 
@@ -295,12 +295,21 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours){
                         target=this;
                         var oldValue=target[property];
                         target[property]=Rokkstar.parseAttribute(value,this._attributeTypes[property]);
-                        var event=$.Event(property+'PropertyChanged',{oldValue:oldValue,newValue:value});
+                        var event=$.Event(property+'PropertyChanged',{oldValue:oldValue,newValue:value,propertyName:property});
                         target.triggerEvent(event);
                     }
                 }
 
                 cls.prototype.get=function(property){
+                    var val=this[property]
+                    //Resolve reference
+                    if(typeof val == "string" && val.substr(0,1)=='$'){
+                        val=eval('var x='+val.substr(1)+'; x');
+                        if(val==undefined){
+                            throw new core.Exception('Cannot resolve reference: '+val);
+                        }
+                        this[property]=this[val];
+                    }
                     return this[property];
                 }
             }
@@ -404,8 +413,18 @@ Rokkstar.parseAttribute=function(val,typeForcing){
     }else if(typeForcing=='object'){
         if(val instanceof Object){
             ret=val;
+        }else if(typeof val =="string" && val.substr(0,1)=="$"){
+            ret=val;
         }else{
             ret=JSON.parse(val.replace(/'/g,'"'));
+        }
+    }else if(typeForcing=='function'){
+        if(typeof val != 'function'){
+            if(typeof val =="string" && val.substr(0,1)=="$"){
+                ret=val;
+            }else{
+                val=getClass(val);
+            }
         }
     }else{
         ret=val;
@@ -550,4 +569,4 @@ $(function(){
 });
 
 
-Rokkstar.globals.DOMEvents=['mouseover','mouseout','mousemove','blur','mouseup','mousedown','touchend','touchstart','keyup','keydown'];
+Rokkstar.globals.DOMEvents=['mouseover','mouseout','mousemove','blur','mouseup','mousedown','touchend','touchstart','keyup','keydown','focus'];

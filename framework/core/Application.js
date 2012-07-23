@@ -41,9 +41,9 @@ core.Application=Rokkstar.createClass('core.Application','core.VisualContainer',
 
     this.tack=function(){
         if(this.componentInvalid){
-            console.profile();
+            //console.profile();
             this.callSuper('tack');
-            console.profileEnd();
+            //console.profileEnd();
         }
     }
 },[new Attr('fps',24)]);

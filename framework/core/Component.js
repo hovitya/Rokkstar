@@ -134,6 +134,10 @@ core.Component=Rokkstar.createClass('core.Component','core.EventDispatcher',func
         return $(this).attr('id')+className;
     }
 
+    this.construct=function(){
+        this.init();
+    }
+
 
 
 });

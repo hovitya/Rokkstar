@@ -53,7 +53,7 @@ core.Box=Rokkstar.createClass('core.Box','core.VisualComponent',function(){
 
     this.invalidateShadow=function(){
         this.shadowInvalid=true;
-        this.invalidateDisplayList();
+        this.invalidateProperties();
     }
 
     this.refreshShadow=function(){
@@ -78,7 +78,7 @@ core.Box=Rokkstar.createClass('core.Box','core.VisualComponent',function(){
 
     this.invalidateBackground=function(){
         this.backgroundInvalid=true;
-        this.invalidateDisplayList();
+        this.invalidateProperties();
     }
 
     this.refreshBackground=function(){
@@ -115,7 +115,7 @@ core.Box=Rokkstar.createClass('core.Box','core.VisualComponent',function(){
 
     this.invalidateBorder=function(){
         this.borderInvalid=true;
-        this.invalidateDisplayList();
+        this.invalidateProperties();
     }
 
     this.refreshBorder=function(){

@@ -54,11 +54,7 @@
         </xsl:text>
         <!-- parsing definitions -->
         <xsl:for-each select="//r:definitions">
-            <xsl:for-each select="./*">
-                <xsl:if test="namespace-uri(.)!=$rNS">
                     <xsl:call-template name="process"/>
-                </xsl:if>
-            </xsl:for-each>
         </xsl:for-each>
 
         <xsl:text disable-output-escaping="yes">
