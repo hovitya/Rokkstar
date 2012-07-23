@@ -2,8 +2,8 @@
          xmlns:rx="http://www.imagix-interactive/2012/Rokkstar/components"
          xmlns:rg="core.graphics">
     <r:states>
-        <r:State name="normal"/>
-        <r:State name="normalWithControlBar"/>
+        <rx:State name="normal"/>
+        <rx:State name="normalWithControlBar"/>
     </r:states>
     <rx:Box class="noSelect" backgroundColor="#FFFFFF" borderColor="#CCCCCC" top="0" left="0" right="0" bottom="0" shadow="true" shadowOffsetX="1" shadowOffsetY="1" shadowBlur="8.0" corner="5"/>
     <rx:Box class="noSelect" borderAlpha="0.0" backgroundColor="#484848" top="0" left="0" right="0" height="29px" corner="0" topLeftCorner="5" topRightCorner="5"/>

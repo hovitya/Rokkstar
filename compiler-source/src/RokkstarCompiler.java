@@ -1,3 +1,6 @@
+import helpers.FileReference;
+import helpers.RokkstarOutput;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -21,6 +24,10 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+
+import xml.XMLFile;
+
+import exceptions.CompilerException;
 
 
 public class RokkstarCompiler {
@@ -225,6 +232,8 @@ public class RokkstarCompiler {
 	}
 
 	protected String compileXML(File file,String packageName) throws CompilerException{
+		XMLFile xFile=new XMLFile(file);
+		xFile.analyze();
 		try{
 			ByteArrayOutputStream baos=new ByteArrayOutputStream();
 			javax.xml.transform.Source xmlSource =
@@ -346,7 +355,7 @@ public class RokkstarCompiler {
 
 		// check if directory already exists or not
 		if (file.exists()) {
-			System.out.println("Directory : " + dir + " already exists");
+			//System.out.println("Directory : " + dir + " already exists");
 		} else {
 
 			// create the non existent directory if any
@@ -356,10 +365,11 @@ public class RokkstarCompiler {
 
 			// evaluate the result
 			if (retval) {
-				System.out.println("Directory : " + dir
-						+ " created succesfully");
+				//System.out.println("Directory : " + dir
+				//		+ " created succesfully");
 			} else {
-				System.out.println("Directory : " + dir + " creation failed");
+				//System.out.println("Directory : " + dir + " creation failed");
+				RokkstarOutput.WriteError("Directory : " + dir + " creation failed", new FileReference("",0));
 			}
 		}
 
