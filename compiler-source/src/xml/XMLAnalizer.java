@@ -12,11 +12,11 @@ import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
 
-public class XMLHandler extends DefaultHandler {
+public class XMLAnalizer extends DefaultHandler {
 	public Vector<String> namespaces=new Vector<String>();
 	public RequestedClass inheritsFrom=null;
 	public Vector<RequestedClass> requestedClasses=new Vector<RequestedClass>();
-	public Vector<String> attributes=new Vector<String>();
+	public Vector<Attribute> attributes=new Vector<Attribute>();
 	public String fileName="";
 	public Boolean errorOccured=false;
 	protected Locator locator=null;
@@ -80,11 +80,23 @@ public class XMLHandler extends DefaultHandler {
 		elementLevel++;
 	}
 	
-	public void endElement(String nsURI, String localName, String tagName, Attributes attributes) throws SAXException {
+	public void endElement(String nsURI, String localName, String tagName) throws SAXException {
 		if(!ClassDefinition.isPromotedNS(nsURI)){
 			currentComponent.remove(currentComponent.size()-1);
 		}
 		elementLevel--;
+	}
+	
+	public void processingInstruction(String target, String data)
+			throws SAXException {
+		FileReference fRef=new FileReference(this.fileName, locator.getLineNumber());
+		if(target.equals("Attribute")){
+			String[] params=data.split("\\s+");
+			if(params.length==2){
+				this.attributes.add(new Attribute(params[0], fRef));
+			}
+		}
+		
 	}
 	
 

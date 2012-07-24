@@ -40,6 +40,11 @@ core.Animation = Rokkstar.createClass('core.Animation', 'core.Component', functi
 
     this.init=function(){
         this.callSuper('init');
+        this.createTween();
+    }
+
+
+    this.createTween=function(){
         this.tween=new Tween([],'','',0,0,this.getDuration(),this.getSuffix());
     }
 

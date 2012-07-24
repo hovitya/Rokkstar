@@ -4,7 +4,7 @@ import java.util.Vector;
 
 public class ClassDefinition {
 	public String className="";
-	public Vector<String> attributes=new Vector<String>();
+	public Vector<Attribute> attributes=new Vector<Attribute>();
 	public ClassDefinition inheritsFrom=null;
 	
 	static public String translateNamespace(String ns){
@@ -41,6 +41,6 @@ public class ClassDefinition {
 	static public String transitionsAttr="transitions";
 	
 	//Promoted namespaces
-	static public String eventNS="[event]";
-	static public String rokkstarNS="[rokkstar]";
+	static public String eventNS="http://www.imagix-interactive/2012/Rokkstar/events";
+	static public String rokkstarNS="http://www.imagix-interactive/2012/Rokkstar";
 }

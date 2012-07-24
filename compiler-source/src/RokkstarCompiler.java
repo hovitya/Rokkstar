@@ -232,35 +232,9 @@ public class RokkstarCompiler {
 	}
 
 	protected String compileXML(File file,String packageName) throws CompilerException{
-		XMLFile xFile=new XMLFile(file);
+		XMLFile xFile=new XMLFile(file,packageName+file.getName().replaceAll("\\.xml", ""));
 		xFile.analyze();
-		try{
-			ByteArrayOutputStream baos=new ByteArrayOutputStream();
-			javax.xml.transform.Source xmlSource =
-					new javax.xml.transform.stream.StreamSource(file);
-			javax.xml.transform.Source xsltSource =
-					new javax.xml.transform.stream.StreamSource(getClass().getResourceAsStream("rokkstarXML.xsl"));
-			javax.xml.transform.Result result =
-					new javax.xml.transform.stream.StreamResult(baos);
-			
-			javax.xml.transform.TransformerFactory transFact =
-					javax.xml.transform.TransformerFactory.newInstance(  );
-	
-			javax.xml.transform.Transformer trans =
-					transFact.newTransformer(xsltSource);
-	
-			trans.transform(xmlSource, result);
-			return baos.toString("UTF-8").replaceAll("\\{\\{instance_name\\}\\}", packageName+file.getName().replaceAll(".(xml|XML)", ""));
-		}catch(TransformerConfigurationException ex){
-			System.err.println("Invalid transformer configuration: "+file.getPath());
-			throw new CompilerException();
-		}catch(TransformerException ex){
-			System.err.println("XML compilation error in file: "+file.getPath()+" Error: "+ex.getMessage());
-			throw new CompilerException();
-		}catch(UnsupportedEncodingException ex){
-			System.err.println("UTF-8 encoding not supported.");
-		}
-		throw new CompilerException();
+		return xFile.compile();
 		
 	}
 	

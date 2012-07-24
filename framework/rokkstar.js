@@ -410,22 +410,6 @@ Rokkstar.parseAttribute=function(val,typeForcing){
             ret=[];
             ret.push(val);
         }
-    }else if(typeForcing=='object'){
-        if(val instanceof Object){
-            ret=val;
-        }else if(typeof val =="string" && val.substr(0,1)=="$"){
-            ret=val;
-        }else{
-            ret=JSON.parse(val.replace(/'/g,'"'));
-        }
-    }else if(typeForcing=='function'){
-        if(typeof val != 'function'){
-            if(typeof val =="string" && val.substr(0,1)=="$"){
-                ret=val;
-            }else{
-                val=getClass(val);
-            }
-        }
     }else{
         ret=val;
     }
