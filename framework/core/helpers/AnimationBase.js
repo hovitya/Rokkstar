@@ -10,6 +10,8 @@
 /**
  * @class
  */
-core.helpers.AnimationBase = Rokkstar.createClass('core.helpers.AnimationBase', 'core.Components', function () {
+core.helpers.AnimationBase = Rokkstar.createClass('core.helpers.AnimationBase', 'core.Component', function () {
+    this.play=function(reversed){
 
+    }
 });

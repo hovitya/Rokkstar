@@ -19,8 +19,10 @@ core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.An
     }
 
     this._propChanged=function(event){
-        if(event.propertyName=='property') this.propertyName=this.getProperty();
-        if(event.propertyName=='start') this.startValue=this.getStart();
-        if(event.propertyName=='end') this.endValue=this.getEnd();
+        if(event.propertyName=='property'){ this.propertyName=this.getProperty(); }
+        if(event.propertyName=='start'){ this.startValue=this.getStart();  }
+        if(event.propertyName=='end'){ this.endValue=this.getEnd();  }
+        this.updateTween();
+
     }
 },[new Attr('property','','string'),new Attr('start',0,'integer'),new Attr('end',100,'integer')]);

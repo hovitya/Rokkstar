@@ -44,8 +44,8 @@ public class XMLCodeGenerator  extends DefaultHandler{
 			this.superClassName=ns+"."+localName;
 			//Attributes
 			for (int i = 0; i < attributes.getLength(); i++) {
-				if(ns.equalsIgnoreCase(ClassDefinition.eventNS)){
-					this.propertySetSection=this.propertySetSection.concat("this.createEventListener('"+attributes.getLocalName(i)+"',this."+attributes.getValue(i)+",this);\n");
+				if(attributes.getURI(i).equalsIgnoreCase(ClassDefinition.eventNS)){
+					this.propertySetSection=this.propertySetSection.concat("this.createEventListener('"+attributes.getLocalName(i)+"',function(event){"+attributes.getValue(i)+"},this);\n");
 				}else{
 					if(attributes.getLocalName(i).lastIndexOf('.')!=-1){
 						String state=attributes.getLocalName(i).substring(attributes.getLocalName(i).lastIndexOf('.')+1);
@@ -72,8 +72,8 @@ public class XMLCodeGenerator  extends DefaultHandler{
 			this.createComponent(ns+"."+localName, id,customId);
 			//Attributes
 			for (int i = 0; i < attributes.getLength(); i++) {
-				if(ns.equalsIgnoreCase(ClassDefinition.eventNS)){
-					this.propertySetSection=this.propertySetSection.concat(id+".createEventListener('"+attributes.getLocalName(i)+"',this."+attributes.getValue(i)+",this);\n");
+				if(attributes.getURI(i).equalsIgnoreCase(ClassDefinition.eventNS)){
+					this.propertySetSection=this.propertySetSection.concat(id+".createEventListener('"+attributes.getLocalName(i)+"',function(event){"+attributes.getValue(i)+"},this);\n");
 				}else{
 					if(attributes.getLocalName(i).lastIndexOf('.')!=-1){
 						String state=attributes.getLocalName(i).substring(attributes.getLocalName(i).lastIndexOf('.')+1);

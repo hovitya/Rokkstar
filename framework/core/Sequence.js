@@ -10,6 +10,108 @@
 /**
  * @class
  */
-Sequence = Rokkstar.createClass('Sequence', 'core.Animation', function () {
+core.Sequence = Rokkstar.createClass('core.Sequence', 'core.helpers.AnimationBase', function () {
+    this.tween=null;
+    this.init=function(){
+        this.callSuper('init');
+        this.createTween();
+        this.createEventListener('elementsPropertyChanged',this.elementsChanged,this);
+    }
 
-});
+    this.createTween=function(){
+        this.tween=new Sequence();
+    }
+
+    this.elementsChanged=function(event){
+        this.tween.children=[];
+        for(var i=0;i<this.getElementsNum();i++){
+            this.tween.children.push(this.getElementAt(i).tween);
+        }
+    }
+
+    this.play=function(reversed){
+        this.tween.start();
+    }
+
+    this.stop=function(){
+        this.tween.stop();
+    }
+
+    this.elements=[];
+
+    this.getElementsNum=function(){
+        return this.elements.length;
+    }
+
+    /**
+     *
+     * @param position
+     * @return {core.VisualComponent}
+     */
+    this.getElementAt=function(position){
+        return this.elements[position];
+    }
+
+    this.getElementIndex=function(element){
+        return this.elements.indexOf(element);
+    }
+
+    this.removeElement=function(element){
+        if(this.getElementIndex(element)!=-1){
+            this.elements.splice(this.elements.indexOf(element),1);
+            element.parent=null;
+            element.triggerEvent("parentChanged");
+            this.triggerEvent('elementsPropertyChanged');
+        }
+    }
+
+    this.removeElementAt=function(position){
+        if(position>=0 && position<=this.elements.length){
+            this.elements[position].parent=null;
+            this.elements[position].triggerEvent("parentChanged");
+            this.elements.splice(position,1);
+            this.triggerEvent('elementsPropertyChanged');
+        }
+    }
+
+    this.removeAllElements=function(){
+        for(var i in this.elements){
+            this.elements[i].parent=null;
+            this.elements[i].triggerEvent("parentChanged");
+        }
+        this.elements=[];
+        this.triggerEvent('elementsPropertyChanged');
+    }
+
+
+    this.addElement=function(element){
+        if(this.elements.indexOf(element)==-1){
+            if(element.parent!=null){
+                element.parent.removeElement(element);
+            }
+            this.elements.push(element);
+            element.parent=this;
+            element.triggerEvent("parentChanged");
+        }else{
+            this.elements.splice(this.getElementIndex(element),1);
+            this.elements.push(element);
+
+        }
+        this.triggerEvent('elementsPropertyChanged');
+    }
+
+    this.addElementAt=function(element,position){
+        if(this.elements.indexOf(element)==-1){
+            if(element.parent!=null){
+                element.parent.removeElement(element);
+            }
+            this.elements.splice(position,0,element);
+            element.parent=this;
+            element.triggerEvent("parentChanged");
+        }else{
+            this.elements.splice(this.getElementIndex(element),1);
+            this.elements.splice(position,0,element);
+        }
+        this.triggerEvent('elementsPropertyChanged');
+    }
+},[],[]);
