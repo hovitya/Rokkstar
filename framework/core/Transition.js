@@ -10,20 +10,6 @@
 /**
  * @class
  */
-core.helpers.AnimationBase = Rokkstar.createClass('core.helpers.AnimationBase', 'core.Component', function () {
-    this.play=function(reversed){
+core.Transition = Rokkstar.createClass('core.Transition', 'core.Parallel', function () {
 
-    }
-
-    this.setUp=function(reversed){
-
-    }
-
-    this.fastForward=function(){
-
-    }
-
-    this.isPlaying=function(){
-        return false;
-    }
-});
+},[new Attr('from','','string'),new Attr('to','','string')]);

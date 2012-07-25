@@ -138,7 +138,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         this.createEventListener('translateYPropertyChanged', this._createMatrix, this);
         this.createEventListener('visiblePropertyChanged', this._visibilityChanged, this);
         this.createEventListener('currentStatePropertyChanged', this.stateChanged, this);
-        this.createEventListener('cssStylePropertyChanged', this.styleChanged, this);
+        this.createEventListener('alphaPropertyChanged', this._styleChanged, this);
     }
 
 
@@ -200,6 +200,10 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         if(this._matrixInvalid){
             this._matrixInvalid=false;
             this.domElement.style[Modernizr.prefixed('transform')]=this.getMatrix().toString();
+        }
+        if(this._styleInvalid){
+            this._styleInvalid=false;
+            this._commitStyle();
         }
         if(this._visibilityInvalid){
             this._visibilityInvalid=false;
@@ -333,9 +337,16 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         }
     }
 
-    this.styleChanged=function(event){
+    this._styleInvalid=false;
+
+    this._styleChanged=function(event){
         event.stopPropagation();
-        $(this.domElement).css(this.getCssStyle());
+        this._styleInvalid=true;
+        this.invalidateProperties();
+    }
+
+    this._commitStyle=function(){
+        this.domElement.style.opacity=this.getAlpha();
     }
 
     this._matrixInvalid=false;
@@ -364,6 +375,6 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
     }
 
 },[new Attr('currentState', undefined),new Attr('class'),new Attr('x',undefined,'integer'),new Attr('y',undefined,'integer'),new Attr('left',undefined,'integer'),new Attr('right',undefined,'integer'),new Attr('top',undefined,'integer'),new Attr('bottom',undefined,'integer'),new Attr('position', 'center'),new Attr('height', undefined),
-new Attr('width', undefined), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('cssStyle', {}, 'object'), new Attr('matrix', undefined), new Attr('rotation', 0,'float'), new Attr('scaleX', 1.0,'float'), new Attr('scaleY', 1.0,'float'), new Attr('skewX', 0,'float'), new Attr('skewY', 0,'float'),new Attr('translateX', 0,'integer'), new Attr('translateY', 0,'integer'),
+new Attr('width', undefined), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('matrix', undefined), new Attr('rotation', 0,'float'), new Attr('scaleX', 1.0,'float'), new Attr('scaleY', 1.0,'float'), new Attr('skewX', 0,'float'), new Attr('skewY', 0,'float'),new Attr('translateX', 0,'integer'), new Attr('translateY', 0,'integer'), new Attr('alpha', 1.0,'float'),
 new Attr('visible',true,'boolean')]);
 

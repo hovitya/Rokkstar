@@ -18,19 +18,18 @@ core.Animation = Rokkstar.createClass('core.Animation', 'core.helpers.AnimationB
     this.propertyName='';
 
     this.play=function(reversed){
+        if(this.isPlaying()) this.fastForward();
         if(reversed==undefined){
             reversed=false;
         }
+        this.setUp(reversed);
 
-        if(!reversed){
-            this.tween.begin=this.startValue;
-            this.tween.setFinish(this.endValue);
-        }else{
-            this.tween.begin=this.endValue;
-            this.tween.setFinish(this.startValue);
-        }
         this.tween.start();
 
+    }
+
+    this.fastForward=function(){
+        this.tween.fforward();
     }
 
     this.init=function(){

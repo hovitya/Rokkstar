@@ -15,7 +15,25 @@ core.Sequence = Rokkstar.createClass('core.Sequence', 'core.helpers.AnimationBas
     this.init=function(){
         this.callSuper('init');
         this.createTween();
-        this.createEventListener('elementsPropertyChanged',this.elementsChanged,this);
+        //this.createEventListener('elementsPropertyChanged',this.elementsChanged,this);
+    }
+
+    this.setUp=function(reversed){
+        this.tween.children=[];
+        this.tween.numChildren=0;
+
+        if(!reversed){
+            for(var i=0;i<this.getElementsNum();i++){
+                this.getElementAt(i).setUp(reversed);
+                this.tween.addChild(this.getElementAt(i).tween);
+            }
+        }else{
+            for(var i=this.getElementsNum()-1;i>=0;i--){
+                this.getElementAt(i).setUp(reversed);
+                this.tween.addChild(this.getElementAt(i).tween);
+            }
+        }
+
     }
 
     this.createTween=function(){
@@ -24,12 +42,13 @@ core.Sequence = Rokkstar.createClass('core.Sequence', 'core.helpers.AnimationBas
 
     this.elementsChanged=function(event){
         this.tween.children=[];
-        for(var i=0;i<this.getElementsNum();i++){
-            this.tween.children.push(this.getElementAt(i).tween);
-        }
+        this.tween.numChildren=0;
+
     }
 
     this.play=function(reversed){
+        if(this.isPlaying()) this.fastForward();
+        this.setUp(reversed);
         this.tween.start();
     }
 
@@ -113,5 +132,18 @@ core.Sequence = Rokkstar.createClass('core.Sequence', 'core.helpers.AnimationBas
             this.elements.splice(position,0,element);
         }
         this.triggerEvent('elementsPropertyChanged');
+    }
+
+    this.fastForward=function(){
+        for(var i=this.getElementsNum()-1;i>=0;i--){
+            this.getElementAt(i).fastForward();
+        }
+    }
+
+    this.isPlaying=function(){
+        for(var i=this.getElementsNum()-1;i>=0;i--){
+            if(this.getElementAt(i).isPlaying()) return true;
+        }
+        return false;
     }
 },[],[]);

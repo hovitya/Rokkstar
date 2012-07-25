@@ -13,16 +13,56 @@
 core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.Animation', function () {
     this.init=function(){
         this.callSuper('init');
-        this.createEventListener('propertyPropertyChanged',this._propChanged,this);
-        this.createEventListener('startPropertyChanged',this._propChanged,this);
-        this.createEventListener('endPropertyChanged',this._propChanged,this);
     }
 
-    this._propChanged=function(event){
-        if(event.propertyName=='property'){ this.propertyName=this.getProperty(); }
-        if(event.propertyName=='start'){ this.startValue=this.getStart();  }
-        if(event.propertyName=='end'){ this.endValue=this.getEnd();  }
-        this.updateTween();
 
+
+    this.setUp=function(reversed){
+        if(this.getBy()==undefined){
+            var start=this.getStart();
+            var end=this.getEnd();
+            if(start==undefined){
+                start=this.getTarget().get(this.getProperty());
+                this.setStart(start);
+            }
+            if(this.getType()=='integer'){
+                start=parseInt(start);
+                end=parseInt(end);
+            }else{
+                start=parseFloat(start);
+                end=parseFloat(end);
+            }
+            if(!reversed){
+                this.tween.begin=start;
+                this.tween.setFinish(end);
+            }else{
+                this.tween.begin=end;
+                this.tween.setFinish(start);
+            }
+        }else{
+            var start=this.getTarget().get(this.getProperty());
+            var by=this.getBy();
+            if(this.getType()=='integer'){
+                start=parseInt(start);
+                by=parseInt(by);
+            }else{
+                start=parseFloat(start);
+                by=parseFloat(by);
+            }
+
+            if(!reversed){
+                this.tween.begin=start;
+                this.tween.setFinish(start+by);
+            }else{
+                this.tween.begin=start;
+                this.tween.setFinish(start-by);
+            }
+        }
+        this.tween.prop=this.getProperty();
     }
-},[new Attr('property','','string'),new Attr('start',0,'integer'),new Attr('end',100,'integer')]);
+
+    this.isPlaying=function(){
+        if(this.tween.isPlaying==undefined) return false;
+        else return this.tween.isPlaying;
+    }
+},[new Attr('property','','string'),new Attr('start',undefined,'string'),new Attr('end',100,'string'),new Attr('by',undefined,'string')]);
