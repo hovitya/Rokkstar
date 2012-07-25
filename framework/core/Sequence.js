@@ -24,6 +24,8 @@ core.Sequence = Rokkstar.createClass('core.Sequence', 'core.helpers.AnimationBas
 
         if(!reversed){
             for(var i=0;i<this.getElementsNum();i++){
+                this.getElementAt(i).transitionMode=this.transitionMode;
+                this.getElementAt(i).startState=this.startState;
                 this.getElementAt(i).setUp(reversed);
                 this.tween.addChild(this.getElementAt(i).tween);
             }
@@ -38,6 +40,15 @@ core.Sequence = Rokkstar.createClass('core.Sequence', 'core.helpers.AnimationBas
 
     this.createTween=function(){
         this.tween=new Sequence();
+        var scope=this;
+        var a={};
+        a.onMotionFinished=function(){
+            scope.triggerEvent('animationEnded');
+        }
+        a.onMotionStarted=function(){
+            scope.triggerEvent('animationStarted');
+        }
+        this.tween.addListener(a);
     }
 
     this.elementsChanged=function(event){

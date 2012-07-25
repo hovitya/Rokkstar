@@ -43,6 +43,15 @@ core.Animation = Rokkstar.createClass('core.Animation', 'core.helpers.AnimationB
     }
     this.createTween=function(){
         this.tween=new Tween([],'','',0,0,this.getDuration(),this.getSuffix());
+        var scope=this;
+        var a={};
+        a.onMotionFinished=function(){
+            scope.triggerEvent('animationEnded');
+        }
+        a.onMotionStarted=function(){
+            scope.triggerEvent('animationStarted');
+        }
+        this.tween.addListener(a);
     }
 
     this.updateTween=function(){

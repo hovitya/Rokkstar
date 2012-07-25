@@ -12,4 +12,12 @@
  */
 core.Transition = Rokkstar.createClass('core.Transition', 'core.Parallel', function () {
 
+
+    this.playTransition=function(startState,endState){
+        this.transitionMode=true;
+        this.startState=startState;
+        this.endState=endState;
+        this.play();
+        this.transitionMode=false;
+    }
 },[new Attr('from','','string'),new Attr('to','','string')]);

@@ -95,6 +95,8 @@ public class XMLCodeGenerator  extends DefaultHandler{
 				this.currentAttr.set(this.currentAttr.size()-1,this.currentAttr.get(this.currentAttr.size()-1).concat(pref+id));
 			}else if(mode.get(mode.size()-1)=="states"){
 				this.declarationSection=declarationSection.concat("this.states['"+attributes.getValue("name")+"']="+id+";\n");
+			}else if(mode.get(mode.size()-1)=="transitions"){
+				this.declarationSection=declarationSection.concat("this.transitions.push("+id+");\n");
 			}
 			this.idS.add(id);
 			this.mode.add("component");

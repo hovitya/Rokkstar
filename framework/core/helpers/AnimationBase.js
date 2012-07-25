@@ -11,6 +11,12 @@
  * @class
  */
 core.helpers.AnimationBase = Rokkstar.createClass('core.helpers.AnimationBase', 'core.Component', function () {
+
+    this.transitionMode=false;
+
+    this.startState=null;
+    this.endState=null;
+
     this.play=function(reversed){
 
     }
