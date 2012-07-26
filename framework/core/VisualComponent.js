@@ -329,32 +329,42 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         this.domElement.className = this.getClass();
     }
 
-    this.stateChanged = function (event) {
-        event.stopPropagation();
-        if(this.states[this.getCurrentState()]!=undefined){
-            var from=event.oldValue;
-            var to=event.newValue;
-            //Searching for applicable transition
-            var i=this.transitions.length;
-            var trans=null;
-            while(i--){
-                if((this.transitions[i].getFrom()==from || this.transitions[i].getFrom()=='*') && (this.transitions[i].getTo()==to || this.transitions[i].getTo()=='*')){
-                    trans=this.transitions[i];
-                    i=0;
-                }
-            }
-            if(trans==null){
-                //Apply state without transition
-                this.states[this.getCurrentState()].activate();
-            }else{
-                //Apply state after transition
-                var state=this.states[this.getCurrentState()];
-                trans.createEventListener('animationEnded',function(){state.activate()},this,true);
-                trans.play();
-            }
+    this._runningTransitions=[];
 
-        }else{
-            throw new core.exceptions.Exception('Requested state is missing.');
+    this.stateChanged = function (event) {
+        if(event.oldValue!=event.newValue){
+            for(var i in this._runningTransitions){
+                this._runningTransitions[i].fastForward();
+            }
+            event.stopPropagation();
+            if(this.states[this.getCurrentState()]!=undefined){
+                var from=event.oldValue;
+                var to=event.newValue;
+                //Searching for applicable transition
+                var i=this.transitions.length;
+                var trans=null;
+                while(i--){
+                    if((this.transitions[i].getFrom()==from || this.transitions[i].getFrom()=='*') && (this.transitions[i].getTo()==to || this.transitions[i].getTo()=='*')){
+                        trans=this.transitions[i];
+                        i=0;
+                    }
+                }
+                if(trans==null){
+                    //Apply state without transition
+                    this.states[this.getCurrentState()].activate();
+                }else{
+                    //Apply state after transition
+                    var state=this.states[this.getCurrentState()];
+                    var that=this;
+                    var self=trans;
+                    trans.createEventListener('animationEnded',function(){state.activate();that._runningTransitions.slice(that._runningTransitions.indexOf(self),1);},this,true);
+                    this._runningTransitions.push(trans);
+                    trans.playTransition(this.states[from],this.states[to]);
+                }
+
+            }else{
+                throw new core.exceptions.Exception('Requested state is missing.');
+            }
         }
     }
 

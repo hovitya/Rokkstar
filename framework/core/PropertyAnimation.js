@@ -15,10 +15,46 @@ core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.An
         this.callSuper('init');
     }
 
-
+    this.stop=function(){
+        this.tween.stop();
+    }
 
     this.setUp=function(reversed){
-        if(this.getBy()==undefined){
+        if(this.transitionMode){
+            var start=this.getTarget().get(this.getProperty());
+            var end=this.getEnd();
+            var startProp=this.startState.properties;
+            var endProp=this.endState.properties;
+            //var i=startProp.length;
+            /*var prop=this.getProperty();
+            while(i--){
+                if(startProp[i].property==prop){
+                    start=startProp[i].value;
+                }
+            }*/
+
+            i=endProp.length;
+            var prop=this.getProperty();
+            while(i--){
+                if(endProp[i].property==prop){
+                    end=endProp[i].value;
+                }
+            }
+            if(this.getType()=='integer'){
+                start=parseInt(start);
+                end=parseInt(end);
+            }else{
+                start=parseFloat(start);
+                end=parseFloat(end);
+            }
+            if(!reversed){
+                this.tween.begin=start;
+                this.tween.setFinish(end);
+            }else{
+                this.tween.begin=end;
+                this.tween.setFinish(start);
+            }
+        }else if(this.getBy()==undefined){
             var start=this.getStart();
             var end=this.getEnd();
             if(start==undefined){

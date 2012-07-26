@@ -26,11 +26,15 @@ core.Sequence = Rokkstar.createClass('core.Sequence', 'core.helpers.AnimationBas
             for(var i=0;i<this.getElementsNum();i++){
                 this.getElementAt(i).transitionMode=this.transitionMode;
                 this.getElementAt(i).startState=this.startState;
+                this.getElementAt(i).endState=this.endState;
                 this.getElementAt(i).setUp(reversed);
                 this.tween.addChild(this.getElementAt(i).tween);
             }
         }else{
             for(var i=this.getElementsNum()-1;i>=0;i--){
+                this.getElementAt(i).transitionMode=this.transitionMode;
+                this.getElementAt(i).startState=this.startState;
+                this.getElementAt(i).endState=this.endState;
                 this.getElementAt(i).setUp(reversed);
                 this.tween.addChild(this.getElementAt(i).tween);
             }
