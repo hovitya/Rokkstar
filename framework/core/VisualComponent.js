@@ -118,6 +118,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         this._buildDOM();
 
 
+
         //Registering event listeners
         this.createEventListener('widthPropertyChanged', this.widthChanged, this);
         this.createEventListener('heightPropertyChanged', this.heightChanged, this);
@@ -138,8 +139,18 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         this.createEventListener('translateXPropertyChanged', this._createMatrix, this);
         this.createEventListener('translateYPropertyChanged', this._createMatrix, this);
         this.createEventListener('visiblePropertyChanged', this._visibilityChanged, this);
-        this.createEventListener('currentStatePropertyChanged', this.stateChanged, this);
+
         this.createEventListener('alphaPropertyChanged', this._styleChanged, this);
+
+        for(var i in this.states){
+            if(this.states.hasOwnProperty(i)){
+                this.setCurrentState(this.states[i].name);
+                this.states[i].activate();
+                break;
+            }
+        }
+
+        this.createEventListener('currentStatePropertyChanged', this.stateChanged, this);
     }
 
 
@@ -334,7 +345,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
     this.stateChanged = function (event) {
         if(event.oldValue!=event.newValue){
             for(var i in this._runningTransitions){
-                this._runningTransitions[i].fastForward();
+                this._runningTransitions[i].interrupt();
             }
             event.stopPropagation();
             if(this.states[this.getCurrentState()]!=undefined){

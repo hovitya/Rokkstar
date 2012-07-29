@@ -369,3 +369,14 @@ td { vertical-align: top; }
 .coreUpDownHandle{
     cursor: n-resize;
 }
+
+input{
+    border: none;
+    background: transparent;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+}
