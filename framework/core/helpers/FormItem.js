@@ -22,12 +22,18 @@ core.helpers.FormItem=Rokkstar.createClass('core.helpers.FormItem','core.Skinnab
         this.createEventListener('disabledPropertyChanged',this.invalidateSkinState,this);
     }
 
+    this.focus=false;
+
 
     this.getSkinState=function(){
         if(this.getDisabled()){
             return 'disabled';
+        }else if(this.focus){
+            return 'active';
         }else{
             return 'normal';
         }
     }
+
+
 },[new Attr('label','','string'),new Attr('disabled',false,'boolean')],['core.behaviours.FormItemBehaviour']);

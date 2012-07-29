@@ -14,6 +14,9 @@ core.InputBase=Rokkstar.createClass('core.InputBase','core.VisualComponent',func
         this.createEventListener('change',this._inputChanged,this);
         this.createEventListener('disabledPropertyChanged',this._disabledChanged,this);
         this.createEventListener('valuePropertyChanged',this._valueChanged,this);
+        this.createEventListener('fontColorPropertyChanged',this.invalidateFont,this);
+        this.createEventListener('fontSizePropertyChanged',this.invalidateFont,this);
+        this.createEventListener('fontFamilyPropertyChanged',this.invalidateFont,this);
     }
 
     this.createDomElement=function(){
@@ -34,4 +37,21 @@ core.InputBase=Rokkstar.createClass('core.InputBase','core.VisualComponent',func
         this.domElement.disabled=this.getDisabled();
     }
 
-},[new Attr('value',"",'string'),new Attr('disabled',false,'boolean')]);
+    this.fontInvalid=true;
+
+    this.invalidateFont=function(){
+        this.fontInvalid=true;
+        this.invalidateProperties();
+    }
+
+    this.commitProperties=function(){
+        this.callSuper('commitProperties');
+        if(this.fontInvalid){
+            this.domElement.style.fontFamily=this.getFontFamily();
+            this.domElement.style.fontSize=this.getFontSize().toString()+"px";
+            this.domElement.style.color=this.getFontColor();
+            this.domElement.style.textAlign=this.getTextAlign();
+        }
+    }
+
+},[new Attr('value',"",'string'),new Attr('disabled',false,'boolean'),new Attr('fontFamily','PTSansRegular','string'),new Attr('fontColor','#000000','string'),new Attr('fontSize',12,'integer'),new Attr('textAlign','left','string')]);
