@@ -12,26 +12,27 @@
  */
 core.data.Model = Rokkstar.createClass('core.data.Model', 'core.Component', function () {
 
-    this.fieldData={};
+    this.currentClass=null;
 
+    this.init=function(){
+        this.callSuper('init');
+        this.createEventListener('fieldsPropertyChanged',this.regenerateClass,this);
+    }
 
-    this.setField=function(field,value){
-        if(this.fieldData[field]!=undefined){
-            this.fieldData[field].value=value;
-        }else{
-            throw new core.exceptions.Exception("Field not found: "+field);
+    this.regenerateClass=function(event){
+        var attributes=[];
+        var fields=this.getFields();
+        var i=fields.length;
+        while(--i){
+            var field=fields[i];
+            attributes.push(new Attr(field.name,field.defaultValue,field.type));
         }
+        var idField=this.getIdField();
+        this.currentClass=Rokkstar.createClass(core.data.IDGenerator.generateModelId(),this.getExtends(),function(){this.construct=function(){this.callSuper('construct');this.setIdField(idField)};},attributes);
     }
 
-    this.getField=function(field){
-        if(this.fieldData[field]!=undefined){
-            return this.fieldData[field].value;
-        }else{
-            throw new core.exceptions.Exception("Field not found: "+field);
-        }
+    this.createEntity=function(){
+        return new this.currentClass;
     }
 
-    this.hasField=function(field){
-        return (this.fieldData[field]!=undefined);
-    }
-},[new Attr('fields',[],'array')]);
+},[new Attr('fields',[],'array'),new Attr('extends','core.data.Entity','string'),new Attr('idField','id','string')]);

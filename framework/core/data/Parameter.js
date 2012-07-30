@@ -1,0 +1,1 @@
+core.data.Parameter=Rokkstar.createClass('core.data.Parameter','core.Component',function(){},[new Attr('name','','string'),new Attr('value','','string')]);
