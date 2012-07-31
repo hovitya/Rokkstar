@@ -1,0 +1,1 @@
+core.Event=Rokkstar.createClass('core.Event',undefined,function(){});

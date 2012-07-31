@@ -245,8 +245,11 @@ Rokkstar.createAttribute=function(cls,property,defaultValue){
 Rokkstar.instanceOf=function(object,type){
     if(typeof object != "object") return false;
     if(object.type==undefined || typeof object != "string") return false;
-    if(object.type!=type) return false;
-    return true;
+    if(object.type==type) return true;
+    for(var i in object._interfaces){
+        if(object._interfaces[i]==type) return true;
+    }
+    return false;
 }
 
 /**
@@ -256,13 +259,14 @@ Rokkstar.instanceOf=function(object,type){
  * @param {Array} behaviours Optional. Class behaviours.
  * @return {Function} Class declaration.
  */
-Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours){
+Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,interfaces){
     Rokkstar.classes.push(name);
     return function(){
         var cls=getClass(name);
         if(cls.prototype.constructed==undefined){
 
             cls.prototype._object_scope=[];
+            cls.prototype._interfaces=[];
             cls.prototype._attributeTypes={};
 
             //constructing prototype
@@ -280,6 +284,8 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours){
                 //cls.prototype._object_scope=cls.prototype._object_scope.concat(superCls.prototype._object_scope);
                 //cls.prototype._attributes=cls.prototype._attributes.concat(superCls.prototype._attributes);
                 Rokkstar.Extend(cls.prototype._attributeTypes,superCls.prototype._attributeTypes);
+                cls.prototype._interfaces=cls.prototype._interfaces.concat(superCls.prototype._interfaces);
+                //Rokkstar.Extend(cls.prototype._interfaces,superCls.prototype._attributeTypes);
                 cls.prototype.superClass=superCls;
                 //Copy rokkstar object to local namespace
                 cls.prototype.rokk=Rokkstar;
@@ -325,6 +331,9 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours){
 
 
 
+
+
+
             //Building class structure
             structure.apply(reference);
 
@@ -352,12 +361,28 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours){
                             refValue.altered=true;
                         }
                         cls.prototype[i]=refValue;
-                    }else if(i!="_object_scope" && i!="_attributes" && i!="_attributeTypes"){
+                    }else if(i!="_object_scope" && i!="_attributes" && i!="_attributeTypes" && i!="_interfaces"){
                         cls.prototype._object_scope.push({name:i,val:refValue});
                     }
                 }
             }
             cls.prototype.constructed=true;
+
+            if(interfaces!=undefined){
+                for(var i in interfaces){
+                    var iface=getClass(interfaces[i]);
+                    for(var j in iface){
+                        if(iface.hasOwnProperty(j) && iface[j] instanceof Function){
+                            if(cls.prototype[j] instanceof Function && cls.prototype[j].length==iface[j].length){
+                                //Correct implementation
+                            }else{
+                                throw new Error('Interface function '+j+' is missing, or it has wrong signature. Interface:'+interfaces[i]);
+                            }
+                        }
+                    }
+                    cls.prototype._interfaces.push(interfaces[i]);
+                }
+            }
 
 
         }
