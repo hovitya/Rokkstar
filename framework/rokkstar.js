@@ -252,6 +252,10 @@ Rokkstar.instanceOf=function(object,type){
     return false;
 }
 
+Rokkstar.createInterface=function(name,structure,interfaces){
+
+}
+
 /**
  * Creates a new a class.
  * @param {Function} structure Class structure creator function.
@@ -301,7 +305,7 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
                         target=this;
                         var oldValue=target[property];
                         target[property]=Rokkstar.parseAttribute(value,this._attributeTypes[property]);
-                        var event=$.Event(property+'PropertyChanged',{oldValue:oldValue,newValue:value,propertyName:property});
+                        var event=new core.events.PropertyChangeEvent(property+'PropertyChanged',oldValue,value,property);
                         target.triggerEvent(event);
                     }
                 }
@@ -355,10 +359,12 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
                     var refValue=reference[i];
                     if(refValue instanceof Function){
                         if(refValue.altered==undefined){
+                            var sign=refValue.length;
                             if(superClass!=undefined){
                                 refValue=Rokkstar.createClosure(refValue,cls);
                             }
                             refValue.altered=true;
+                            refValue.originalSignature=sign;
                         }
                         cls.prototype[i]=refValue;
                     }else if(i!="_object_scope" && i!="_attributes" && i!="_attributeTypes" && i!="_interfaces"){
@@ -373,7 +379,7 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
                     var iface=getClass(interfaces[i]);
                     for(var j in iface){
                         if(iface.hasOwnProperty(j) && iface[j] instanceof Function){
-                            if(cls.prototype[j] instanceof Function && cls.prototype[j].length==iface[j].length){
+                            if(cls.prototype[j] instanceof Function && (cls.prototype[j].originalSignature==iface[j].length || (cls.prototype[j].originalSignature==undefined && cls.prototype[j].length==iface[j].length))){
                                 //Correct implementation
                             }else{
                                 throw new Error('Interface function '+j+' is missing, or it has wrong signature. Interface:'+interfaces[i]);

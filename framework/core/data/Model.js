@@ -14,18 +14,23 @@ core.data.Model = Rokkstar.createClass('core.data.Model', 'core.Component', func
 
     this.currentClass=null;
 
+    this.fieldNames=[];
+
     this.init=function(){
         this.callSuper('init');
         this.createEventListener('fieldsPropertyChanged',this.regenerateClass,this);
+        this.createEventListener('extendsPropertyChanged',this.regenerateClass,this);
     }
 
     this.regenerateClass=function(event){
         var attributes=[];
+        this.fieldNames=[];
         var fields=this.getFields();
         var i=fields.length;
         while(--i){
             var field=fields[i];
             attributes.push(new Attr(field.name,field.defaultValue,field.type));
+            this.fieldNames.push(field.name);
         }
         var idField=this.getIdField();
         this.currentClass=Rokkstar.createClass(core.data.IDGenerator.generateModelId(),this.getExtends(),function(){this.construct=function(){this.callSuper('construct');this.setIdField(idField)};},attributes);
@@ -33,6 +38,10 @@ core.data.Model = Rokkstar.createClass('core.data.Model', 'core.Component', func
 
     this.createEntity=function(){
         return new this.currentClass;
+    }
+
+    this.hasField=function(fieldName){
+        return this.fieldNames.indexOf(fieldName)!=-1;
     }
 
 },[new Attr('fields',[],'array'),new Attr('extends','core.data.Entity','string'),new Attr('idField','id','string')]);

@@ -15,6 +15,8 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
 
     this.registeredDOMEvents=[];
 
+    this.construct=function(){}
+
 
     /**
      * Register new event handler.
@@ -72,7 +74,7 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
     this.triggerEvent=function(event,bubbling,cancellable){
         if(this.domElement==null) this.createDomElement();
         if(typeof event === "string"){
-            event=$.Event(event);
+            event=new core.Event(event);
         }
         var handlers=this.handlers[event.type];
         var remove=[];
