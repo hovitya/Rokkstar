@@ -1,6 +1,17 @@
 core.data.AbstractStore=Rokkstar.createClass('core.data.AbstractStore','core.data.ArrayCollection',function(){
 
+    /**
+     * @type {core.data.IList}
+     */
+    this.dataProvider=null;
 
+    this.init=function(){
+        this.callSuper('init');
+    }
+
+    this.attachDataProvider=function(dataProvider){
+        dataProvider.createEventListener
+    }
 
     /**
      *
@@ -12,8 +23,8 @@ core.data.AbstractStore=Rokkstar.createClass('core.data.AbstractStore','core.dat
     }
 
 
-    this._readProperty=function(object,property){
-
+    this.readProperty=function(object,property){
+        return object[property];
     }
 
-},[new Attr('model',undefined,'core.data.Model'),new Attr('format','json','string')]);
+},[new Attr('model',undefined,'core.data.Model')]);

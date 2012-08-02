@@ -330,19 +330,10 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
                 }
             }
 
-
-
-
-
-
-
-
-
             //Building class structure
             structure.apply(reference);
 
-
-            //Creating attributes
+          //Creating attributes
             if(attributes!=undefined){
                 var j=attributes.length;
                 while(--j>=0){
@@ -351,7 +342,6 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
                     Rokkstar.createAttribute(cls,attr.name,attr.defaultValue,attr.type);
                 }
             }
-
 
             //Altering new functions
             for(var i in reference){
@@ -412,7 +402,6 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
             }
         }
 
-
         if(arguments.length!=1  || arguments[0]!="R::!!NO-CONSTRUCT!!"){
             if(this.construct!=undefined){ this.construct.apply(this,arguments);}
         }
@@ -441,8 +430,25 @@ Rokkstar.parseAttribute=function(val,typeForcing){
             ret=[];
             ret.push(val);
         }
-    }else{
+    }else if(typeForcing=='string'){
+        if(typeof val == 'object'){
+            ret=val.toString();
+        }
         ret=val;
+    }else if(typeForcing==undefined || typeForcing=='object' || typeForcing=='*' || typeForcing=='function'){
+        ret=val;
+    }else{
+        if(typeof val == 'string'){
+            var object=new typeForcing;
+            if(!Rokkstar.instanceOf(object,'core.ISerializable')) throw new TypeError('This class cannot be initialized from string.');
+            object.unserialize(val);
+            ret=object;
+        }else if(typeof val == 'object'){
+            if(!Rokkstar.instanceOf(val,typeForcing)) throw new TypeError('Type mismatch. Requested type: '+typeForcing);
+            ret=val;
+        }else{
+            throw new TypeError('Unknown attribute type.');
+        }
     }
     return ret;
 };

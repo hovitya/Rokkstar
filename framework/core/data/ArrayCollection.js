@@ -79,7 +79,6 @@ core.data.ArrayCollection=Rokkstar.createClass('core.data.ArrayCollection','core
             this.view.push(item);
             this.triggerEvent(new core.data.events.CollectionEvent('collectionChanged','move',this.view.length-1,oldIndex,[item]));
         }
-
     }
 
     this._checkIndex=function(index){
