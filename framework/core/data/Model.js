@@ -52,19 +52,28 @@ core.data.Model = Rokkstar.createClass('core.data.Model', 'core.Component', func
 
     this.createEntity=function(data){
         if(this.classInvalid) this.regenerateClass();
-        var entry=new this.currentClass;
         if(data!=undefined){
+            var entry=new this.currentClass;
             var i=fields.length;
             while(--i){
-                entry.set(fields[i].getPropertyName(),data[fields[i].getName()]);
+                var factory=fields[i].getFactory();
+                if(factory){
+                    entry.set(fields[i].getPropertyName(),factory.createObject(data[fields[i].getName()]));
+                }else{
+                    entry.set(fields[i].getPropertyName(),data[fields[i].getName()]);
+                }
+
             }
+        }else{
+            return undefined;
         }
 
     }
 
-    this.hasField=function(fieldName){
-        return this.fieldNames.indexOf(fieldName)!=-1;
+    this.createObject=function(data){
+        return this.createEntity(data);
     }
+
 
     this.classInvalid=true;
 
@@ -78,4 +87,4 @@ core.data.Model = Rokkstar.createClass('core.data.Model', 'core.Component', func
         this.triggerEvent('fieldsChanged');
     }
 
-},[new Attr('entityClass','core.Component','string'),new Attr('idField','id','string')]);
+},[new Attr('entityClass','core.Component','string'),new Attr('idField','id','string')],[],['core.IFactory']);

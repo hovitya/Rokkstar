@@ -16,6 +16,8 @@ Rokkstar.classReferenceCache={};
 
 Rokkstar.objectVariablesCache={};
 
+Rokkstar.modelCache={};
+
 Rokkstar.templates={};
 
 Rokkstar.globals={};
