@@ -1,8 +1,8 @@
 /**
- * @augments core.Layout
+ * @augments core.layouts.Layout
  * @construct
  */
-core.ConstraintLayout=Rokkstar.createClass('core.ConstraintLayout','core.Layout',function(){
+core.layouts.ConstraintLayout=Rokkstar.createClass('core.layouts.ConstraintLayout','core.layouts.Layout',function(){
     /**
      *
      * @param {core.VisualComponent} div Target component

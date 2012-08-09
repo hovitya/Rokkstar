@@ -35,7 +35,7 @@ public class XMLCodeGenerator  extends DefaultHandler{
 	        String qName, Attributes attributes)
 	    throws SAXException {
 		FileReference fRef=new FileReference(this.fileName, locator.getLineNumber());
-		String ns=ClassDefinition.translateNamespace(uri);
+		String ns=ClassDefinition.translateNamespace(uri,localName);
 
 		
 		if(!ClassDefinition.isPromotedNS(ns) && elementLevel==0){

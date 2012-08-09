@@ -1,8 +1,8 @@
 /**
- * @augments core.Layout
+ * @augments core.layouts.Layout
  * @constructor
  */
-core.AlignmentLayout=Rokkstar.createClass('core.AlignmentLayout','core.Layout',function(){
+core.layouts.AlignmentLayout=Rokkstar.createClass('core.layouts.AlignmentLayout','core.layouts.Layout',function(){
 
     this.init=function(){
         this.callSuper('init');

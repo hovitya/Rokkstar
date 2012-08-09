@@ -3,10 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /**
- * @augments core.Layout
+ * @augments core.layouts.Layout
  * @constructor
  */
-core.FormLayout=Rokkstar.createClass('core.FormLayout','core.Layout',function(){
+core.layouts.FormLayout=Rokkstar.createClass('core.layouts.FormLayout','core.layouts.Layout',function(){
 
     this.init=function(){
         this.callSuper('init');

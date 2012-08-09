@@ -1,4 +1,4 @@
-core.BorderLayout=Rokkstar.createClass('core.BorderLayout','core.Layout',function(){
+core.layouts.BorderLayout=Rokkstar.createClass('core.layouts.BorderLayout','core.layouts.Layout',function(){
 
 
     this.init=function(){

@@ -9,7 +9,7 @@
  * @augments core.Component
  * @constructor
  */
-core.Layout =Rokkstar.createClass('core.Layout','core.Component',function () {
+core.layouts.Layout =Rokkstar.createClass('core.layouts.Layout','core.Component',function () {
 
     this.lastDiv = null;
 

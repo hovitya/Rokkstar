@@ -139,7 +139,7 @@ core.VisualContainer=Rokkstar.createClass('core.VisualContainer','core.VisualCom
     }
 
     this.refreshLayout=function(){
-        if(this.getLayout()==null) this.layout=this.createComponent('core.ConstraintLayout');
+        if(this.getLayout()==null) this.layout=this.createComponent('core.layouts.ConstraintLayout');
         this.layout.doLayout(this);
     }
     this.layoutInvalid=false;

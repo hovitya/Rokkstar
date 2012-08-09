@@ -25,7 +25,7 @@ public class XMLAnalizer extends DefaultHandler {
 	
 	public void startElement(String nsURI, String localName, String tagName, Attributes attributes) throws SAXException {
 		FileReference fRef=new FileReference(this.fileName, locator.getLineNumber());
-		String ns=ClassDefinition.translateNamespace(nsURI);
+		String ns=ClassDefinition.translateNamespace(nsURI,localName);
 		if(!ClassDefinition.isPromotedNS(nsURI)){
 			/*
 			 * Process component 

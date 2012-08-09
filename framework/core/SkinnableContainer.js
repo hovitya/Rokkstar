@@ -41,7 +41,7 @@ core.SkinnableContainer=Rokkstar.createClass('core.SkinnableContainer','core.Vis
 
     /**
      * @protected
-     * @type {core.ConstraintLayout}
+     * @type {core.layouts.ConstraintLayout}
      */
     this.constraintLayout=null;
 
@@ -114,7 +114,7 @@ core.SkinnableContainer=Rokkstar.createClass('core.SkinnableContainer','core.Vis
 
     this.partAdded=function(name,instance){
         if(name=='content'){
-            if(this.constraintLayout==null) this.constraintLayout=this.createComponent('core.ConstraintLayout');
+            if(this.constraintLayout==null) this.constraintLayout=this.createComponent('core.layouts.ConstraintLayout');
             this.redirectProperty('layout',instance,this.constraintLayout);
             for(var i in this.pendingElements){
                 instance.addElement(this.pendingElements[i]);

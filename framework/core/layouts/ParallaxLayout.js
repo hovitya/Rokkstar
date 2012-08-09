@@ -6,7 +6,7 @@
  *
  * @constructor
  */
-core.ParallaxLayout=Rokkstar.createClass('core.ParallaxLayout','core.Layout',function(){
+core.layouts.ParallaxLayout=Rokkstar.createClass('core.layouts.ParallaxLayout','core.layouts.Layout',function(){
 
     this.init=function(){
         this.callSuper('init');

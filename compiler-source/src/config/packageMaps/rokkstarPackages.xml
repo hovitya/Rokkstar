@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packageMap namespace="http://www.imagix-interactive/2012/Rokkstar/components" default="core">
+	<package name="core.data">
+		<component>ArrayCollection</component>	
+		<component>Field</component>
+		<component>Model</component>
+		<component>Request</component>	
+	</package>
+	<package name="core.layouts">
+		<component>BorderLayout</component>
+		<component>HorizontalLayout</component>
+		<component>ConstraintLayout</component>
+		<component>FormLayout</component>
+		<component>VerticalLayout</component>
+		<component>ParallaxLayout</component>
+	</package>
+</packageMap>

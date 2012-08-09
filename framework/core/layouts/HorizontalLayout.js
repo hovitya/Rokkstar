@@ -3,10 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
  /**
- * @augments core.AlignmentLayout
+ * @augments core.layouts.AlignmentLayout
  * @constructor
  */
-core.HorizontalLayout=Rokkstar.createClass('core.HorizontalLayout','core.AlignmentLayout',function(){
+core.layouts.HorizontalLayout=Rokkstar.createClass('core.layouts.HorizontalLayout','core.layouts.AlignmentLayout',function(){
     /**
      * 
      * @param {core.VisualComponent} div Parent component
