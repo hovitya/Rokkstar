@@ -1,4 +1,5 @@
 package helpers;
+import java.io.Console;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -21,7 +22,7 @@ public class RokkstarPreferences {
 	public Map<String,PackageMapHandler> packageMaps=new HashMap<String,PackageMapHandler>();
 
 	private RokkstarPreferences(){
-		File dir=new File(this.getClass().getResource("config"+File.separator+"packageMaps").getPath());
+		File dir=new File("config"+File.separator+"packageMaps");
 		//Load package map files
 		for (File xmlFile : dir.listFiles()) {
 			if (".".equals(xmlFile.getName()) || "..".equals(xmlFile.getName())) {
@@ -29,13 +30,15 @@ public class RokkstarPreferences {
 			}
 			if (!xmlFile.isDirectory()){
 				//Parsing package map
-				try{
+					try{
 					PackageMapHandler handler=new PackageMapHandler();
 					handler.fileName=xmlFile.getPath();
 					XMLReader xr = XMLReaderFactory.createXMLReader();
 					xr.setContentHandler(handler);
 					FileReader r = new FileReader(xmlFile);
 					xr.parse(new InputSource(r));
+					
+					r.close();
 					packageMaps.put(handler.namespace, handler);
 				}catch(SAXException ex){
 					RokkstarOutput.WriteError(ex.getMessage(), new FileReference(xmlFile.getPath(), 0));
@@ -46,6 +49,7 @@ public class RokkstarPreferences {
 				}
 			}
 		}
+		System.out.println(this.packageMaps.toString());
 	}
 
 	public static RokkstarPreferences getInstance(){

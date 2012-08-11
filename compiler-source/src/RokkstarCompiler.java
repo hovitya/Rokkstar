@@ -2,6 +2,7 @@
 
 import helpers.FileReference;
 import helpers.RokkstarOutput;
+import helpers.RokkstarPreferences;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -44,9 +45,11 @@ public class RokkstarCompiler {
 	public String sourceDir=null;
 	public String skinDir="skins"+File.separator+"default";
 	public String templateFile=null;
+	public RokkstarPreferences preferences=RokkstarPreferences.getInstance();
 	protected String cssValue="";
 	
 	public RokkstarCompiler(CommandLine line) {
+		
 		if(line.hasOption("source")){
 			this.sourceDir=line.getOptionValue("source");
 		}
