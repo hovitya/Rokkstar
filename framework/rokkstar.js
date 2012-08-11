@@ -246,8 +246,9 @@ Rokkstar.createAttribute=function(cls,property,defaultValue){
 
 Rokkstar.instanceOf=function(object,type){
     if(typeof object != "object") return false;
-    if(object.type==undefined || typeof object != "string") return false;
-    if(object.type==type) return true;
+    if(object.__classType==undefined) return false;
+    if(object.__classType==type) return true;
+    if(object._classHierarchy.indexOf(type)!=-1) return true;
     for(var i in object._interfaces){
         if(object._interfaces[i]==type) return true;
     }
@@ -274,6 +275,7 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
             cls.prototype._object_scope=[];
             cls.prototype._interfaces=[];
             cls.prototype._attributeTypes={};
+            cls.prototype._classHierarchy=[];
 
             //constructing prototype
             var reference={};
@@ -291,6 +293,8 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
                 //cls.prototype._attributes=cls.prototype._attributes.concat(superCls.prototype._attributes);
                 Rokkstar.Extend(cls.prototype._attributeTypes,superCls.prototype._attributeTypes);
                 cls.prototype._interfaces=cls.prototype._interfaces.concat(superCls.prototype._interfaces);
+                cls.prototype._classHierarchy=cls.prototype._interfaces.concat(superCls.prototype._classHierarchy);
+                cls.prototype._classHierarchy.push(superClass);
                 //Rokkstar.Extend(cls.prototype._interfaces,superCls.prototype._attributeTypes);
                 cls.prototype.superClass=superCls;
                 //Copy rokkstar object to local namespace
@@ -385,8 +389,7 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
 
         }
 
-        //Set type
-        this.type=name;
+
 
         var j=cls.prototype._object_scope.length;
         while(--j>=0){
@@ -403,6 +406,9 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
                 this[prop.name]=prop.val;
             }
         }
+
+        //Set type
+        this.__classType=name;
 
         if(arguments.length!=1  || arguments[0]!="R::!!NO-CONSTRUCT!!"){
             if(this.construct!=undefined){ this.construct.apply(this,arguments);}
