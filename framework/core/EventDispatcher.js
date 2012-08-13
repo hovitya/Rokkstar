@@ -102,11 +102,17 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
      */
     this.deleteEventListener=function(event,listener,scope){
         if(this.domElement==null) this.createDomElement();
+        var eventsToRemove=[];
         if(this.handlers[event]!=undefined){
+            //Search events to delete
             for(var i in this.handlers[event]){
                 if(this.handlers[event][i].func===listener && this.handlers[event][i].scope===scope){
-                    this.handlers[event]=this.handlers[event].splice(i,1);
+                    eventsToRemove.push(this.handlers[event][i]);
                 }
+            }
+            //Delete events from array
+            for(var i in eventsToRemove){
+                this.handlers[event].splice(this.handlers[event].indexOf(eventsToRemove[i]),1);
             }
         }
     }

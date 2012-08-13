@@ -88,6 +88,7 @@ core.ChangeWatcher = Rokkstar.createClass('core.ChangeWatcher',undefined, functi
             i++;
         }
         if(i==this.chain.length-1) this.chainObjects[i].createEventListener(this.chain[i]+'PropertyChanged',this.finalAttributeChanged,this);
+        this.handler.apply(this.wscope,[event]);
 
     }
 
@@ -109,7 +110,15 @@ core.ChangeWatcher = Rokkstar.createClass('core.ChangeWatcher',undefined, functi
 
 
     this.getValue=function(){
-
+        //Resolve chain
+        var current=this.host;
+        var i=0;
+        var last=this.chain.length-1;
+        while(i<=last && current!=undefined){
+            current=current[this.chain[i]];
+            i++;
+        }
+        return current;
     }
 
     this.finalAttributeChanged=function(event){

@@ -17,4 +17,7 @@
 	<package name="core.network">
 		<component>HTTPService</component>
 	</package>
+	<package name="core.form">
+		<component>Input</component>
+	</package>
 </packageMap>

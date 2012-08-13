@@ -34,4 +34,4 @@ core.TitlePanel=Rokkstar.createClass('core.TitlePanel','core.Panel',function(){
     }
 
 
-},[new Attr('titleLabel','')]);
+},[new Attr('titleLabel','','string')]);

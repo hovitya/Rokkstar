@@ -14,17 +14,18 @@
  */
 core.Binding = Rokkstar.createClass('core.Binding', 'core.Component', function () {
 
-});
 
-core.Binding.bindProperty=function(source,sourceAttribute,destination,destinationAttribute){
-    if(source._attributeTypes==undefined || source._attributeTypes[sourceAttribute]==undefined){
-        Rokkstar.console.warning("Class "+source.__classType+" does not have attribute called "+sourceAttribute+", so real data binding is not possible.");
+},[new Attr('source','','string'),new Attr('destination','','string')]);
+
+core.Binding.bindProperty=function(site,property,host,chain){
+    var watcher=core.ChangeWatcher.watch(host,chain,null,site);
+    var handler=function(event){
+        if(site._attributeTypes[property]!=undefined){
+            site["set"+property.capitalize()].apply(site,[watcher.getValue()]);
+        }else{
+            site[property]=watcher.getValue();
+        }
     }
-    if(destination.__bindings==undefined){
-        destination.__bindings=[];
-    }
-    destination.__bindings.push({source:source,sourceAttribute:sourceAttribute,destination:destination,destinationAttribute:destinationAttribute});
-
-
-
+    watcher.handler=handler;
+    return watcher;
 }

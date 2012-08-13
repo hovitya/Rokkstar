@@ -11,7 +11,7 @@ core.InputBase=Rokkstar.createClass('core.InputBase','core.VisualComponent',func
 
     this.init=function(){
         this.callSuper('init');
-        this.createEventListener('change',this._inputChanged,this);
+        this.createEventListener('keyup',this._inputChanged,this);
         this.createEventListener('disabledPropertyChanged',this._disabledChanged,this);
         this.createEventListener('valuePropertyChanged',this._valueChanged,this);
         this.createEventListener('fontColorPropertyChanged',this.invalidateFont,this);

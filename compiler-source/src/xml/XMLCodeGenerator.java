@@ -25,10 +25,11 @@ public class XMLCodeGenerator  extends DefaultHandler{
 	protected Locator locator=null;
 	public String fileName="";
 	public String generatedCode="";
+	protected String bindings="";
 	
 	
 	public void endDocument() throws SAXException {
-		generatedCode="".concat(className+" = Rokkstar.createClass('"+className+"','"+superClassName+"',function(){"+scriptSection+"\nthis._buildDOM=function(){\nthis.callSuper('_buildDOM');\n"+declarationSection+"\n"+propertySetSection+"\n};"+"});\n\n");
+		generatedCode="".concat(className+" = Rokkstar.createClass('"+className+"','"+superClassName+"',function(){"+scriptSection+"\nthis._buildDOM=function(){\nthis.callSuper('_buildDOM');\n"+declarationSection+"\n"+propertySetSection+"\n"+bindings+"\n};"+"});\n\n");
     }
 	
 	public void startElement(String uri, String localName,
@@ -50,9 +51,9 @@ public class XMLCodeGenerator  extends DefaultHandler{
 					if(attributes.getLocalName(i).lastIndexOf('.')!=-1){
 						String state=attributes.getLocalName(i).substring(attributes.getLocalName(i).lastIndexOf('.')+1);
 						String property=attributes.getLocalName(i).substring(0,attributes.getLocalName(i).lastIndexOf('.'));
-						this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty(this,'"+property+"',"+this.parseValue(attributes.getValue(i))+");\n");
+						this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty(this,'"+property+"',"+this.parseValue(attributes.getValue(i),property)+");\n");
 					}else{
-						this.propertySetSection=this.propertySetSection.concat("this.set('"+attributes.getLocalName(i)+"',"+this.parseValue(attributes.getValue(i))+");\n");	
+						this.propertySetSection=this.propertySetSection.concat("this.set('"+attributes.getLocalName(i)+"',"+this.parseValue(attributes.getValue(i),attributes.getLocalName(i))+");\n");	
 					}
 					
 				}
@@ -78,9 +79,9 @@ public class XMLCodeGenerator  extends DefaultHandler{
 					if(attributes.getLocalName(i).lastIndexOf('.')!=-1){
 						String state=attributes.getLocalName(i).substring(attributes.getLocalName(i).lastIndexOf('.')+1);
 						String property=attributes.getLocalName(i).substring(0,attributes.getLocalName(i).lastIndexOf('.'));
-						this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty("+id+",'"+property+"',"+this.parseValue(attributes.getValue(i))+");\n");
+						this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty("+id+",'"+property+"',"+this.parseValue(attributes.getValue(i),property)+");\n");
 					}else{
-						this.propertySetSection=this.propertySetSection.concat(id+".set('"+attributes.getLocalName(i)+"',"+this.parseValue(attributes.getValue(i))+");\n");	
+						this.propertySetSection=this.propertySetSection.concat(id+".set('"+attributes.getLocalName(i)+"',"+this.parseValue(attributes.getValue(i),attributes.getLocalName(i))+");\n");	
 					}
 					
 				}
@@ -119,8 +120,20 @@ public class XMLCodeGenerator  extends DefaultHandler{
 		elementLevel++;
 	}
 	
-	protected String parseValue(String value){
+	protected String parseValue(String value,String property){
 		if(value.startsWith("{") && value.endsWith("}")){
+			//Create binding
+			String[] parts=value.substring(1, value.length()-1).split("\\.");
+			String chain="[";
+			for (int i = 1; i < parts.length; i++) {
+				if(chain.length()!=1){
+					chain+=",";
+				}
+				chain+=parts[i];
+			}
+			chain+="]";
+			
+			bindings+="core.Binding.bindProperty(this,'"+property+"',"+parts[0]+","+chain+");\n";
 			return value.substring(1, value.length()-1); 
 		}else{
 			return '"'+value+'"';
