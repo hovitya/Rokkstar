@@ -61,7 +61,10 @@ public class RokkstarCompiler {
 		if(line.hasOption("sdk")){
 			this.sdkDir=line.getOptionValue("sdk");
 		}
-
+		
+		RokkstarPreferences.getInstance().SDKDir=this.sdkDir;
+		RokkstarPreferences.getInstance().loadConfig();
+		
 		if(line.hasOption("output")){
 			this.outputMode=line.getOptionValue("output");
 		}

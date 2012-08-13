@@ -10,6 +10,7 @@
 /**
  * @class
  * @name PropertyChangeEvent
+ * @augments core.Event
  * @package core.events
  */
 core.events.PropertyChangeEvent = Rokkstar.createClass('core.events.PropertyChangeEvent', 'core.Event', function () {

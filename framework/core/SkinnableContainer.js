@@ -177,4 +177,4 @@ core.SkinnableContainer=Rokkstar.createClass('core.SkinnableContainer','core.Vis
     }
 
 
-},[new Attr('skinClass',undefined)],['core.behaviours.SkinnableBehaviour']);
+},[new Attr('skinClass',undefined),new Attr('skin',undefined,'core.Skin')],['core.behaviours.SkinnableBehaviour']);

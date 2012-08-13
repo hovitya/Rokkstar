@@ -69,7 +69,7 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
      * <code>
      *      myEventDispatcher.triggerEvent('layoutChanged');
      * </code>
-     * @param {String} event Event name.
+     * @param {String|core.Event} event Event name.
      */
     this.triggerEvent=function(event,bubbling,cancellable){
         if(this.domElement==null) this.createDomElement();
@@ -78,6 +78,7 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
         }
         var handlers=this.handlers[event.type];
         var remove=[];
+        event.currentTarget=this;
         if(handlers!=undefined){
             var i=handlers.length;
             while(--i>=0){
@@ -104,7 +105,7 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
         if(this.handlers[event]!=undefined){
             for(var i in this.handlers[event]){
                 if(this.handlers[event][i].func===listener && this.handlers[event][i].scope===scope){
-                    this.handlers=this.handlers.splice(i,1);
+                    this.handlers[event]=this.handlers[event].splice(i,1);
                 }
             }
         }

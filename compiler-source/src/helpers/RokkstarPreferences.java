@@ -20,9 +20,14 @@ public class RokkstarPreferences {
 	private static RokkstarPreferences _instance=null;
 
 	public Map<String,PackageMapHandler> packageMaps=new HashMap<String,PackageMapHandler>();
+	
+	public String SDKDir;
 
 	private RokkstarPreferences(){
-		File dir=new File("config"+File.separator+"packageMaps");
+	}
+	
+	public void loadConfig(){
+		File dir=new File(this.SDKDir+File.separator+"compiler-source"+File.separator+"src"+File.separator+"config"+File.separator+"packageMaps");
 		//Load package map files
 		for (File xmlFile : dir.listFiles()) {
 			if (".".equals(xmlFile.getName()) || "..".equals(xmlFile.getName())) {
@@ -49,7 +54,7 @@ public class RokkstarPreferences {
 				}
 			}
 		}
-		System.out.println(this.packageMaps.toString());
+		//System.out.println(this.packageMaps.toString());		
 	}
 
 	public static RokkstarPreferences getInstance(){

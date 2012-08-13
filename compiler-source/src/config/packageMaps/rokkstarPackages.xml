@@ -14,4 +14,7 @@
 		<component>VerticalLayout</component>
 		<component>ParallaxLayout</component>
 	</package>
+	<package name="core.network">
+		<component>HTTPService</component>
+	</package>
 </packageMap>

@@ -108,7 +108,7 @@ core.behaviours.SkinnableBehaviour=function(){
             }
             this.removeSkin(this.skin);
         }
-        this.skin=this.createComponent(this.getSkinClass());
+        this.setSkin(this.createComponent(this.getSkinClass()));
         this.addSkin(this.skin);
         for(var i in this.definedSkinParts){
             var def=this.definedSkinParts[i];

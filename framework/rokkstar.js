@@ -259,6 +259,14 @@ Rokkstar.createInterface=function(name,structure,interfaces){
 
 }
 
+Rokkstar.console={};
+
+Rokkstar.console.warning=function(message){
+    if(console){
+        console.warn(message);
+    }
+}
+
 /**
  * Creates a new a class.
  * @param {Function} structure Class structure creator function.
