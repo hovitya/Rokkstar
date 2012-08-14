@@ -9,7 +9,7 @@
 
 /**
  * @class
- * @name Binding
+ * @name core.Binding
  * @package core
  */
 core.Binding = Rokkstar.createClass('core.Binding', 'core.Component', function () {
@@ -28,4 +28,38 @@ core.Binding.bindProperty=function(site,property,host,chain){
     }
     watcher.handler=handler;
     return watcher;
+};
+
+core.Binding.bindExpression=function(site,property,hosts,chains,expression){
+    var watchers=[];
+    var handler=function(){
+        var __watch_results=[];
+        var i=0;
+        var watch_length=watchers.length-1;
+
+        while(i<=watch_length){
+            __watch_results[i]=watchers[i].getValue();
+            i++;
+        }
+
+        var result=eval("var x="+expression+";x");
+
+        if(site._attributeTypes[property]!=undefined){
+            site["set"+property.capitalize()].apply(site,[result]);
+        }else{
+            site[property]=result;
+        }
+    }
+
+    //Create watchers
+    var i=0;
+    var hosts_length=hosts.length-1;
+    var __watch_results=[];
+    while(i<=hosts_length){
+        watchers[i]=core.ChangeWatcher.watch(hosts[i],chains[i],handler,site);
+        __watch_results[i]=watchers[i].getValue();
+        i++;
+    }
+    var result=eval("var x="+expression+";x");
+    return result;
 }

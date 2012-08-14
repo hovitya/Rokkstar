@@ -480,6 +480,16 @@ String.prototype.uncapitalize = function() {
     return this.charAt(0).toLowerCase() + this.slice(1);
 };
 
+String.prototype.trim=function()
+{
+    var l=0; var r=this.length -1;
+    while(l < this.length && this[l] == ' ')
+    {     l++; }
+    while(r > l && this[r] == ' ')
+    {     r-=1;     }
+    return s.substring(l, r+1);
+}
+
 Rokkstar.toDegree=function(radians){
     var pi = Math.PI;
     var deg = (radians)*(180/pi);

@@ -5,7 +5,7 @@
         <rx:State name="down"/>
         <rx:State name="disabled"/>
     </r:states>
-    <rx:BoxContainer corner="5" left="0" right="0" top="0" bottom="0" borderColor.up="#999999" borderColor.disabled="#999999" borderColor.over="#0099CC" borderColor.down="#0099CC" borderWidth="1" gradientMode="true" gradientStart.up="#f3f3f3" gradientEnd.up="#cccccc" gradientStart.over="#d9f5ff" gradientEnd.over="#91e3ff" gradientStart.down="#d9f5ff" gradientEnd.down="#0099cc"  gradientStart.disabled="#f3f3f3" gradientEnd.disabled="#cccccc"/>
+    <rx:BoxContainer corner="5" left="0" right="0" top="0" bottom="0" borderColor="#999999" borderColor.over="#0099CC" borderColor.down="#0099CC" borderWidth="1" gradientMode="true" gradientStart.up="#f3f3f3" gradientEnd.up="#cccccc" gradientStart.over="#d9f5ff" gradientEnd.over="#91e3ff" gradientStart.down="#d9f5ff" gradientEnd.down="#0099cc"  gradientStart.disabled="#f3f3f3" gradientEnd.disabled="#cccccc"/>
     <rx:BoxContainer corner="5" bottomLeftCorner="0" bottomRightCorner="0" left="1" right="1" top="1" height="40%" borderAlpha="0.0" borderWidth="1" gradientMode="true" gradientStart="#ffffff" gradientEnd="#ffffff" gradientAlphaStart="0.3" gradientAlphaEnd="0.8"/>
     <rx:Label id="label" left="0" right="0" top="0" bottom="0" textAlign="center">
     </rx:Label>

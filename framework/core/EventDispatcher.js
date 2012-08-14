@@ -31,7 +31,7 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
      * @param {String} event Event name
      * @param {Function} listener Function to call
      * @param {Object} scope Scope for callback function
-     * @param {Boolean} once Optional. Dismiss event listener after the first trigger if it is true
+     * @param {Boolean} once Optional. Will dismiss event listener after the first trigger if this value is true
      */
     this.createEventListener=function(event,listenerF,scope,once){
         if(once==undefined){

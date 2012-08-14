@@ -19,6 +19,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
 
     this.transitions=[];
 
+    this.stateGroups={};
+
     /**
      * Get width string
      * @description
@@ -141,6 +143,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         this.createEventListener('visiblePropertyChanged', this._visibilityChanged, this);
 
         this.createEventListener('alphaPropertyChanged', this._styleChanged, this);
+
+        //Find state properties
 
         for(var i in this.states){
             if(this.states.hasOwnProperty(i)){
@@ -362,13 +366,15 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
                 }
                 if(trans==null){
                     //Apply state without transition
-                    this.states[this.getCurrentState()].activate();
+                    if(this.states[from]){ this.states[from].deactivate(); }
+                    this.states[to].activate();
                 }else{
                     //Apply state after transition
-                    var state=this.states[this.getCurrentState()];
+                    var state=this.states[to];
+                    var prevState=this.states[from];
                     var that=this;
                     var self=trans;
-                    trans.createEventListener('animationEnded',function(){state.activate();that._runningTransitions.slice(that._runningTransitions.indexOf(self),1);},this,true);
+                    trans.createEventListener('animationEnded',function(){if(prevState){prevState.deactivate();};state.activate();that._runningTransitions.slice(that._runningTransitions.indexOf(self),1);},this,true);
                     this._runningTransitions.push(trans);
                     trans.playTransition(this.states[from],this.states[to]);
                 }

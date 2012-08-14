@@ -5,9 +5,16 @@ import helpers.FileReference;
 import helpers.RokkstarOutput;
 
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 public class XMLCodeGenerator  extends DefaultHandler{
 	protected String scriptSection="";
@@ -51,9 +58,9 @@ public class XMLCodeGenerator  extends DefaultHandler{
 					if(attributes.getLocalName(i).lastIndexOf('.')!=-1){
 						String state=attributes.getLocalName(i).substring(attributes.getLocalName(i).lastIndexOf('.')+1);
 						String property=attributes.getLocalName(i).substring(0,attributes.getLocalName(i).lastIndexOf('.'));
-						this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty(this,'"+property+"',"+this.parseValue(attributes.getValue(i),property)+");\n");
+						this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty(this,'"+property+"',"+this.parseValue(attributes.getValue(i),property,"id")+");\n");
 					}else{
-						this.propertySetSection=this.propertySetSection.concat("this.set('"+attributes.getLocalName(i)+"',"+this.parseValue(attributes.getValue(i),attributes.getLocalName(i))+");\n");	
+						this.propertySetSection=this.propertySetSection.concat("this.set('"+attributes.getLocalName(i)+"',"+this.parseValue(attributes.getValue(i),attributes.getLocalName(i),"this")+");\n");	
 					}
 					
 				}
@@ -79,9 +86,9 @@ public class XMLCodeGenerator  extends DefaultHandler{
 					if(attributes.getLocalName(i).lastIndexOf('.')!=-1){
 						String state=attributes.getLocalName(i).substring(attributes.getLocalName(i).lastIndexOf('.')+1);
 						String property=attributes.getLocalName(i).substring(0,attributes.getLocalName(i).lastIndexOf('.'));
-						this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty("+id+",'"+property+"',"+this.parseValue(attributes.getValue(i),property)+");\n");
+						this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty("+id+",'"+property+"',"+this.parseValue(attributes.getValue(i),property,id)+");\n");
 					}else{
-						this.propertySetSection=this.propertySetSection.concat(id+".set('"+attributes.getLocalName(i)+"',"+this.parseValue(attributes.getValue(i),attributes.getLocalName(i))+");\n");	
+						this.propertySetSection=this.propertySetSection.concat(id+".set('"+attributes.getLocalName(i)+"',"+this.parseValue(attributes.getValue(i),attributes.getLocalName(i),id)+");\n");	
 					}
 					
 				}
@@ -120,10 +127,12 @@ public class XMLCodeGenerator  extends DefaultHandler{
 		elementLevel++;
 	}
 	
-	protected String parseValue(String value,String property){
+	protected String parseValue(String value,String property,String id){
+		FileReference fRef=new FileReference(this.fileName, locator.getLineNumber());
 		if(value.startsWith("{") && value.endsWith("}")){
+			try{
 			//Create binding
-			String[] parts=value.substring(1, value.length()-1).split("\\.");
+			/*String[] parts=value.substring(1, value.length()-1).split("\\.");
 			String chain="[";
 			for (int i = 1; i < parts.length; i++) {
 				if(chain.length()!=1){
@@ -134,7 +143,43 @@ public class XMLCodeGenerator  extends DefaultHandler{
 			chain+="]";
 			
 			bindings+="core.Binding.bindProperty(this,'"+property+"',"+parts[0]+","+chain+");\n";
-			return value.substring(1, value.length()-1); 
+			return value.substring(1, value.length()-1); */
+			String hosts="[";
+			JSONArray chains=new JSONArray();
+			String expression=value.substring(1, value.length()-1);
+			Pattern pattern = Pattern.compile("([',\"]{0,1}[a-zA-Z_][a-zA-Z0-9_]*(?:\\.[a-zA-Z_][a-zA-Z0-9_]*)+)[',\"]{0,1}");
+			Matcher m = pattern.matcher(value.substring(1, value.length()-1));
+			int i=0;
+			
+			while (m.find()) {
+				
+			    String s = m.group(1);
+			    if(!s.startsWith("'") && !s.startsWith("\"")){
+				    String[] parts=s.split("\\.");
+				    if(hosts.length()!=1){
+				    	hosts+=",";
+				    }
+				    hosts+=parts[0];
+				    JSONArray chain=new JSONArray();
+					for (int j = 1; j < parts.length; j++) {
+						chain.put(parts[j]);
+					}
+					chains.put(chain);
+				    expression=expression.replaceAll(Pattern.quote(s), "__watch_results["+i+"]");
+				    i++;
+			    }
+			}
+			hosts+="]";
+			try{
+				return "core.Binding.bindExpression("+id+",'"+property+"',"+hosts+","+chains.toString(0)+",'"+expression.replace("'", "\\'")+"')"; 
+			}catch(JSONException ex){
+				RokkstarOutput.WriteError("Unable to parse "+property+" property value.", fRef);
+			}
+			
+			}catch(Exception ex){
+				RokkstarOutput.WriteError("Unable to parse "+property+" property value.", fRef);
+			}
+			return "undefined";
 		}else{
 			return '"'+value+'"';
 		}

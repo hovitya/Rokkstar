@@ -14,8 +14,6 @@ core.Application=Rokkstar.createClass('core.Application','core.VisualContainer',
         $(window).bind('resize', $.proxy(function() {
             this.invalidateSize();
         },this));
-
-
     }
 
     this.processId=-1;
@@ -46,4 +44,4 @@ core.Application=Rokkstar.createClass('core.Application','core.VisualContainer',
             //console.profileEnd();
         }
     }
-},[new Attr('fps',24)]);
+},[new Attr('fps',24),new Attr('device','desktop','string'),new Attr('orientation','portrait','string')]);
