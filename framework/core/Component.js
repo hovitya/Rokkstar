@@ -28,6 +28,17 @@ core.Component=Rokkstar.createClass('core.Component','core.EventDispatcher',func
         return val;
     }
 
+    this.getAttr=function(attribute){
+        return this["get"+attribute.capitalize()].apply(this,[]);
+    }
+
+    this.hasAttr=function(attribute){
+        if(this._attributeTypes==undefined) return false;
+        if(this._attributeTypes[attribute]==undefined) return false;
+        return true;
+    }
+
+
     /**
      * Master component
      * This component defines this instance

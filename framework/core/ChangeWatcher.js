@@ -20,7 +20,7 @@ core.ChangeWatcher = Rokkstar.createClass('core.ChangeWatcher',undefined, functi
     this.wscope=null;
 
     this.construct=function(host,chain,handler,scope){
-        if(!Rokkstar.instanceOf(host,'core.EventDispatcher')) throw new TypeError('Change watcher host object has to be instance of core.EventDispatcher.');
+        //if(!Rokkstar.instanceOf(host,'core.EventDispatcher')) throw new TypeError('Change watcher host object has to be instance of core.EventDispatcher.');
         this.chain=chain;
         this.host=host;
         this.handler=handler;
@@ -37,14 +37,15 @@ core.ChangeWatcher = Rokkstar.createClass('core.ChangeWatcher',undefined, functi
             this.chainObjects.push(this.chainObjects[i][this.chain[i]]);
 
             //Ensuring target object is an event dispatcher
-            if(!Rokkstar.instanceOf(this.chainObjects[i],'core.EventDispatcher')) throw new TypeError('Change watcher host object has to be instance of core.EventDispatcher.');
+            if(Rokkstar.instanceOf(this.chainObjects[i],'core.EventDispatcher')){
+                //Register change event listener
+                this.chainObjects[i].createEventListener(this.chain[i]+'PropertyChanged',this.attributeChanged,this);
+            }
 
-            //Register change event listener
-            this.chainObjects[i].createEventListener(this.chain[i]+'PropertyChanged',this.attributeChanged,this);
 
             i++;
         }
-        if(i==this.chain.length-1) this.chainObjects[i].createEventListener(this.chain[i]+'PropertyChanged',this.finalAttributeChanged,this);
+        if(i==this.chain.length-1 && Rokkstar.instanceOf(this.chainObjects[i],'core.EventDispatcher')) this.chainObjects[i].createEventListener(this.chain[i]+'PropertyChanged',this.finalAttributeChanged,this);
 
     }
 
@@ -60,10 +61,12 @@ core.ChangeWatcher = Rokkstar.createClass('core.ChangeWatcher',undefined, functi
 
         //Deleting affected event listeners
         while(i<=lastChainObj){
-            if(i==this.chain.length-1){
-                this.chainObjects[i].deleteEventListener(this.chain[i]+'PropertyChanged',this.finalAttributeChanged,this);
-            }else{
-                this.chainObjects[i].deleteEventListener(this.chain[i]+'PropertyChanged',this.attributeChanged,this);
+            if(Rokkstar.instanceOf(this.chainObjects[i],'core.EventDispatcher')){
+                if(i==this.chain.length-1){
+                    this.chainObjects[i].deleteEventListener(this.chain[i]+'PropertyChanged',this.finalAttributeChanged,this);
+                }else{
+                    this.chainObjects[i].deleteEventListener(this.chain[i]+'PropertyChanged',this.attributeChanged,this);
+                }
             }
             i++;
         }
@@ -80,14 +83,16 @@ core.ChangeWatcher = Rokkstar.createClass('core.ChangeWatcher',undefined, functi
             this.chainObjects.push(this.chainObjects[i][this.chain[i]]);
 
             //Ensuring target object is an event dispatcher
-            if(!Rokkstar.instanceOf(this.chainObjects[i],'core.EventDispatcher')) throw new TypeError('Change watcher host object has to be instance of core.EventDispatcher.');
-
-            //Register change event listener
-            this.chainObjects[i].createEventListener(this.chain[i]+'PropertyChanged',this.attributeChanged,this);
+            if(Rokkstar.instanceOf(this.chainObjects[i],'core.EventDispatcher')){
+                //Register change event listener
+                this.chainObjects[i].createEventListener(this.chain[i]+'PropertyChanged',this.attributeChanged,this);
+            }
 
             i++;
         }
-        if(i==this.chain.length-1) this.chainObjects[i].createEventListener(this.chain[i]+'PropertyChanged',this.finalAttributeChanged,this);
+        if(i==this.chain.length-1 && Rokkstar.instanceOf(this.chainObjects[i],'core.EventDispatcher')){
+            this.chainObjects[i].createEventListener(this.chain[i]+'PropertyChanged',this.finalAttributeChanged,this);
+        }
         this.handler.apply(this.wscope,[event]);
 
     }
@@ -97,10 +102,12 @@ core.ChangeWatcher = Rokkstar.createClass('core.ChangeWatcher',undefined, functi
         var lastChainObj=this.chainObjects.length-1;
         //Deleting affected event listeners
         while(i<=lastChainObj){
-            if(i==this.chain.length-1){
-                this.chainObjects[i].deleteEventListener(this.chain[i]+'PropertyChanged',this.finalAttributeChanged,this);
-            }else{
-                this.chainObjects[i].deleteEventListener(this.chain[i]+'PropertyChanged',this.attributeChanged,this);
+            if(Rokkstar.instanceOf(this.chainObjects[i],'core.EventDispatcher')){
+                if(i==this.chain.length-1){
+                    this.chainObjects[i].deleteEventListener(this.chain[i]+'PropertyChanged',this.finalAttributeChanged,this);
+                }else{
+                    this.chainObjects[i].deleteEventListener(this.chain[i]+'PropertyChanged',this.attributeChanged,this);
+                }
             }
             i++;
         }

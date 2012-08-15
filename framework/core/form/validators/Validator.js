@@ -25,8 +25,9 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
     this.init=function(){
         this.callSuper('init');
         this.createEventListener('triggerPropertyChanged',this.__triggerChanged,this);
-        this.createEventListener('triggerEventPropertyChanged',this.__triggerEventChanged,this);
+        this.createEventListener('triggeredEventPropertyChanged',this.__triggerEventChanged,this);
         this.createEventListener('sourcePropertyChanged',this.__sourceChanged,this);
+        this.createEventListener('listenerPropertyChanged',this.addListenerHandlers,this);
     }
 
     /**
@@ -35,12 +36,12 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
      * @private
      */
     this.__triggerChanged=function(event){
-        if(this.getTriggerEvent()!=undefined){
+        if(this.getTriggeredEvent()!=undefined){
             if(event.oldValue!=undefined){
-                event.oldValue.deleteEventListener(this.getTriggerEvent(),this.__trigger,this);
+                event.oldValue.deleteEventListener(this.getTriggeredEvent(),this.__trigger,this);
             }
             if(event.newValue!=undefined){
-                event.newValue.createEventListener(this.getTriggerEvent(),this.__trigger,this);
+                event.newValue.createEventListener(this.getTriggeredEvent(),this.__trigger,this);
             }
         }
     }
@@ -68,9 +69,11 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
      */
     this.__sourceChanged=function(event){
         if(this.trigger==undefined){
-            event.oldValue.deleteEventListener(this.getTriggerEvent(),this.__trigger,this);
-            event.newValue.createEventListener(this.getTriggerEvent(),this.__trigger,this);
+            if(event.oldValue) event.oldValue.deleteEventListener(this.getTriggeredEvent(),this.__trigger,this);
+            event.newValue.createEventListener(this.getTriggeredEvent(),this.__trigger,this);
         }
+        this.removeListenerHandlers();
+        this.addListenerHandlers();
     }
 
 
@@ -152,7 +155,7 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
      */
     this.doValidation=function(value){
         var errors=[];
-        if(this.getRequired() && this.isRealValue(value)) errors.push(new core.form.validators.ValidationResult(true,this.subField,this.getRequiredFieldError(),"REQUIRED_FIELD_ERROR"));
+        if(this.getRequired() && !this.isRealValue(value)) errors.push(new core.form.validators.ValidationResult(true,this.subField,this.getRequiredFieldError(),"REQUIRED_FIELD_ERROR"));
         return errors;
     }
 
@@ -164,8 +167,8 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
      */
     this.getValueFromSource=function(){
         var source=this.getSource();
-        if(source.hasAttribute(this.getProperty())){
-            return this.callGetter(this.getProperty());
+        if(source.hasAttr(this.getProperty())){
+            return source.getAttr(this.getProperty());
         }else{
             return source[this.getProperty()];
         }
@@ -178,9 +181,9 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
      * @return {Boolean} true if value is not null
      */
     this.isRealValue=function(value){
-        if(Rokkstar.instanceOf(value,'string')){
-            return value.trim()=="";
-        }else if(Rokkstar.instanceOf(value,'array')){
+        if(typeof value == "string"){
+            return value.trim()!="";
+        }else if(typeof value == "array"){
             return value.length==0;
         }else{
             return value==null || value==undefined;
@@ -198,5 +201,5 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
     }
 
 
-},[new Attr('enabled',true,'boolean'),new Attr('trigger',undefined,'core.EventDispatcher'),new Attr('triggerEvent','valueCommit','string'),new Attr('source',undefined,'core.EventDispatcher'),new Attr('listener',undefined,'core.EventDispatcher'),
+},[new Attr('enabled',true,'boolean'),new Attr('trigger',undefined,'core.EventDispatcher'),new Attr('triggeredEvent','valueCommit','string'),new Attr('source',undefined,'core.EventDispatcher'),new Attr('listener',undefined,'core.EventDispatcher'),
     new Attr('property','value','string'),new Attr('required',false,'boolean'),new Attr('requiredFieldError',"This field is required.",'string')]);

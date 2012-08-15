@@ -125,5 +125,9 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
         this.domElement.style.position='absolute';
     }
 
+    this.toString=function(){
+        return "[object "+this.__classType+"]";
+    }
+
 
 });

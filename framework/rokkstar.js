@@ -132,7 +132,7 @@ function getClass(className){
         base=base[classPath[i]];
         if(base==undefined){
 
-            throw new core.exceptions.TypeException('Class not found: '+className,1);
+            throw new TypeError('Class not found: '+className,1);
         }
     }
 
@@ -489,16 +489,6 @@ String.prototype.trim=function()
 }
 
 //Creating primitive types.
-Object.prototype.__classType="object";
-Object.prototype.callGetter=function(attribute){
-    return this["get"+property.capitalize()].apply(this,[]);
-}
-
-Object.prototype.hasAttribute=function(attribute){
-    if(this._attributeTypes==undefined) return false;
-    if(this._attributeTypes[attribute]==undefined) return false;
-    return true;
-}
 String.prototype.__classType="string";
 Boolean.prototype.__classType="boolean";
 Function.prototype.__classType="function";

@@ -20,4 +20,7 @@
 	<package name="core.form">
 		<component>Input</component>
 	</package>
+	<package name="core.form.validators">
+		<component>Validator</component>
+	</package>
 </packageMap>
