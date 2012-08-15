@@ -469,8 +469,6 @@ Rokkstar.parseAttribute=function(val,typeForcing){
     return ret;
 };
 
-Rokkstar.requestAnimationFrame = Modernizr.prefixed('requestAnimationFrame', window) || function(callback){ window.setTimeout(callback, 1000 / 60); };
-
 // Creating prototypes
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
@@ -487,8 +485,31 @@ String.prototype.trim=function()
     {     l++; }
     while(r > l && this[r] == ' ')
     {     r-=1;     }
-    return s.substring(l, r+1);
+    return this.substring(l, r+1);
 }
+
+//Creating primitive types.
+Object.prototype.__classType="object";
+Object.prototype.callGetter=function(attribute){
+    return this["get"+property.capitalize()].apply(this,[]);
+}
+
+Object.prototype.hasAttribute=function(attribute){
+    if(this._attributeTypes==undefined) return false;
+    if(this._attributeTypes[attribute]==undefined) return false;
+    return true;
+}
+String.prototype.__classType="string";
+Boolean.prototype.__classType="boolean";
+Function.prototype.__classType="function";
+Number.prototype.__classType="number";
+
+
+Rokkstar.requestAnimationFrame = Modernizr.prefixed('requestAnimationFrame', window) || function(callback){ window.setTimeout(callback, 1000 / 60); };
+
+
+
+
 
 Rokkstar.toDegree=function(radians){
     var pi = Math.PI;

@@ -6,15 +6,12 @@
 core.behaviours.ButtonBehaviour=function(){
 
     this.buttonCreateAttributes=function(){
-        var upState=this.createComponent('core.State');
-        upState.setStateName('up');
-        var overState=this.createComponent('core.State');
-        overState.setStateName('over');
-        var downState=this.createComponent('core.State');
-        downState.setStateName('down');
-        this.states['up']=upState;
-        this.states['over']=overState;
-        this.states['down']=downState;
+        var upState=new core.State(this);
+        upState.setName('up');
+        var overState=new core.State(this);
+        overState.setName('over');
+        var downState=new core.State(this);
+        downState.setName('down');
     }
 
     this.buttonInit=function(){

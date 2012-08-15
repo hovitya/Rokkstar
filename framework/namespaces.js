@@ -6,3 +6,5 @@ core.exceptions={};
 core.graphics={};
 core.helpers={};
 core.network={};
+core.form={};
+core.form.validators={};

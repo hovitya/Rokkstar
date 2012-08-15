@@ -20,6 +20,21 @@ core.form.Input=Rokkstar.createClass('core.form.Input','core.helpers.FormItem',f
         this.setSkinClass('core.skins.InputSkin');
         this.createEventListener('tabIndexPropertyChanged',this.tabIndexChanged,this);
         this.createEventListener('valuePropertyChanged',this._commit,this);
+        this.createEventListener('invalid',this.validationHandler,this);
+        this.createEventListener('valid',this.validationHandler,this);
+
+    }
+
+    /**
+     *
+     * @param {core.form.validators.ValidationResultEvent} event
+     */
+    this.validationHandler=function(event){
+        if(event.type=='invalid'){
+            this.setValid(false);
+        }else if(event.type=='valid'){
+            this.setValid(true);
+        }
     }
 
     this.tabIndexChanged=function(){
@@ -32,7 +47,7 @@ core.form.Input=Rokkstar.createClass('core.form.Input','core.helpers.FormItem',f
         this.callSuper('partAdded',name,instance);
         if(name=='input'){
             instance.createEventListener('focus',this.focused,this);
-            instance.createEventListener('blur',this.blured,this);
+            instance.createEventListener('blur',this.blurred,this);
             instance.createEventListener('valuePropertyChanged',this._inputChanged,this);
         }
     }
@@ -51,9 +66,10 @@ core.form.Input=Rokkstar.createClass('core.form.Input','core.helpers.FormItem',f
         this.invalidateSkinState();
     }
 
-    this.blured=function(event){
+    this.blurred=function(event){
         this.focus=false;
         this.invalidateSkinState();
+        this.triggerEvent('valueCommit');
     }
 
     this._commitEnabled=true;

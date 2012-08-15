@@ -30,10 +30,12 @@ core.helpers.FormItem=Rokkstar.createClass('core.helpers.FormItem','core.Skinnab
             return 'disabled';
         }else if(this.focus){
             return 'active';
+        }else if(!this.getValid()){
+            return 'invalid';
         }else{
             return 'normal';
         }
     }
 
 
-},[new Attr('label','','string'),new Attr('disabled',false,'boolean')],['core.behaviours.FormItemBehaviour']);
+},[new Attr('label','','string'),new Attr('disabled',false,'boolean'),new Attr('valid',true,'boolean')],['core.behaviours.FormItemBehaviour']);

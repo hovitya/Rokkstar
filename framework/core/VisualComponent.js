@@ -21,6 +21,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
 
     this.stateGroups={};
 
+    this.states={};
+
     /**
      * Get width string
      * @description
@@ -112,7 +114,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
 
     this.xmlContentArray = [];
 
-    this.states={};
+    //this.states={};
 
     this.init = function () {
         if(this.domElement==null) this.createDomElement();
@@ -345,6 +347,17 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
     }
 
     this._runningTransitions=[];
+
+    this.addStateProperty=function(target,property,value,stateName){
+        var stateNames=stateName.split(".");
+        if(this.stateGroups[stateNames[0].trim()]!=undefined){
+            for(var i in this.stateGroups[stateNames[0].trim()]){
+                this.stateGroups[stateNames[0].trim()][i].addProperty(target,property,value,stateNames.slice(1));
+            }
+        }else{
+            Rokkstar.console.warning("State is missing: "+stateNames[0].trim());
+        }
+    }
 
     this.stateChanged = function (event) {
         if(event.oldValue!=event.newValue){

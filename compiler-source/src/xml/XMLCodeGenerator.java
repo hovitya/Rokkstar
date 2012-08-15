@@ -32,11 +32,11 @@ public class XMLCodeGenerator  extends DefaultHandler{
 	protected Locator locator=null;
 	public String fileName="";
 	public String generatedCode="";
-	protected String bindings="";
+	protected String stateProps="";
 	
 	
 	public void endDocument() throws SAXException {
-		generatedCode="".concat(className+" = Rokkstar.createClass('"+className+"','"+superClassName+"',function(){"+scriptSection+"\nthis._buildDOM=function(){\nthis.callSuper('_buildDOM');\n"+declarationSection+"\n"+propertySetSection+"\n"+bindings+"\n};"+"});\n\n");
+		generatedCode="".concat(className+" = Rokkstar.createClass('"+className+"','"+superClassName+"',function(){"+scriptSection+"\nthis._buildDOM=function(){\nthis.callSuper('_buildDOM');\n"+declarationSection+"\n"+propertySetSection+"\n"+stateProps+"\n};"+"});\n\n");
     }
 	
 	public void startElement(String uri, String localName,
@@ -58,7 +58,7 @@ public class XMLCodeGenerator  extends DefaultHandler{
 					if(attributes.getLocalName(i).lastIndexOf('.')!=-1){
 						String state=attributes.getLocalName(i).substring(attributes.getLocalName(i).lastIndexOf('.')+1);
 						String property=attributes.getLocalName(i).substring(0,attributes.getLocalName(i).lastIndexOf('.'));
-						this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty(this,'"+property+"',"+this.parseValue(attributes.getValue(i),property,"id")+");\n");
+						this.stateProps=this.stateProps.concat("this.addStateProperty(this,'"+property+"',"+this.parseValue(attributes.getValue(i),property,"this")+",'"+state+"');\n");
 					}else{
 						this.propertySetSection=this.propertySetSection.concat("this.set('"+attributes.getLocalName(i)+"',"+this.parseValue(attributes.getValue(i),attributes.getLocalName(i),"this")+");\n");	
 					}
@@ -84,9 +84,9 @@ public class XMLCodeGenerator  extends DefaultHandler{
 					this.propertySetSection=this.propertySetSection.concat(id+".createEventListener('"+attributes.getLocalName(i)+"',function(event){"+attributes.getValue(i)+"},this);\n");
 				}else{
 					if(attributes.getLocalName(i).lastIndexOf('.')!=-1){
-						String state=attributes.getLocalName(i).substring(attributes.getLocalName(i).lastIndexOf('.')+1);
-						String property=attributes.getLocalName(i).substring(0,attributes.getLocalName(i).lastIndexOf('.'));
-						this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty("+id+",'"+property+"',"+this.parseValue(attributes.getValue(i),property,id)+");\n");
+						String state=attributes.getLocalName(i).substring(attributes.getLocalName(i).indexOf('.')+1);
+						String property=attributes.getLocalName(i).substring(0,attributes.getLocalName(i).indexOf('.'));
+						this.stateProps=this.stateProps.concat("this.addStateProperty("+id+",'"+property+"',"+this.parseValue(attributes.getValue(i),property,id)+",'"+state+"');\n");
 					}else{
 						this.propertySetSection=this.propertySetSection.concat(id+".set('"+attributes.getLocalName(i)+"',"+this.parseValue(attributes.getValue(i),attributes.getLocalName(i),id)+");\n");	
 					}
@@ -102,6 +102,7 @@ public class XMLCodeGenerator  extends DefaultHandler{
 				if(this.currentAttr.get(this.currentAttr.size()-1).length()!=0) pref=",";
 				this.currentAttr.set(this.currentAttr.size()-1,this.currentAttr.get(this.currentAttr.size()-1).concat(pref+id));
 			}else if(mode.get(mode.size()-1)=="states"){
+				this.declarationSection=declarationSection.concat(id+".host=this;\n");
 				this.declarationSection=declarationSection.concat("this.states['"+attributes.getValue("name")+"']="+id+";\n");
 			}else if(mode.get(mode.size()-1)=="transitions"){
 				this.declarationSection=declarationSection.concat("this.transitions.push("+id+");\n");
@@ -206,7 +207,8 @@ public class XMLCodeGenerator  extends DefaultHandler{
 			  }else{
 					String state=localName.substring(localName.lastIndexOf('.')+1);
 					String property=localName.substring(0,localName.lastIndexOf('.'));
-					this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty("+idS.lastElement()+",'"+property+"',"+attrData+");\n");
+					this.stateProps=this.stateProps.concat("this.addStateProperty("+idS.lastElement()+",'"+property+"',"+attrData+",'"+state+"');\n");
+					//this.propertySetSection=this.propertySetSection.concat("this.states['"+state+"'].addProperty("+idS.lastElement()+",'"+property+"',"+attrData+");\n");
 			  }
 			  
 			  currentAttr.remove(currentAttr.size()-1);

@@ -2,6 +2,7 @@ core.behaviours.FormItemBehaviour=function(){
 
     this.formItemInit=function(){
         this.createEventListener('labelPropertyChanged',this._refreshLabel,this);
+        this.createEventListener('validPropertyChanged',this.invalidateSkinState,this);
     }
 
     /**
