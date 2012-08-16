@@ -1,23 +1,30 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
+/* Rokkstar JavaScript Framework
+ *
+ * Copyright © 2012 Viktor Horvath
+ * Licensed under the MPL 2.0 license
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
 /**
+ * @classdef Multiline text area component
+ * @class
+ * @name Textarea
+ * @package core.form
  * @augments core.helpers.FormItem
- * @constructor
  */
-core.form.Input = Rokkstar.createClass('core.form.Input', 'core.helpers.FormItem', function () {
+core.form.Textarea = Rokkstar.createClass('core.form.Textarea', 'core.helpers.FormItem', function () {
     "use strict";
 
     this.createAttributes = function () {
         this.callSuper('createAttributes');
-        this.declareSkinPart('input', true, 'core.InputBase');
+        this.declareSkinPart('input', true, 'core.form.TextareaBase');
     };
 
 
     this.init = function () {
         this.callSuper('init');
-        this.setSkinClass('core.skins.InputSkin');
+        this.setSkinClass('core.skins.TextareaSkin');
 
         this.createEventListener('valuePropertyChanged', this._commit, this);
 

@@ -11,13 +11,13 @@
  * @classdef Represents a gradient stop.
  * @class
  */
-core.graphics.GradientStop=Rokkstar.createClass('core.graphics.GradientStop','core.Component',function(){
+core.graphics.GradientStop = Rokkstar.createClass('core.graphics.GradientStop', 'core.Component', function () {
     /**
      * Add this gradient stop into an existing CanvasGradient object
      * @param {CanvasGradient} gradient
      */
-    this.addInto=function(gradient){
-        var rgb=Rokkstar.hexToRgb(this.getColor());
-        gradient.addColorStop(this.getRatio(),"rgba("+rgb.r+","+rgb.g+","+rgb.b+","+this.getAlpha().toString()+")");
+    this.addInto = function (gradient) {
+        var rgb = Rokkstar.hexToRgb(this.getColor());
+        gradient.addColorStop(this.getRatio(), "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + this.getAlpha().toString() + ")");
     }
-},[new Attr('alpha',1.0,'float'),new Attr('color','#000000','string'),new Attr('ratio',0.0,'float')]);
+}, [new Attr('alpha', 1.0, 'float'), new Attr('color', '#000000', 'string'), new Attr('ratio', 0.0, 'float')]);

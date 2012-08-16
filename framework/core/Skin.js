@@ -6,20 +6,20 @@
  * @augments core.Group
  * @constructor
  */
-core.Skin=Rokkstar.createClass('core.Skin','core.Group',function(){
-    extend(this,'core.Group');
+core.Skin = Rokkstar.createClass('core.Skin', 'core.Group', function () {
+    extend(this, 'core.Group');
     /**
      * Host component
      * @type {*}
      */
-    this.hostComponent=null;
+    this.hostComponent = null;
 
-    this.invalidateDisplayList=function(){
-        this.componentInvalid=true;
-        if(this.hostComponent!=undefined && this.hostComponent!=null) this.hostComponent.invalidateDisplayList();
+    this.invalidateDisplayList = function () {
+        this.componentInvalid = true;
+        if (this.hostComponent != undefined && this.hostComponent != null) this.hostComponent.invalidateDisplayList();
     }
 
-    this.init=function(){
+    this.init = function () {
         this.callSuper('init');
         //Set properties to fill the component item
         this.setLeft(0);

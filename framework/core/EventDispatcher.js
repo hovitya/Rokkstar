@@ -2,20 +2,22 @@
  * Creates new event dispatcher instance.
  * @class Super class for event handlers.
  * @author Horváth Viktor
- * @augments core.JQueryProxy
+ * @augments core.RokkObject
  * @constructor
  */
-core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryProxy',function(){
+core.EventDispatcher = Rokkstar.createClass('core.EventDispatcher', 'core.RokkObject', function () {
+    "use strict";
 
     /**
      * @private
      * @type {Object}
      */
-    this.handlers={};
+    this.handlers = {};
 
-    this.registeredDOMEvents=[];
+    this.registeredDOMEvents = [];
 
-    this.construct=function(){}
+    this.construct = function () {
+    };
 
 
     /**
@@ -33,34 +35,34 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
      * @param {Object} scope Scope for callback function
      * @param {Boolean} once Optional. Will dismiss event listener after the first trigger if this value is true
      */
-    this.createEventListener=function(event,listenerF,scope,once){
-        if(once==undefined){
-            once=false;
+    this.createEventListener = function (event, listenerF, scope, once) {
+        if (once === undefined) {
+            once = false;
         }
-        if(Rokkstar.globals.DOMEvents.indexOf(event)!=-1){
+        if (Rokkstar.globals.DOMEvents.indexOf(event) !== -1) {
             this.registerDOMEvent(event);
         }
-        if(this.domElement==null) this.createDomElement();
-        if(this.handlers[event]==undefined){
-            this.handlers[event]=[];
+        if (this.domElement === null) { this.createDomElement(); }
+        if (this.handlers[event] === undefined) {
+            this.handlers[event] = [];
         }
-        this.handlers[event].push({func:listenerF,scope:scope,once:once});
-    }
+        this.handlers[event].push({func: listenerF, scope: scope, once: once});
+    };
 
-    this.registerDOMEvent=function(event){
-        if(this.registeredDOMEvents.indexOf(event)==-1){
-            this.domElement.addEventListener(event, $.proxy(this.triggerDOMEvent,this));
+    this.registerDOMEvent = function (event) {
+        if (this.registeredDOMEvents.indexOf(event) == -1) {
+            this.domElement.addEventListener(event, $.proxy(this.triggerDOMEvent, this));
             this.registeredDOMEvents.push(event);
         }
-    }
+    };
 
     /**
      *
      * @param {Event} event
      */
-    this.triggerDOMEvent=function(event){
+    this.triggerDOMEvent = function (event) {
         this.triggerEvent(event);
-    }
+    };
 
     /**
      * Triggers new event.
@@ -71,26 +73,26 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
      * </code>
      * @param {String|core.Event} event Event name.
      */
-    this.triggerEvent=function(event,bubbling,cancellable){
-        if(this.domElement==null) this.createDomElement();
-        if(typeof event === "string"){
-            event=new core.Event(event);
+    this.triggerEvent = function (event, bubbling, cancellable) {
+        if (this.domElement == null) this.createDomElement();
+        if (typeof event === "string") {
+            event = new core.Event(event);
         }
-        var handlers=this.handlers[event.type];
-        var remove=[];
-        event.currentTarget=this;
-        if(handlers!=undefined){
-            var i=handlers.length;
-            while(--i>=0){
-                handlers[i].func.apply(handlers[i].scope,[event]);
-                if(handlers[i].once) remove.push(handlers[i]);
+        var handlers = this.handlers[event.type];
+        var remove = [];
+        event.currentTarget = this;
+        if (handlers != undefined) {
+            var i = handlers.length;
+            while (--i >= 0) {
+                handlers[i].func.apply(handlers[i].scope, [event]);
+                if (handlers[i].once) remove.push(handlers[i]);
             }
-            i=remove.length;
-            while(--i>=0){
-                this.handlers[event.type].splice(this.handlers[event.type].indexOf(remove[i]),1);
+            i = remove.length;
+            while (--i >= 0) {
+                this.handlers[event.type].splice(this.handlers[event.type].indexOf(remove[i]), 1);
             }
         }
-    }
+    };
 
     /**
      * Destroys previously created event listener.
@@ -100,34 +102,32 @@ core.EventDispatcher=Rokkstar.createClass('core.EventDispatcher','core.JQueryPro
      * @param listener
      * @param scope
      */
-    this.deleteEventListener=function(event,listener,scope){
-        if(this.domElement==null) this.createDomElement();
-        var eventsToRemove=[];
-        if(this.handlers[event]!=undefined){
+    this.deleteEventListener = function (event, listener, scope) {
+        if (this.domElement == null) this.createDomElement();
+        var eventsToRemove = [];
+        if (this.handlers[event] != undefined) {
             //Search events to delete
-            for(var i in this.handlers[event]){
-                if(this.handlers[event][i].func===listener && this.handlers[event][i].scope===scope){
+            for (var i in this.handlers[event]) {
+                if (this.handlers[event][i].func === listener && this.handlers[event][i].scope === scope) {
                     eventsToRemove.push(this.handlers[event][i]);
                 }
             }
             //Delete events from array
-            for(var i in eventsToRemove){
-                this.handlers[event].splice(this.handlers[event].indexOf(eventsToRemove[i]),1);
+            for (var i in eventsToRemove) {
+                this.handlers[event].splice(this.handlers[event].indexOf(eventsToRemove[i]), 1);
             }
         }
-    }
+    };
 
-    this.domElement=null;
+    this.domElement = null;
 
-    this.createDomElement=function(){
-        this.domElement=document.createElement('div');
-        this.domElement.style[Modernizr.prefixed('boxSizing')]='border-box';
-        this.domElement.style.position='absolute';
-    }
+    this.createDomElement = function () {
+        this.domElement = document.createElement('div');
+        this.domElement.style[Modernizr.prefixed('boxSizing')] = 'border-box';
+        this.domElement.style.position = 'absolute';
+    };
 
-    this.toString=function(){
-        return "[object "+this.__classType+"]";
-    }
+
 
 
 });

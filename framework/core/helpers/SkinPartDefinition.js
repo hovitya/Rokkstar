@@ -5,8 +5,8 @@
  * @param {String} className Class name
  * @constructor
  */
-core.helpers.SkinPartDefinition=function(name,required,className){
-    this.required=required;
-    this.name=name;
-    this.className=className;
+core.helpers.SkinPartDefinition = function (name, required, className) {
+    this.required = required;
+    this.name = name;
+    this.className = className;
 }

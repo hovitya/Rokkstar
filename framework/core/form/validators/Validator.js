@@ -13,110 +13,109 @@
  * @name Validator
  * @package core.form.validators
  */
-core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Validator','core.Component',function(){
+core.form.validators.Validator = Rokkstar.createClass('core.form.validators.Validator', 'core.Component', function () {
+    "use strict";
 
-    this.subFields=undefined;
+    this.subFields = undefined;
 
-    this.construct=function(){
+    this.construct = function () {
         this.callSuper('construct');
-        this.subFields=['default'];
-    }
+        this.subFields = ['default'];
+    };
 
-    this.init=function(){
+    this.init = function () {
         this.callSuper('init');
-        this.createEventListener('triggerPropertyChanged',this.__triggerChanged,this);
-        this.createEventListener('triggeredEventPropertyChanged',this.__triggerEventChanged,this);
-        this.createEventListener('sourcePropertyChanged',this.__sourceChanged,this);
-        this.createEventListener('listenerPropertyChanged',this.addListenerHandlers,this);
-    }
+        this.createEventListener('triggerPropertyChanged', this.__triggerChanged, this);
+        this.createEventListener('triggeredEventPropertyChanged', this.__triggerEventChanged, this);
+        this.createEventListener('sourcePropertyChanged', this.__sourceChanged, this);
+        this.createEventListener('listenerPropertyChanged', this.addListenerHandlers, this);
+    };
 
     /**
      *
      * @param {core.events.PropertyChangeEvent} event
      * @private
      */
-    this.__triggerChanged=function(event){
-        if(this.getTriggeredEvent()!=undefined){
-            if(event.oldValue!=undefined){
-                event.oldValue.deleteEventListener(this.getTriggeredEvent(),this.__trigger,this);
+    this.__triggerChanged = function (event) {
+        if (this.getTriggeredEvent() !== undefined && this.getTriggeredEvent() !== null) {
+            if (event.oldValue !== undefined && event.oldValue !== null) {
+                event.oldValue.deleteEventListener(this.getTriggeredEvent(), this.__trigger, this);
             }
-            if(event.newValue!=undefined){
-                event.newValue.createEventListener(this.getTriggeredEvent(),this.__trigger,this);
+            if (event.newValue !== undefined && event.newValue !== null) {
+                event.newValue.createEventListener(this.getTriggeredEvent(), this.__trigger, this);
             }
         }
-    }
+    };
 
     /**
      *
      * @param {core.events.PropertyChangeEvent} event
      * @private
      */
-    this.__triggerEventChanged=function(event){
-        if(this.getTrigger()!=undefined){
-            if(event.oldValue!=undefined){
-                this.getTrigger().deleteEventListener(event.oldValue,this.__trigger,this);
+    this.__triggerEventChanged = function (event) {
+        if (this.getTrigger() !== undefined && this.getTrigger() !== null) {
+            if (event.oldValue !== undefined && event.oldValue !== null) {
+                this.getTrigger().deleteEventListener(event.oldValue, this.__trigger, this);
             }
-            if(event.newValue!=undefined){
-                this.getTrigger().createEventListener(event.newValue,this.__trigger,this);
+            if (event.newValue !== undefined && event.newValue !== null) {
+                this.getTrigger().createEventListener(event.newValue, this.__trigger, this);
             }
         }
-    }
+    };
 
     /**
      *
      * @param {core.events.PropertyChangeEvent} event
      * @private
      */
-    this.__sourceChanged=function(event){
-        if(this.trigger==undefined){
-            if(event.oldValue) event.oldValue.deleteEventListener(this.getTriggeredEvent(),this.__trigger,this);
-            event.newValue.createEventListener(this.getTriggeredEvent(),this.__trigger,this);
+    this.__sourceChanged = function (event) {
+        if (this.trigger === undefined || this.trigger === null) {
+            if (event.oldValue) { event.oldValue.deleteEventListener(this.getTriggeredEvent(), this.__trigger, this); }
+            event.newValue.createEventListener(this.getTriggeredEvent(), this.__trigger, this);
         }
         this.removeListenerHandlers();
         this.addListenerHandlers();
-    }
+    };
 
 
-
-    this.getTrigger=function(){
-        if(this.trigger!=undefined) return this.trigger;
+    this.getTrigger = function () {
+        if (this.trigger !== undefined && this.trigger !== null) { return this.trigger; }
         return this.source;
-    }
+    };
 
 
-    this.getListener=function(){
-        if(this.listener!=undefined) return this.listener;
+    this.getListener = function () {
+        if (this.listener !== undefined && this.listener !== null) { return this.listener; }
         return this.source;
-    }
+    };
 
     /**
      *
      * @private
      */
-    this.__trigger=function(){
-        this.validate();
-    }
+    this.__trigger = function () {
+        if (this.getEnabled()) { this.validate(); }
+    };
 
 
-
-    this.validate=function(value,suppressEvents){
-        if(suppressEvents==undefined){
-            suppressEvents=false;
+    this.validate = function (value, suppressEvents) {
+        if (suppressEvents === undefined) {
+            suppressEvents = false;
         }
-        if(value==undefined){
-           value=this.getValueFromSource();
+        if (value === undefined) {
+            value = this.getValueFromSource();
         }
-        var results=this.doValidation(value);
+        var results = this.doValidation(value), resultEvent, i;
 
-        var resultEvent=this.handleResults(results);
+        resultEvent = this.handleResults(results);
 
-        if(!suppressEvents){
-            for(var i in this.subFields){
-                if(this.listenerHandlers[this.subFields[i]]!=null && this.listenerHandlers[this.subFields[i]]!=undefined) this.listenerHandlers[this.subFields[i]].triggerEvent(resultEvent);
+        if (!suppressEvents) {
+            for (i in this.subFields) {
+                if (this.subFields.hasOwnProperty(i)) { if (this.listenerHandlers[this.subFields[i]] !== null && this.listenerHandlers[this.subFields[i]] !== undefined) { this.listenerHandlers[this.subFields[i]].triggerEvent(resultEvent); } }
             }
         }
         return resultEvent;
-    }
+    };
 
     /**
      * Returns a ValidationResultEvent from the Array of error results.
@@ -130,21 +129,20 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
      * @protected
      * @return {core.form.validators.ValidationResultEvent}
      */
-    this.handleResults=function(results){
-        var type='valid';
-        var message='';
-        if(results.length!=0){
-            type='invalid';
-            for(var i in results){
-                message+=results[i].errorMessage+" ";
+    this.handleResults = function (results) {
+        var type = 'valid', message = '', i, resultEvent;
+        if (results.length !== 0) {
+            type = 'invalid';
+            for (i in results) {
+                if (results.hasOwnProperty(i)) { message += results[i].errorMessage + " "; }
             }
         }
-        var resultEvent=new core.form.validators.ValidationResultEvent(type);
-        resultEvent.field=this.getProperty();
-        resultEvent.results=results;
-        resultEvent.message=message;
+        resultEvent = new core.form.validators.ValidationResultEvent(type);
+        resultEvent.field = this.getProperty();
+        resultEvent.results = results;
+        resultEvent.message = message;
         return resultEvent;
-    }
+    };
 
     /**
      * Executes the validation logic of this validator, including validating that a missing or empty value causes a validation error as defined by the value of the required property.
@@ -153,11 +151,11 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
      * @protected
      * @return {Array} For an invalid result, an Array of ValidationResult objects, with one ValidationResult object for each field examined by the validator that failed validation.
      */
-    this.doValidation=function(value){
-        var errors=[];
-        if(this.getRequired() && !this.isRealValue(value)) errors.push(new core.form.validators.ValidationResult(true,this.subField,this.getRequiredFieldError(),"REQUIRED_FIELD_ERROR"));
+    this.doValidation = function (value) {
+        var errors = [];
+        if (this.getRequired() && !this.isRealValue(value)) { errors.push(new core.form.validators.ValidationResult(true, this.subField, this.getRequiredFieldError(), "REQUIRED_FIELD_ERROR")); }
         return errors;
-    }
+    };
 
     /**
      * Returns the Object to validate. Complex subclasses override this method because they need to access the values
@@ -165,14 +163,14 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
      *
      * @return {object}
      */
-    this.getValueFromSource=function(){
-        var source=this.getSource();
-        if(source.hasAttr(this.getProperty())){
+    this.getValueFromSource = function () {
+        var source = this.getSource();
+        if (source.hasAttr(this.getProperty())) {
             return source.getAttr(this.getProperty());
-        }else{
+        } else {
             return source[this.getProperty()];
         }
-    }
+    };
 
     /**
      * Returns true if value is not null.
@@ -180,26 +178,26 @@ core.form.validators.Validator=Rokkstar.createClass('core.form.validators.Valida
      * @param {object} value
      * @return {Boolean} true if value is not null
      */
-    this.isRealValue=function(value){
-        if(typeof value == "string"){
-            return value.trim()!="";
-        }else if(typeof value == "array"){
-            return value.length==0;
-        }else{
-            return value==null || value==undefined;
+    this.isRealValue = function (value) {
+        if (typeof value === "string") {
+            return value.trim() !== "";
+        } else if (typeof value === "array") {
+            return value.length === 0;
+        } else {
+            return value === null || value === undefined;
         }
-    }
+    };
 
-    this.listenerHandlers={};
+    this.listenerHandlers = {};
 
-    this.removeListenerHandlers=function(){
-        this.listenerHandlers={};
-    }
+    this.removeListenerHandlers = function () {
+        this.listenerHandlers = {};
+    };
 
-    this.addListenerHandlers=function(){
-        this.listenerHandlers["default"]=this.getListener();
-    }
+    this.addListenerHandlers = function () {
+        this.listenerHandlers["default"] = this.getListener();
+    };
 
 
-},[new Attr('enabled',true,'boolean'),new Attr('trigger',undefined,'core.EventDispatcher'),new Attr('triggeredEvent','valueCommit','string'),new Attr('source',undefined,'core.EventDispatcher'),new Attr('listener',undefined,'core.EventDispatcher'),
-    new Attr('property','value','string'),new Attr('required',false,'boolean'),new Attr('requiredFieldError',"This field is required.",'string')]);
+}, [new Attr('enabled', true, 'boolean'), new Attr('trigger', undefined, 'core.EventDispatcher'), new Attr('triggeredEvent', 'valueCommit', 'string'), new Attr('source', undefined, 'core.EventDispatcher'), new Attr('listener', undefined, 'core.EventDispatcher'),
+    new Attr('property', 'value', 'string'), new Attr('required', false, 'boolean'), new Attr('requiredFieldError', "This field is required.", 'string')]);

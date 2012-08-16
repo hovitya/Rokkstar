@@ -11,94 +11,94 @@
  * @class
  */
 core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.Animation', function () {
-    this.init=function(){
+    this.init = function () {
         this.callSuper('init');
     }
 
-    this.stop=function(){
+    this.stop = function () {
         this.tween.stop();
     }
 
-    this.setUp=function(reversed){
-        if(this.transitionMode){
-            var start=this.getTarget().get(this.getProperty());
-            var end=this.getEnd();
-            var startProp=this.startState.properties;
-            var endProp=this.endState.properties;
+    this.setUp = function (reversed) {
+        if (this.transitionMode) {
+            var start = this.getTarget().get(this.getProperty());
+            var end = this.getEnd();
+            var startProp = this.startState.properties;
+            var endProp = this.endState.properties;
             //var i=startProp.length;
             /*var prop=this.getProperty();
-            while(i--){
-                if(startProp[i].property==prop){
-                    start=startProp[i].value;
-                }
-            }*/
+             while(i--){
+             if(startProp[i].property==prop){
+             start=startProp[i].value;
+             }
+             }*/
 
-            i=endProp.length;
-            var prop=this.getProperty();
-            while(i--){
-                if(endProp[i].property==prop){
-                    end=endProp[i].value;
+            i = endProp.length;
+            var prop = this.getProperty();
+            while (i--) {
+                if (endProp[i].property == prop) {
+                    end = endProp[i].value;
                 }
             }
-            if(this.getType()=='integer'){
-                start=parseInt(start);
-                end=parseInt(end);
-            }else{
-                start=parseFloat(start);
-                end=parseFloat(end);
+            if (this.getType() == 'integer') {
+                start = parseInt(start);
+                end = parseInt(end);
+            } else {
+                start = parseFloat(start);
+                end = parseFloat(end);
             }
-            if(!reversed){
-                this.tween.begin=start;
+            if (!reversed) {
+                this.tween.begin = start;
                 this.tween.setFinish(end);
-            }else{
-                this.tween.begin=end;
+            } else {
+                this.tween.begin = end;
                 this.tween.setFinish(start);
             }
-        }else if(this.getBy()==undefined){
-            var start=this.getStart();
-            var end=this.getEnd();
-            if(start==undefined){
-                start=this.getTarget().get(this.getProperty());
+        } else if (this.getBy() == undefined) {
+            var start = this.getStart();
+            var end = this.getEnd();
+            if (start == undefined) {
+                start = this.getTarget().get(this.getProperty());
                 this.setStart(start);
             }
-            if(this.getType()=='integer'){
-                start=parseInt(start);
-                end=parseInt(end);
-            }else{
-                start=parseFloat(start);
-                end=parseFloat(end);
+            if (this.getType() == 'integer') {
+                start = parseInt(start);
+                end = parseInt(end);
+            } else {
+                start = parseFloat(start);
+                end = parseFloat(end);
             }
-            if(!reversed){
-                this.tween.begin=start;
+            if (!reversed) {
+                this.tween.begin = start;
                 this.tween.setFinish(end);
-            }else{
-                this.tween.begin=end;
+            } else {
+                this.tween.begin = end;
                 this.tween.setFinish(start);
             }
-        }else{
-            var start=this.getTarget().get(this.getProperty());
-            var by=this.getBy();
-            if(this.getType()=='integer'){
-                start=parseInt(start);
-                by=parseInt(by);
-            }else{
-                start=parseFloat(start);
-                by=parseFloat(by);
+        } else {
+            var start = this.getTarget().get(this.getProperty());
+            var by = this.getBy();
+            if (this.getType() == 'integer') {
+                start = parseInt(start);
+                by = parseInt(by);
+            } else {
+                start = parseFloat(start);
+                by = parseFloat(by);
             }
 
-            if(!reversed){
-                this.tween.begin=start;
-                this.tween.setFinish(start+by);
-            }else{
-                this.tween.begin=start;
-                this.tween.setFinish(start-by);
+            if (!reversed) {
+                this.tween.begin = start;
+                this.tween.setFinish(start + by);
+            } else {
+                this.tween.begin = start;
+                this.tween.setFinish(start - by);
             }
         }
-        this.tween.prop=this.getProperty();
+        this.tween.prop = this.getProperty();
     }
 
-    this.isPlaying=function(){
-        if(this.tween.isPlaying==undefined) return false;
+    this.isPlaying = function () {
+        if (this.tween.isPlaying == undefined) return false;
         else return this.tween.isPlaying;
     }
-},[new Attr('property','','string'),new Attr('start',undefined,'string'),new Attr('end',100,'string'),new Attr('by',undefined,'string')]);
+}, [new Attr('property', '', 'string'), new Attr('start', undefined, 'string'), new Attr('end', 100, 'string'), new Attr('by', undefined, 'string')]);

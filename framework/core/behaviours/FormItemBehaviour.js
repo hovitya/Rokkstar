@@ -1,27 +1,28 @@
-core.behaviours.FormItemBehaviour=function(){
+core.behaviours.FormItemBehaviour = function () {
+    "use strict";
 
-    this.formItemInit=function(){
-        this.createEventListener('labelPropertyChanged',this._refreshLabel,this);
-        this.createEventListener('validPropertyChanged',this.invalidateSkinState,this);
-    }
+    this.formItemInit = function () {
+        this.createEventListener('labelPropertyChanged', this._refreshLabel, this);
+        this.createEventListener('validPropertyChanged', this.invalidateSkinState, this);
+    };
 
     /**
      * Label node
      * @type {HTMLLabelElement}
      */
-    this.labelNode=null;
+    this.labelNode = null;
 
-    this.validate=function(){
+    this.validate = function () {
         return this.doValidation();
-    }
+    };
 
-    this.doValidation=function(){
+    this.doValidation = function () {
         return true;
-    }
+    };
 
-    this._refreshLabel=function(event){
-        if(this.labelNode!=null){
-            this.labelNode.innerHTML=this.getLabel();
+    this._refreshLabel = function (event) {
+        if (this.labelNode !== null) {
+            this.labelNode.innerHTML = this.getLabel();
         }
-    }
-}
+    };
+};

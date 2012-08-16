@@ -4,32 +4,42 @@
  * @package core.data
  * @trigger cursorUpdated
  */
-core.data.IViewCursor={
-    isAfterLast:function(){},
-    isBeforeFirst:function(){},
+core.data.IViewCursor = {
+    isAfterLast:function () {
+    },
+    isBeforeFirst:function () {
+    },
 
-    findAny:function(values){},
+    findAny:function (values) {
+    },
 
-    findFirst:function(values){},
+    findFirst:function (values) {
+    },
 
-    findLast:function(values){},
+    findLast:function (values) {
+    },
 
-    insert:function(data){},
+    insert:function (data) {
+    },
 
-    remove:function(){},
+    remove:function () {
+    },
 
-    moveNext:function(){},
+    moveNext:function () {
+    },
 
-    movePrevious:function(){},
+    movePrevious:function () {
+    },
 
-    current:function(){},
+    current:function () {
+    },
 
     /**
      * Create bookmark to the current position
      *
      * @returns core.data.CursorBookmark
      */
-    getBookmark:function(){
+    getBookmark:function () {
 
     },
 
@@ -38,7 +48,7 @@ core.data.IViewCursor={
      *
      * @param {CursorBookmark} bookmark
      */
-    seek:function(bookmark){
+    seek:function (bookmark) {
 
     }
 };

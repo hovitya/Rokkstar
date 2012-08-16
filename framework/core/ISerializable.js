@@ -1,3 +1,4 @@
-core.ISerializable={
-    unserialize:function(str){}
+core.ISerializable = {
+    unserialize:function (str) {
+    }
 };

@@ -9,34 +9,32 @@
  * @borrows core.behaviours.SkinnableBehaviour#declareSkinPart
  * @constructor
  */
-core.SkinnableComponent=Rokkstar.createClass('core.SkinnableComponent','core.VisualComponent',function(){
+core.SkinnableComponent = Rokkstar.createClass('core.SkinnableComponent', 'core.VisualComponent', function () {
 
 
-    this.init=function(){
+    this.init = function () {
         this.callSuper('init');
         this.skinnableInit();
     }
 
-    this.tack=function(){
+    this.tack = function () {
         this.callSuper('tack');
         this.skinnableTack();
     }
 
-    this.measure=function(){
-        var mW=this.measuredWidth;
-        var mH=this.measuredHeight;
+    this.measure = function () {
+        var mW = this.measuredWidth;
+        var mH = this.measuredHeight;
         this.skinnableMeasure();
-        if ((mH!=this.measuredHeight || mW!=this.measuredWidth) && this.parent != null) {
+        if ((mH != this.measuredHeight || mW != this.measuredWidth) && this.parent != null) {
             this.parent.invalidateLayout();
         }
     }
 
-    this.commitProperties=function(){
+    this.commitProperties = function () {
         this.callSuper('commitProperties');
         this.skinnableCommitProperties();
     }
 
 
-
-
-},[new Attr('skinClass',undefined),new Attr('skin',undefined,'core.Skin')],['core.behaviours.SkinnableBehaviour']);
+}, [new Attr('skinClass', undefined), new Attr('skin', undefined, 'core.Skin')], ['core.behaviours.SkinnableBehaviour']);

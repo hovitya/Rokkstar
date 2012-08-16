@@ -13,6 +13,6 @@
  * @package core.network.events
  */
 core.network.events.ResponseEvent = Rokkstar.createClass('core.network.events.ResponseEvent', 'core.Event', function () {
-    this.jqXHR=null;
-    this.textStatus=null;
+    this.jqXHR = null;
+    this.textStatus = null;
 });

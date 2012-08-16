@@ -1,4 +1,6 @@
-core.data.IEntity={
-    id:function(){},
-    setIdField:function(fieldName){}
+core.data.IEntity = {
+    id:function () {
+    },
+    setIdField:function (fieldName) {
+    }
 };

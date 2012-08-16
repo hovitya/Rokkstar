@@ -1,3 +1,4 @@
-core.IFactory={
-    createObject:function(data){}
+core.IFactory = {
+    createObject:function (data) {
+    }
 };

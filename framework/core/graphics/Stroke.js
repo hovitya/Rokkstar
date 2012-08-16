@@ -15,7 +15,7 @@ core.graphics.Stroke = Rokkstar.createClass('core.graphics.Stroke', 'core.Compon
      *
      * @param {CanvasRenderingContext2D} graphics
      */
-    this.applyStroke=function(graphics){
+    this.applyStroke = function (graphics) {
 
     }
 
@@ -23,7 +23,7 @@ core.graphics.Stroke = Rokkstar.createClass('core.graphics.Stroke', 'core.Compon
      *
      * @param {CanvasRenderingContext2D} graphics
      */
-    this.callStroke=function(graphics){
+    this.callStroke = function (graphics) {
 
     }
 });

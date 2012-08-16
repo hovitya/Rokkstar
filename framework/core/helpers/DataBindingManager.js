@@ -1,4 +1,4 @@
-core.helpers.DataBindingManager=function(){
+core.helpers.DataBindingManager = function () {
     /**
      *
      * @param {core.EventDispatcher} from
@@ -6,7 +6,7 @@ core.helpers.DataBindingManager=function(){
      * @param {core.EventDispatcher} to
      * @param {String} toAttribute
      */
-    this.bind=function(from,fromAttribute,to,toAttribute){
+    this.bind = function (from, fromAttribute, to, toAttribute) {
 
     }
 }

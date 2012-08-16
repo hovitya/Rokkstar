@@ -13,12 +13,20 @@
  * @package core.data
  */
 core.data.IList = {
-    addItem:function(item){},
-    addItemAt:function(item,index){},
-    getItemAt:function(index){},
-    getItemIndex:function(item){},
-    removesAll:function(){},
-    removeItemAt:function(index){},
-    setItemAt:function(index,index){},
-    toArray:function(){}
+    addItem:function (item) {
+    },
+    addItemAt:function (item, index) {
+    },
+    getItemAt:function (index) {
+    },
+    getItemIndex:function (item) {
+    },
+    removesAll:function () {
+    },
+    removeItemAt:function (index) {
+    },
+    setItemAt:function (index, index) {
+    },
+    toArray:function () {
+    }
 };

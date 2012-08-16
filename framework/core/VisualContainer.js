@@ -3,17 +3,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
- /**
+/**
  * @class Superclass for container type components.
  * @augments core.VisualComponent
  * @constructor
  */
-core.VisualContainer=Rokkstar.createClass('core.VisualContainer','core.VisualComponent',function(){
-    extend(this,'core.VisualComponent');
+core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.VisualComponent', function () {
+    extend(this, 'core.VisualComponent');
 
-    this.elements=[];
+    this.elements = [];
 
-    this.getElementsNum=function(){
+    this.getElementsNum = function () {
         return this.elements.length;
     }
 
@@ -22,63 +22,63 @@ core.VisualContainer=Rokkstar.createClass('core.VisualContainer','core.VisualCom
      * @param position
      * @return {core.VisualComponent}
      */
-    this.getElementAt=function(position){
+    this.getElementAt = function (position) {
         return this.elements[position];
     }
 
-    this.getElementIndex=function(element){
+    this.getElementIndex = function (element) {
         return this.elements.indexOf(element);
     }
 
-    this.removeElement=function(element){
-        if(this.getElementIndex(element)!=-1){
-            if(this.domElement==element.domElement.parentNode){
+    this.removeElement = function (element) {
+        if (this.getElementIndex(element) != -1) {
+            if (this.domElement == element.domElement.parentNode) {
                 this.domElement.removeChild(element.domElement);
             }
-            this.elements.splice(this.elements.indexOf(element),1);
+            this.elements.splice(this.elements.indexOf(element), 1);
             this.deactivateElement(element);
-            element.parent=null;
+            element.parent = null;
             element.triggerEvent("parentChanged");
             this.triggerEvent('elementsPropertyChanged');
         }
     }
 
-    this.removeElementAt=function(position){
-        if(position>=0 && position<=this.elements.length){
-            if(this.domElement==this.elements[position].domElement.parentNode){
+    this.removeElementAt = function (position) {
+        if (position >= 0 && position <= this.elements.length) {
+            if (this.domElement == this.elements[position].domElement.parentNode) {
                 this.domElement.removeChild(this.elements[position].domElement);
             }
             this.deactivateElement(this.elements[position]);
-            this.elements[position].parent=null;
+            this.elements[position].parent = null;
             this.elements[position].triggerEvent("parentChanged");
-            this.elements.splice(position,1);
+            this.elements.splice(position, 1);
             this.triggerEvent('elementsPropertyChanged');
         }
     }
 
-    this.removeAllElements=function(){
-        for(var i in this.elements){
+    this.removeAllElements = function () {
+        for (var i in this.elements) {
             this.deactivateElement(this.elements[i]);
-            this.elements[i].parent=null;
+            this.elements[i].parent = null;
             this.elements[i].triggerEvent("parentChanged");
         }
-        this.elements=[];
+        this.elements = [];
         this.triggerEvent('elementsPropertyChanged');
     }
 
 
-    this.addElement=function(element){
-        if(this.elements.indexOf(element)==-1){
-            if(element.parent!=null){
+    this.addElement = function (element) {
+        if (this.elements.indexOf(element) == -1) {
+            if (element.parent != null) {
                 element.parent.removeElement(element);
             }
             this.elements.push(element);
             this.domElement.appendChild(element.domElement);
             this.activateElement(element);
-            element.parent=this;
+            element.parent = this;
             element.triggerEvent("parentChanged");
-        }else{
-            this.elements.splice(this.getElementIndex(element),1);
+        } else {
+            this.elements.splice(this.getElementIndex(element), 1);
             this.elements.push(element);
             this.domElement.appendChild(element.domElement);
 
@@ -86,26 +86,26 @@ core.VisualContainer=Rokkstar.createClass('core.VisualContainer','core.VisualCom
         this.triggerEvent('elementsPropertyChanged');
     }
 
-    this.addElementAt=function(element,position){
-        if(this.elements.indexOf(element)==-1){
-            if(element.parent!=null){
+    this.addElementAt = function (element, position) {
+        if (this.elements.indexOf(element) == -1) {
+            if (element.parent != null) {
                 element.parent.removeElement(element);
             }
-            if(position<this.elements.length-1){
-                this.domElement.insertBefore(this.elements[position+1].domElement,element.domElement);
-            }else{
+            if (position < this.elements.length - 1) {
+                this.domElement.insertBefore(this.elements[position + 1].domElement, element.domElement);
+            } else {
                 this.domElement.appendChild(element.domElement);
             }
-            this.elements.splice(position,0,element);
+            this.elements.splice(position, 0, element);
             this.activateElement(element);
-            element.parent=this;
+            element.parent = this;
             element.triggerEvent("parentChanged");
-        }else{
-            this.elements.splice(this.getElementIndex(element),1);
-            this.elements.splice(position,0,element);
-            if(position<this.elements.length-1){
-                this.domElement.insertBefore(this.elements[position+1].domElement,element.domElement);
-            }else{
+        } else {
+            this.elements.splice(this.getElementIndex(element), 1);
+            this.elements.splice(position, 0, element);
+            if (position < this.elements.length - 1) {
+                this.domElement.insertBefore(this.elements[position + 1].domElement, element.domElement);
+            } else {
                 this.domElement.appendChild(element.domElement);
             }
         }
@@ -113,61 +113,60 @@ core.VisualContainer=Rokkstar.createClass('core.VisualContainer','core.VisualCom
     }
 
 
-
-    this.init=function(){
+    this.init = function () {
         this.callSuper('init');
-        for(var i in this.xmlContentArray){
+        for (var i in this.xmlContentArray) {
             this.addElement(this.xmlContentArray[i]);
         }
-        this.createEventListener('elementsPropertyChanged',this.elementsChanged,this);
-        this.createEventListener('layoutPropertyChanged',this.invalidateLayout,this);
+        this.createEventListener('elementsPropertyChanged', this.elementsChanged, this);
+        this.createEventListener('layoutPropertyChanged', this.invalidateLayout, this);
         this.elementsChanged({});
     }
 
-    this.elementsChanged=function(event){
+    this.elementsChanged = function (event) {
         this.invalidateLayout();
     }
 
-    this.activateElement=function(element){
-        element.createEventListener('sizeChanged',this.invalidateLayout,this);
-        element.createEventListener('positionChanged',this.invalidateLayout,this);
+    this.activateElement = function (element) {
+        element.createEventListener('sizeChanged', this.invalidateLayout, this);
+        element.createEventListener('positionChanged', this.invalidateLayout, this);
     }
 
-    this.deactivateElement=function(element){
-        element.removeEventListener('sizeChanged',this);
-        element.removeEventListener('positionChanged',this);
+    this.deactivateElement = function (element) {
+        element.removeEventListener('sizeChanged', this);
+        element.removeEventListener('positionChanged', this);
     }
 
-    this.refreshLayout=function(){
-        if(this.getLayout()==null) this.layout=this.createComponent('core.layouts.ConstraintLayout');
+    this.refreshLayout = function () {
+        if (this.getLayout() == null) this.layout = this.createComponent('core.layouts.ConstraintLayout');
         this.layout.doLayout(this);
     }
-    this.layoutInvalid=false;
+    this.layoutInvalid = false;
 
-    this.invalidateLayout=function(){
+    this.invalidateLayout = function () {
         this.invalidateDisplayList();
-        this.layoutInvalid=true;
+        this.layoutInvalid = true;
     }
 
-    this.measure=function(predictedWidth,predictedHeight){
-        var mW=this.measuredWidth;
-        var mH=this.measuredHeight;
-        this.callSuper('measure',predictedWidth,predictedHeight);
-        if(this.measuredHeight!=mH || this.measuredWidth!=mW){
+    this.measure = function (predictedWidth, predictedHeight) {
+        var mW = this.measuredWidth;
+        var mH = this.measuredHeight;
+        this.callSuper('measure', predictedWidth, predictedHeight);
+        if (this.measuredHeight != mH || this.measuredWidth != mW) {
             this.invalidateLayout();
         }
     }
 
-    this.tack=function(){
-        if(this.componentInvalid){
+    this.tack = function () {
+        if (this.componentInvalid) {
             this.callSuper('tack');
-            if(this.layoutInvalid){
+            if (this.layoutInvalid) {
                 this.refreshLayout();
-                this.layoutInvalid=false;
+                this.layoutInvalid = false;
             }
-            for(var i in this.elements){
+            for (var i in this.elements) {
                 this.elements[i].tack();
             }
         }
     }
-},[new Attr('layout',null)]);
+}, [new Attr('layout', null)]);

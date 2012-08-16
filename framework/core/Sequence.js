@@ -11,30 +11,30 @@
  * @class
  */
 core.Sequence = Rokkstar.createClass('core.Sequence', 'core.helpers.AnimationBase', function () {
-    this.tween=null;
-    this.init=function(){
+    this.tween = null;
+    this.init = function () {
         this.callSuper('init');
         this.createTween();
         //this.createEventListener('elementsPropertyChanged',this.elementsChanged,this);
     }
 
-    this.setUp=function(reversed){
-        this.tween.children=[];
-        this.tween.numChildren=0;
+    this.setUp = function (reversed) {
+        this.tween.children = [];
+        this.tween.numChildren = 0;
 
-        if(!reversed){
-            for(var i=0;i<this.getElementsNum();i++){
-                this.getElementAt(i).transitionMode=this.transitionMode;
-                this.getElementAt(i).startState=this.startState;
-                this.getElementAt(i).endState=this.endState;
+        if (!reversed) {
+            for (var i = 0; i < this.getElementsNum(); i++) {
+                this.getElementAt(i).transitionMode = this.transitionMode;
+                this.getElementAt(i).startState = this.startState;
+                this.getElementAt(i).endState = this.endState;
                 this.getElementAt(i).setUp(reversed);
                 this.tween.addChild(this.getElementAt(i).tween);
             }
-        }else{
-            for(var i=this.getElementsNum()-1;i>=0;i--){
-                this.getElementAt(i).transitionMode=this.transitionMode;
-                this.getElementAt(i).startState=this.startState;
-                this.getElementAt(i).endState=this.endState;
+        } else {
+            for (var i = this.getElementsNum() - 1; i >= 0; i--) {
+                this.getElementAt(i).transitionMode = this.transitionMode;
+                this.getElementAt(i).startState = this.startState;
+                this.getElementAt(i).endState = this.endState;
                 this.getElementAt(i).setUp(reversed);
                 this.tween.addChild(this.getElementAt(i).tween);
             }
@@ -42,38 +42,38 @@ core.Sequence = Rokkstar.createClass('core.Sequence', 'core.helpers.AnimationBas
 
     }
 
-    this.createTween=function(){
-        this.tween=new Sequence();
-        var scope=this;
-        var a={};
-        a.onMotionFinished=function(){
+    this.createTween = function () {
+        this.tween = new Sequence();
+        var scope = this;
+        var a = {};
+        a.onMotionFinished = function () {
             scope.triggerEvent('animationEnded');
         }
-        a.onMotionStarted=function(){
+        a.onMotionStarted = function () {
             scope.triggerEvent('animationStarted');
         }
         this.tween.addListener(a);
     }
 
-    this.elementsChanged=function(event){
-        this.tween.children=[];
-        this.tween.numChildren=0;
+    this.elementsChanged = function (event) {
+        this.tween.children = [];
+        this.tween.numChildren = 0;
 
     }
 
-    this.play=function(reversed){
-        if(this.isPlaying()) this.fastForward();
+    this.play = function (reversed) {
+        if (this.isPlaying()) this.fastForward();
         this.setUp(reversed);
         this.tween.start();
     }
 
-    this.stop=function(){
+    this.stop = function () {
         this.tween.stop();
     }
 
-    this.elements=[];
+    this.elements = [];
 
-    this.getElementsNum=function(){
+    this.getElementsNum = function () {
         return this.elements.length;
     }
 
@@ -82,83 +82,83 @@ core.Sequence = Rokkstar.createClass('core.Sequence', 'core.helpers.AnimationBas
      * @param position
      * @return {core.VisualComponent}
      */
-    this.getElementAt=function(position){
+    this.getElementAt = function (position) {
         return this.elements[position];
     }
 
-    this.getElementIndex=function(element){
+    this.getElementIndex = function (element) {
         return this.elements.indexOf(element);
     }
 
-    this.removeElement=function(element){
-        if(this.getElementIndex(element)!=-1){
-            this.elements.splice(this.elements.indexOf(element),1);
-            element.parent=null;
+    this.removeElement = function (element) {
+        if (this.getElementIndex(element) != -1) {
+            this.elements.splice(this.elements.indexOf(element), 1);
+            element.parent = null;
             element.triggerEvent("parentChanged");
             this.triggerEvent('elementsPropertyChanged');
         }
     }
 
-    this.removeElementAt=function(position){
-        if(position>=0 && position<=this.elements.length){
-            this.elements[position].parent=null;
+    this.removeElementAt = function (position) {
+        if (position >= 0 && position <= this.elements.length) {
+            this.elements[position].parent = null;
             this.elements[position].triggerEvent("parentChanged");
-            this.elements.splice(position,1);
+            this.elements.splice(position, 1);
             this.triggerEvent('elementsPropertyChanged');
         }
     }
 
-    this.removeAllElements=function(){
-        for(var i in this.elements){
-            this.elements[i].parent=null;
+    this.removeAllElements = function () {
+        for (var i in this.elements) {
+            this.elements[i].parent = null;
             this.elements[i].triggerEvent("parentChanged");
         }
-        this.elements=[];
+        this.elements = [];
         this.triggerEvent('elementsPropertyChanged');
     }
 
 
-    this.addElement=function(element){
-        if(this.elements.indexOf(element)==-1){
-            if(element.parent!=null){
+    this.addElement = function (element) {
+        if (this.elements.indexOf(element) == -1) {
+            if (element.parent != null) {
                 element.parent.removeElement(element);
             }
             this.elements.push(element);
-            element.parent=this;
+            element.parent = this;
             element.triggerEvent("parentChanged");
-        }else{
-            this.elements.splice(this.getElementIndex(element),1);
+        } else {
+            this.elements.splice(this.getElementIndex(element), 1);
             this.elements.push(element);
 
         }
         this.triggerEvent('elementsPropertyChanged');
     }
 
-    this.addElementAt=function(element,position){
-        if(this.elements.indexOf(element)==-1){
-            if(element.parent!=null){
+    this.addElementAt = function (element, position) {
+        if (this.elements.indexOf(element) == -1) {
+            if (element.parent != null) {
                 element.parent.removeElement(element);
             }
-            this.elements.splice(position,0,element);
-            element.parent=this;
+            this.elements.splice(position, 0, element);
+            element.parent = this;
             element.triggerEvent("parentChanged");
-        }else{
-            this.elements.splice(this.getElementIndex(element),1);
-            this.elements.splice(position,0,element);
+        } else {
+            this.elements.splice(this.getElementIndex(element), 1);
+            this.elements.splice(position, 0, element);
         }
         this.triggerEvent('elementsPropertyChanged');
     }
 
-    this.fastForward=function(){
-        for(var i=this.getElementsNum()-1;i>=0;i--){
+    this.fastForward = function () {
+        for (var i = this.getElementsNum() - 1; i >= 0; i--) {
             this.getElementAt(i).fastForward();
         }
     }
 
-    this.isPlaying=function(){
-        for(var i=this.getElementsNum()-1;i>=0;i--){
-            if(this.getElementAt(i).isPlaying()) return true;
+    this.isPlaying = function () {
+        for (var i = this.getElementsNum() - 1; i >= 0; i--) {
+            if (this.getElementAt(i).isPlaying()) return true;
         }
         return false;
     }
-},[],[]);
+}, [], []);

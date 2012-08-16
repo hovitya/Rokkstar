@@ -9,7 +9,7 @@
  * @param e
  * @param f
  */
-core.Matrix=Rokkstar.createClass('core.Matrix',undefined,function(){
+core.Matrix = Rokkstar.createClass('core.Matrix', undefined, function () {
     this.a = 1;
     this.b = 0;
     this.c = 0;
@@ -17,8 +17,8 @@ core.Matrix=Rokkstar.createClass('core.Matrix',undefined,function(){
     this.e = 0;
     this.f = 0;
 
-    this.construct=function(a, b, c, d, e, f){
-        if (a != null) {
+    this.construct = function (a, b, c, d, e, f) {
+        if (a !== null) {
             this.a = +a;
             this.b = +b;
             this.c = +c;
@@ -26,16 +26,35 @@ core.Matrix=Rokkstar.createClass('core.Matrix',undefined,function(){
             this.e = +e;
             this.f = +f;
         }
-    }
+    };
 
     this.add = function (a, b, c, d, e, f) {
-        var out = [[], [], []],
-            m = [[this.a, this.c, this.e], [this.b, this.d, this.f], [0, 0, 1]],
-            matrix = [[a, c, e], [b, d, f], [0, 0, 1]],
-            x, y, z, res;
+        var out = [
+                [],
+                [],
+                []
+            ],
+            m = [
+                [this.a, this.c, this.e],
+                [this.b, this.d, this.f],
+                [0, 0, 1]
+            ],
+            matrix = [
+                [a, c, e],
+                [b, d, f],
+                [0, 0, 1]
+            ],
+            x,
+            y,
+            z,
+            res;
 
-        if (a && Rokkstar.instanceOf(a,"core.Matrix")) {
-            matrix = [[a.a, a.c, a.e], [a.b, a.d, a.f], [0, 0, 1]];
+        if (a && Rokkstar.instanceOf(a, "core.Matrix")) {
+            matrix = [
+                [a.a, a.c, a.e],
+                [a.b, a.d, a.f],
+                [0, 0, 1]
+            ];
         }
 
         for (x = 0; x < 3; x++) {
@@ -69,8 +88,8 @@ core.Matrix=Rokkstar.createClass('core.Matrix',undefined,function(){
         this.add(1, 0, 0, 1, x, y);
     };
 
-    this.shear = function(x, y, cx, cy){
-        y == null && (y = x);
+    this.shear = function (x, y, cx, cy) {
+        y === null && (y = x);
         (cx || cy) && this.add(1, 0, 0, 1, cx, cy);
         this.add(1, x, y, 1, 0, 0);
         (cx || cy) && this.add(1, 0, 0, 1, -cx, -cy);
@@ -78,7 +97,7 @@ core.Matrix=Rokkstar.createClass('core.Matrix',undefined,function(){
     }
 
     this.scale = function (x, y, cx, cy) {
-        y == null && (y = x);
+        y === null && (y = x);
         (cx || cy) && this.add(1, 0, 0, 1, cx, cy);
         this.add(x, 0, 0, y, 0, 0);
         (cx || cy) && this.add(1, 0, 0, 1, -cx, -cy);
@@ -115,11 +134,11 @@ core.Matrix=Rokkstar.createClass('core.Matrix',undefined,function(){
         return [this.e.toFixed(4), this.f.toFixed(4)];
     };
 
-    this.normalize=function(a) {
+    this.normalize = function (a) {
         var mag = Math.sqrt(a[0] * a[0] + a[1] * a[1]);
         a[0] && (a[0] /= mag);
         a[1] && (a[1] /= mag);
-    }
+    };
 
     this.extract = function () {
         var out = {};
@@ -128,7 +147,10 @@ core.Matrix=Rokkstar.createClass('core.Matrix',undefined,function(){
         out.dy = this.f;
 
         // scale and shear
-        var row = [[this.a, this.c], [this.b, this.d]];
+        var row = [
+            [this.a, this.c],
+            [this.b, this.d]
+        ];
         out.scalex = Math.sqrt(a[0] * a[0] + a[1] * a[1]);
         this.normalize(row[0]);
 

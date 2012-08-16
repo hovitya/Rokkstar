@@ -15,7 +15,7 @@ core.graphics.Fill = Rokkstar.createClass('core.graphics.Fill', 'core.Component'
      *
      * @param {CanvasRenderingContext2D} graphics
      */
-    this.applyFill=function(graphics){
+    this.applyFill = function (graphics) {
 
     }
 
@@ -23,7 +23,7 @@ core.graphics.Fill = Rokkstar.createClass('core.graphics.Fill', 'core.Component'
      *
      * @param {CanvasRenderingContext2D} graphics
      */
-    this.callFill=function(graphics){
+    this.callFill = function (graphics) {
 
     }
 });

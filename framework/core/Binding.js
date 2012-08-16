@@ -13,53 +13,58 @@
  * @package core
  */
 core.Binding = Rokkstar.createClass('core.Binding', 'core.Component', function () {
+    "use strict";
 
+}, [new Attr('source', '', 'string'), new Attr('destination', '', 'string')]);
 
-},[new Attr('source','','string'),new Attr('destination','','string')]);
+core.Binding.bindProperty = function (site, property, host, chain) {
+    "use strict";
 
-core.Binding.bindProperty=function(site,property,host,chain){
-    var watcher=core.ChangeWatcher.watch(host,chain,null,site);
-    var handler=function(event){
-        if(site._attributeTypes[property]!=undefined){
-            site["set"+property.capitalize()].apply(site,[watcher.getValue()]);
-        }else{
-            site[property]=watcher.getValue();
+    var watcher, handler;
+    watcher = core.ChangeWatcher.watch(host, chain, null, site);
+    handler = function (event) {
+        if (site._attributeTypes[property] !== undefined) {
+            site["set" + property.capitalize()].apply(site, [watcher.getValue()]);
+        } else {
+            site[property] = watcher.getValue();
         }
-    }
-    watcher.handler=handler;
+    };
+    watcher.handler = handler;
     return watcher;
 };
 
-core.Binding.bindExpression=function(site,property,hosts,chains,expression){
-    var watchers=[];
-    var handler=function(){
-        var __watch_results=[];
-        var i=0;
-        var watch_length=watchers.length-1;
+core.Binding.bindExpression = function (site, property, hosts, chains, expression) {
+    "use strict";
 
-        while(i<=watch_length){
-            __watch_results[i]=watchers[i].getValue();
+    var watchers, handler, result, i = 0, hosts_length = hosts.length - 1, __watch_results = [];
+    watchers = [];
+    handler = function () {
+        var __watch_results = [], i = 0, watch_length = watchers.length - 1, result;
+
+
+        while (i <= watch_length) {
+            __watch_results[i] = watchers[i].getValue();
             i++;
         }
+        /*jslint evil: true */
+        result = eval("var x=" + expression + ";x");
+        /*jslint evil: false */
 
-        var result=eval("var x="+expression+";x");
-
-        if(site._attributeTypes[property]!=undefined){
-            site["set"+property.capitalize()].apply(site,[result]);
-        }else{
-            site[property]=result;
+        if (site._attributeTypes[property] != undefined) {
+            site["set" + property.capitalize()].apply(site, [result]);
+        } else {
+            site[property] = result;
         }
-    }
+    };
 
     //Create watchers
-    var i=0;
-    var hosts_length=hosts.length-1;
-    var __watch_results=[];
-    while(i<=hosts_length){
-        watchers[i]=core.ChangeWatcher.watch(hosts[i],chains[i],handler,site);
-        __watch_results[i]=watchers[i].getValue();
+    while (i <= hosts_length) {
+        watchers[i] = core.ChangeWatcher.watch(hosts[i], chains[i], handler, site);
+        __watch_results[i] = watchers[i].getValue();
         i++;
     }
-    var result=eval("var x="+expression+";x");
+    /*jslint evil: true */
+    result = eval("var x=" + expression + ";x");
+    /*jslint evil: false */
     return result;
-}
+};

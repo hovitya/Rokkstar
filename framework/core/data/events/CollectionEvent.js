@@ -13,10 +13,10 @@
  * @package core.data.events
  */
 core.data.events.CollectionEvent = Rokkstar.createClass('core.data.events.CollectionEvent', 'core.Event', function () {
-    this.kind=undefined;
-    this.location=-1;
-    this.oldLocation=-1;
-    this.items=null;
+    this.kind = undefined;
+    this.location = -1;
+    this.oldLocation = -1;
+    this.items = null;
 
     /**
      * @constructor
@@ -26,11 +26,11 @@ core.data.events.CollectionEvent = Rokkstar.createClass('core.data.events.Collec
      * @param oldLocation
      * @param items
      */
-    this.construct=function(type,kind,location,oldLocation,items){
-        this.callSuper('construct',type);
-        this.kind=kind;
-        if(location!=undefined) this.location=location;
-        if(location!=undefined) this.oldLocation=oldLocation;
-        if(location!=undefined) this.items=items;
+    this.construct = function (type, kind, location, oldLocation, items) {
+        this.callSuper('construct', type);
+        this.kind = kind;
+        if (location != undefined) this.location = location;
+        if (location != undefined) this.oldLocation = oldLocation;
+        if (location != undefined) this.items = items;
     }
 });

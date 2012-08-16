@@ -9,7 +9,8 @@
  * @augments core.EventDispatcher
  * @constructor
  */
-core.Component=Rokkstar.createClass('core.Component','core.EventDispatcher',function(){
+core.Component = Rokkstar.createClass('core.Component', 'core.EventDispatcher', function () {
+    "use strict";
 
     /**
      * Get XML attribute
@@ -20,23 +21,22 @@ core.Component=Rokkstar.createClass('core.Component','core.EventDispatcher',func
      * @param {*} fallback Default value when attribute is not set or the component is not initialized in layout xml
      * @return {String}
      */
-    this.getXMLData=function(data,fallback){
-        var val=$(this).attr('data-'+data);
-        if(val==null){
+    this.getXMLData = function (data, fallback) {
+        var val = $(this).attr('data-' + data);
+        if (val === null) {
             return fallback;
         }
         return val;
-    }
+    };
 
-    this.getAttr=function(attribute){
-        return this["get"+attribute.capitalize()].apply(this,[]);
-    }
+    this.getAttr = function (attribute) {
+        return this["get" + attribute.capitalize()].apply(this, []);
+    };
 
-    this.hasAttr=function(attribute){
-        if(this._attributeTypes==undefined) return false;
-        if(this._attributeTypes[attribute]==undefined) return false;
+    this.hasAttr = function (attribute) {
+        if ((this._attributeTypes === undefined) || (this._attributeTypes[attribute] === undefined)) { return false; }
         return true;
-    }
+    };
 
 
     /**
@@ -44,90 +44,65 @@ core.Component=Rokkstar.createClass('core.Component','core.EventDispatcher',func
      * This component defines this instance
      * @type {core.VisualComponent}
      */
-    this.master=null;
+    this.master = null;
 
     /**
      * @private
      * @param {String} name
      * @param {*} data
      */
-    this.setXMLData=function(property,val){
-        if(this.getXMLData(name,null)==null){
-           $(this).attr('data-'+property,val);
+    this.setXMLData = function (property, val) {
+        if (this.getXMLData(name, null) === null) {
+            $(this).attr('data-' + property, val);
         }
-    }
+    };
 
-    this.propertyRedirections={};
+    this.propertyRedirections = {};
 
-    this.redirectProperty=function(property,component,selfValue){
-        component.set(property,this.get(property));
-        this.set(property,selfValue);
-        this.propertyRedirections[property]=component;
-    }
+    this.redirectProperty = function (property, component, selfValue) {
+        component.set(property, this.get(property));
+        this.set(property, selfValue);
+        this.propertyRedirections[property] = component;
+    };
 
-    this.clearPropertyRedirection=function(property){
-         this.propertyRedirections[property]=null;
-    }
+    this.clearPropertyRedirection = function (property) {
+        this.propertyRedirections[property] = null;
+    };
 
-    this.createAttributes=function(){
-    }
+    this.createAttributes = function () {
+    };
 
-    this.postAttributeCreation=function(){
+    this.postAttributeCreation = function () {
 
-    }
+    };
 
-    this._attributes=[];
-    this._attributeTypes={};
+    this._attributes = [];
+    this._attributeTypes = {};
 
 
-    
-    
-    this.extractValue=function(val,typeForcing){
-        return Rokkstar.parseAttribute(val,typeForcing);
-    }
+    this.extractValue = function (val, typeForcing) {
+        return Rokkstar.parseAttribute(val, typeForcing);
+    };
 
-    this._buildDOM=function(){}
+    this._buildDOM = function () {
+    };
 
-    this.init=function(){
+    this.init = function () {
         Rokkstar.profiling.initCount++;
         //if($(this).attr('id')==undefined){
-            $(this).attr('id','dynid'+Rokkstar.uniqueIds);
-            Rokkstar.uniqueIds++;
+        $(this).attr('id', 'dynid' + Rokkstar.uniqueIds);
+        Rokkstar.uniqueIds++;
         //}
         this.postAttributeCreation();
         this.createAttributes();
-    }
-    /**
-     * General attribute setter.
-     * @description
-     * You can set an attribute created by <code>createAttribute</code> but shorthands are preferred.
-     * @example
-     * Setting using this method: <code>obj.set('width',200)</code>.
-     * Preferred shorthand method: <code>obj.setWidth(200);</code>
-     * @see core.Component#createAttribute
-     * @param {String} property Property name
-     * @param {*} value New property value
-     */
-
-    /**
-     * General attribute getter.
-     * @description
-     * You can get an attribute created by <code>createAttribute</code> but shorthands are preferred.
-     * @example
-     * Getting with this method: <code>obj.get('width',200)</code>.
-     * Preferred shorthand method: <code>obj.getWidth(200);</code>
-     * @see core.Component#createAttribute
-     * @param {String} property Property name
-     */
-
-
+    };
 
     /**
      * Produce a component instance
      * @param {String} name Component class
      * @return {*} Component instance
      */
-    this.createComponent=Rokkstar.createComponent;
+    this.createComponent = Rokkstar.createComponent;
 
     /**
      * Make the given class name unique for this object instance
@@ -141,14 +116,11 @@ core.Component=Rokkstar.createClass('core.Component','core.EventDispatcher',func
      * @param {String} className Requested class name
      * @return {String}
      */
-    this.getInstanceClass=function(className){
-        return $(this).attr('id')+className;
-    }
+    this.getInstanceClass = function (className) {
+        return $(this).attr('id') + className;
+    };
 
-    this.construct=function(){
+    this.construct = function () {
         this.init();
-    }
-
-
-
+    };
 });

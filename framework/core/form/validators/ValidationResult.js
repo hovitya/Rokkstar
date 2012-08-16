@@ -12,16 +12,16 @@
  * @name ValidationResult
  * @package core.form.validators
  */
-core.form.validators.ValidationResult=Rokkstar.createClass('core.form.validators.ValidationResult',undefined,function(){
-   this.isError=false;
-   this.errorMessage="";
-   this.errorCode="";
-   this.subField="";
+core.form.validators.ValidationResult = Rokkstar.createClass('core.form.validators.ValidationResult', undefined, function () {
+    this.isError = false;
+    this.errorMessage = "";
+    this.errorCode = "";
+    this.subField = "";
 
-    this.construct=function(isError,subField,errorMessage,errorCode){
-        this.isError=isError;
-        this.subField=subField;
-        this.errorMessage=errorMessage;
-        this.errorCode=errorCode;
+    this.construct = function (isError, subField, errorMessage, errorCode) {
+        this.isError = isError;
+        this.subField = subField;
+        this.errorMessage = errorMessage;
+        this.errorCode = errorCode;
     }
 });

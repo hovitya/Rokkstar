@@ -1,13 +1,19 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
+/* Rokkstar JavaScript Framework
+ *
+ * Copyright © 2012 Viktor Horvath
+ * Licensed under the MPL 2.0 license
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-
 /**
+ * @classdef Base textarea component. Use it in skins only.
+ * @class
+    * @name TextareaBase
+ * @package core.form
  * @augments core.VisualComponent
- * @constructor
  */
-core.InputBase = Rokkstar.createClass('core.InputBase', 'core.VisualComponent', function () {
+core.form.TextareaBase = Rokkstar.createClass('core.form.TextareaBase', 'core.VisualComponent', function () {
     "use strict";
 
     this.init = function () {
@@ -21,7 +27,7 @@ core.InputBase = Rokkstar.createClass('core.InputBase', 'core.VisualComponent', 
     };
 
     this.createDomElement = function () {
-        this.domElement = document.createElement('input');
+        this.domElement = document.createElement('textarea');
         this.domElement.style[Modernizr.prefixed('boxSizing')] = 'border-box';
         this.domElement.style.position = 'absolute';
     };

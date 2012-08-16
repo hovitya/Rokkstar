@@ -16,7 +16,7 @@ core.graphics.Ellipse = Rokkstar.createClass('core.graphics.Ellipse', 'core.grap
      *
      * @param {CanvasRenderingContext2D} graphics
      */
-    this.drawPath=function(graphics,x,y,w,h){
+    this.drawPath = function (graphics, x, y, w, h) {
         var kappa = .5522848;
         var ox = (w / 2) * kappa,
             oy = (h / 2) * kappa,

@@ -9,7 +9,7 @@
  * @augments core.Component
  * @constructor
  */
-core.layouts.Layout =Rokkstar.createClass('core.layouts.Layout','core.Component',function () {
+core.layouts.Layout = Rokkstar.createClass('core.layouts.Layout', 'core.Component', function () {
 
     this.lastDiv = null;
 
@@ -50,23 +50,23 @@ core.layouts.Layout =Rokkstar.createClass('core.layouts.Layout','core.Component'
     }
 
 
-    this.stringToPixel=function(data,referenceValue,paddingA,paddingB){
-        var percentRegexp=/^[0-9]+%$/;
-        var pxRegexp=/^[0-9]+px$/;
-        if(data=='auto'){
+    this.stringToPixel = function (data, referenceValue, paddingA, paddingB) {
+        var percentRegexp = /^[0-9]+%$/;
+        var pxRegexp = /^[0-9]+px$/;
+        if (data == 'auto') {
             return 'auto';
-        }else if(percentRegexp.test(data)){
-            var p=parseInt(data.replace('%',''));
-            var padding=Math.round((((parseFloat(paddingA)+parseFloat(paddingB))/parseFloat(referenceValue)))*100);
-            return (p-padding)+'%';
-        }else if(pxRegexp.test(data)){
+        } else if (percentRegexp.test(data)) {
+            var p = parseInt(data.replace('%', ''));
+            var padding = Math.round((((parseFloat(paddingA) + parseFloat(paddingB)) / parseFloat(referenceValue))) * 100);
+            return (p - padding) + '%';
+        } else if (pxRegexp.test(data)) {
             //return parseInt(data.replace('px',''));
             return data;
-        }else{
+        } else {
             return parseInt(data);
         }
 
     }
 
 
-},[new Attr('paddingLeft', 0, 'integer'),new Attr('paddingRight', 0, 'integer'),new Attr('paddingTop', 0, 'integer'),new Attr('paddingBottom', 0, 'integer')]);
+}, [new Attr('paddingLeft', 0, 'integer'), new Attr('paddingRight', 0, 'integer'), new Attr('paddingTop', 0, 'integer'), new Attr('paddingBottom', 0, 'integer')]);

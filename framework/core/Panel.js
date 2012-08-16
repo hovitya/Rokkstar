@@ -6,51 +6,51 @@
  * @augments core.SkinnableContainer
  * @constructor
  */
-core.Panel=Rokkstar.createClass('core.Panel','core.SkinnableContainer',function(){
+core.Panel = Rokkstar.createClass('core.Panel', 'core.SkinnableContainer', function () {
 
-    this.createAttributes=function(){
+    this.createAttributes = function () {
         this.callSuper('createAttributes');
-        this.declareSkinPart('controlBar',false,'core.Group');
+        this.declareSkinPart('controlBar', false, 'core.Group');
     }
 
-    this.init=function(){
+    this.init = function () {
         this.callSuper('init');
         this.setSkinClass("core.skins.PanelSkin");
-        this.createEventListener('showControlBarPropertyChanged',this.invalidateSkinState,this);
-        this.createEventListener('controlBarContentPropertyChanged',this._controlBarContentChanged,this);
+        this.createEventListener('showControlBarPropertyChanged', this.invalidateSkinState, this);
+        this.createEventListener('controlBarContentPropertyChanged', this._controlBarContentChanged, this);
     }
 
-    this._controlBarContentChanged=function(){
-        if(this.hasSkinPart('controlBar')){
-            var cbContent=this.getControlBarContent();
-            for(var i in cbContent){
+    this._controlBarContentChanged = function () {
+        if (this.hasSkinPart('controlBar')) {
+            var cbContent = this.getControlBarContent();
+            for (var i in cbContent) {
                 this.getSkinPart('controlBar').addElement(cbContent[i]);
             }
         }
         this.invalidateSkinState();
     }
 
-    this.getSkinState=function(){
-        if(this.getShowControlBar()=='yes'){
+    this.getSkinState = function () {
+        if (this.getShowControlBar() == 'yes') {
             return "normalWithControlBar";
-        }else if(this.getShowControlBar()=='no'){
+        } else if (this.getShowControlBar() == 'no') {
             return "normal";
-        }else if(this.getShowControlBar()=='auto' && this.getControlBarContent().length==0){
+        } else if (this.getShowControlBar() == 'auto' && this.getControlBarContent().length == 0) {
             return "normal";
-        }else{
+        } else {
             return "normalWithControlBar";
         }
     }
 
-    this.partAdded=function(name,instance){
-        this.callSuper('partAdded',name,instance);
-        if(name=='controlBar'){
-            var cbContent=this.getControlBarContent();
-            for(var i in cbContent){
+    this.partAdded = function (name, instance) {
+        this.callSuper('partAdded', name, instance);
+        if (name == 'controlBar') {
+            var cbContent = this.getControlBarContent();
+            for (var i in cbContent) {
                 instance.addElement(cbContent[i]);
             }
         }
     }
 
 
-},[new Attr('controlBarContent',[],'array'),new Attr('showControlBar','auto'),new Attr('controlBar',false,'core.VisualContainer')]);
+}, [new Attr('controlBarContent', [], 'array'), new Attr('showControlBar', 'auto'), new Attr('controlBar', false, 'core.VisualContainer')]);

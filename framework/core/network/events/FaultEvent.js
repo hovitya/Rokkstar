@@ -13,5 +13,5 @@
  * @package core.network.events
  */
 core.network.events.FaultEvent = Rokkstar.createClass('core.network.events.FaultEvent', 'core.network.events.ResponseEvent', function () {
-    this.faultMessage='';
+    this.faultMessage = '';
 });

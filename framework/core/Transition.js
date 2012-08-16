@@ -12,21 +12,21 @@
  */
 core.Transition = Rokkstar.createClass('core.Transition', 'core.Parallel', function () {
 
-    this.transitionListener=null;
-    this.transitionListenerScope=null;
+    this.transitionListener = null;
+    this.transitionListenerScope = null;
 
-    this.playTransition=function(startState,endState){
-        this.transitionMode=true;
-        this.startState=startState;
-        this.endState=endState;
+    this.playTransition = function (startState, endState) {
+        this.transitionMode = true;
+        this.startState = startState;
+        this.endState = endState;
         this.play();
-        this.transitionMode=false;
+        this.transitionMode = false;
     }
 
-    this.interrupt=function(){
+    this.interrupt = function () {
 
         this.fastForward();
         this.triggerEvent('animationEnded');
 
     }
-},[new Attr('from','','string'),new Attr('to','','string')]);
+}, [new Attr('from', '', 'string'), new Attr('to', '', 'string')]);

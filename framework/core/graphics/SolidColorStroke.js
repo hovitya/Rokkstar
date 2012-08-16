@@ -16,24 +16,24 @@ core.graphics.SolidColorStroke = Rokkstar.createClass('core.graphics.SolidColorS
      *
      * @param {CanvasRenderingContext2D} graphics
      */
-    this.applyStroke=function(graphics){
-        var rgb=Rokkstar.hexToRgb(this.getColor());
+    this.applyStroke = function (graphics) {
+        var rgb = Rokkstar.hexToRgb(this.getColor());
         //console.log("rgba("+rgb.r+","+rgb.g+","+rgb.b+","+this.getAlpha().toString()+")");
-        graphics.strokeStyle="rgba("+rgb.r+","+rgb.g+","+rgb.b+","+this.getAlpha().toString()+")";
+        graphics.strokeStyle = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + this.getAlpha().toString() + ")";
     }
 
-    this.init=function(){
+    this.init = function () {
         this.callSuper('init');
-        this.createEventListener('colorPropertyChanged',this._triggerChange,this)
-        this.createEventListener('alphaPropertyChanged',this._triggerChange,this)
+        this.createEventListener('colorPropertyChanged', this._triggerChange, this)
+        this.createEventListener('alphaPropertyChanged', this._triggerChange, this)
     }
 
-    this._triggerChange=function(event){
+    this._triggerChange = function (event) {
         this.triggerEvent('change');
     }
 
-    this.callStroke=function(graphics){
+    this.callStroke = function (graphics) {
         graphics.stroke();
     }
 
-},[new Attr('color','#000000','string'),new Attr('alpha',1.0,'float')]);
+}, [new Attr('color', '#000000', 'string'), new Attr('alpha', 1.0, 'float')]);

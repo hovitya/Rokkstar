@@ -14,14 +14,14 @@
  * @package core.events
  */
 core.events.PropertyChangeEvent = Rokkstar.createClass('core.events.PropertyChangeEvent', 'core.Event', function () {
-    this.oldValue=null;
-    this.newValue=null;
-    this.propertyName=null;
+    this.oldValue = null;
+    this.newValue = null;
+    this.propertyName = null;
 
-    this.construct=function(type,oldValue,newValue,propName){
-        this.callSuper('construct',type);
-        this.oldValue=oldValue;
-        this.newValue=newValue;
-        this.propertyName=propName;
+    this.construct = function (type, oldValue, newValue, propName) {
+        this.callSuper('construct', type);
+        this.oldValue = oldValue;
+        this.newValue = newValue;
+        this.propertyName = propName;
     }
 });

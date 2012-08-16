@@ -13,8 +13,8 @@
  * @package core.form.validators
  * @augments core.Event
  */
-core.form.validators.ValidationResultEvent=Rokkstar.createClass('core.form.validators.ValidationResultEvent','core.Event',function(){
-    this.field="";
-    this.message="";
-    this.results=[];
+core.form.validators.ValidationResultEvent = Rokkstar.createClass('core.form.validators.ValidationResultEvent', 'core.Event', function () {
+    this.field = "";
+    this.message = "";
+    this.results = [];
 });

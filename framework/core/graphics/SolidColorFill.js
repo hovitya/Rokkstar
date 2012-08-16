@@ -16,24 +16,24 @@ core.graphics.SolidColorFill = Rokkstar.createClass('core.graphics.SolidColorFil
      *
      * @param {CanvasRenderingContext2D} graphics
      */
-    this.applyFill=function(graphics){
-        var rgb=Rokkstar.hexToRgb(this.getColor());
+    this.applyFill = function (graphics) {
+        var rgb = Rokkstar.hexToRgb(this.getColor());
         //console.log("rgba("+rgb.r+","+rgb.g+","+rgb.b+","+this.getAlpha().toString()+")");
-        graphics.fillStyle="rgba("+rgb.r+","+rgb.g+","+rgb.b+","+this.getAlpha().toString()+")";
+        graphics.fillStyle = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + "," + this.getAlpha().toString() + ")";
     }
 
-    this.init=function(){
+    this.init = function () {
         this.callSuper('init');
-        this.createEventListener('colorPropertyChanged',this._triggerChange,this)
-        this.createEventListener('alphaPropertyChanged',this._triggerChange,this)
+        this.createEventListener('colorPropertyChanged', this._triggerChange, this)
+        this.createEventListener('alphaPropertyChanged', this._triggerChange, this)
     }
 
-    this._triggerChange=function(event){
+    this._triggerChange = function (event) {
         this.triggerEvent('change');
     }
 
-    this.callFill=function(graphics){
+    this.callFill = function (graphics) {
         graphics.fill();
     }
 
-},[new Attr('color','#000000','string'),new Attr('alpha',1.0,'float')]);
+}, [new Attr('color', '#000000', 'string'), new Attr('alpha', 1.0, 'float')]);

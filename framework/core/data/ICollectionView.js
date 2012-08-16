@@ -3,19 +3,25 @@
  * @name ICollectionView
  * @package core.data
  */
-core.data.ICollectionView={
+core.data.ICollectionView = {
     /**
      * @returns IViewCursor
      */
-    createCursor:function(){},
+    createCursor:function () {
+    },
 
-    setFilter:function(filterFunction){},
+    setFilter:function (filterFunction) {
+    },
 
-    setSort:function(sortFunction){},
+    setSort:function (sortFunction) {
+    },
 
-    length:function(){},
+    length:function () {
+    },
 
-    refresh:function(){},
+    refresh:function () {
+    },
 
-    contains:function(item){}
+    contains:function (item) {
+    }
 }

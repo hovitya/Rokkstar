@@ -2,14 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
- /**
+/**
  * Creates new VisualComponent instance.
  * @class Base class for visible components. Add view state functionality.
  * @author Horváth Viktor
  * @augments core.Component
  * @constructor
  */
-core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Component',function () {
+core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Component', function () {
+    "use strict";
 
     /**
      *
@@ -17,75 +18,11 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.parent = null;
 
-    this.transitions=[];
+    this.transitions = [];
 
-    this.stateGroups={};
+    this.stateGroups = {};
 
-    this.states={};
-
-    /**
-     * Get width string
-     * @description
-     * Returns width in string representation (100% or 100px)
-     * @name core.VisualComponent#getWidth
-     * @function
-     * @returns {String} value Width in pixels or in %
-     */
-    /**
-     * Set width
-     * @description
-     * Set visual component width
-     * <code>
-     *     myComp.setWidth('100%');
-     *     myComp.setWidth('100px');
-     * </code>
-     * @name core.VisualComponent#setWidth
-     * @function
-     * @param {String} value Width in pixels or in %
-     */
-
-
-    /**
-     * Get height string
-     * @description
-     * Returns height in string representation (100% or 100px)
-     * @name core.VisualComponent#getHeight
-     * @function
-     * @returns {String} value Height in pixels or in %
-     */
-    /**
-     * Sets height
-     * @description
-     * Set visual component width
-     * <code>
-     *     myComp.setHeight('100%');
-     *     myComp.setHeight('100px');
-     * </code>
-     * @name core.VisualComponent#setHeight
-     * @function
-     * @param {String} value Height in pixels or in %
-     */
-
-
-    /**
-     * Get x position
-     * @description
-     * Returns x position
-     * @name core.VisualComponent#getX
-     * @function
-     * @returns {int} value x
-     */
-    /**
-     * Set x position
-     * @description
-     * Set visual component x position on the screen
-     * <code>
-     *     myComp.setX(33);
-     * </code>
-     * @name core.VisualComponent#setHeight
-     * @function
-     * @param {int} new x position
-     */
+    this.states = {};
 
 
     /**
@@ -93,7 +30,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.buildDOM = function () {
 
-    }
+    };
 
 
     /**
@@ -102,7 +39,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this._buildDOM = function () {
         this.buildDOM();
-    }
+    };
 
 
     /**
@@ -110,17 +47,17 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.empty = function () {
         $(this).empty();
-    }
+    };
 
     this.xmlContentArray = [];
 
     //this.states={};
 
     this.init = function () {
-        if(this.domElement==null) this.createDomElement();
+        var i;
+        if (this.domElement === null) { this.createDomElement(); }
         this.callSuper('init');
         this._buildDOM();
-
 
 
         //Registering event listeners
@@ -133,7 +70,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         this.createEventListener('topPropertyChanged', this.topChanged, this);
         this.createEventListener('bottomPropertyChanged', this.bottomChanged, this);
         this.createEventListener('positionPropertyChanged', this.positionChanged, this);
-        this.createEventListener('classPropertyChanged', this.classChanged, this)
+        this.createEventListener('classPropertyChanged', this.classChanged, this);
         this.createEventListener('matrixPropertyChanged', this._matrixChanged, this);
         this.createEventListener('rotationPropertyChanged', this._createMatrix, this);
         this.createEventListener('scaleXPropertyChanged', this._createMatrix, this);
@@ -148,8 +85,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
 
         //Find state properties
 
-        for(var i in this.states){
-            if(this.states.hasOwnProperty(i)){
+        for (i in this.states) {
+            if (this.states.hasOwnProperty(i)) {
                 this.setCurrentState(this.states[i].name);
                 this.states[i].activate();
                 break;
@@ -157,38 +94,34 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
         }
 
         this.createEventListener('currentStatePropertyChanged', this.stateChanged, this);
-    }
-
+    };
 
 
     this.measuredWidth = 0;
     this.measuredHeight = 0;
 
-    this.triggerJQEvent=function(event){
-        this.triggerEvent(event.type);
-    }
 
-    this.measure = function (predictedWidth,predictedHeight) {
-        var mW=this.measuredWidth;
-        var mH=this.measuredHeight;
-        if(predictedWidth!=undefined){
+    this.measure = function (predictedWidth, predictedHeight) {
+        var mW = this.measuredWidth, mH = this.measuredHeight;
+
+        if (predictedWidth !== undefined) {
             this.measuredWidth = predictedWidth;
-        }else{
+        } else {
             this.measuredWidth = this.domElement.clientWidth;
         }
 
-        if(predictedHeight!=undefined){
+        if (predictedHeight !== undefined) {
             this.measuredHeight = predictedHeight;
-        }else{
+        } else {
             this.measuredHeight = this.domElement.clientHeight;
         }
 
 
-        if ((mH!=this.measuredHeight || mW!=this.measuredWidth) && this.parent != null) {
+        if ((mH !== this.measuredHeight || mW !== this.measuredWidth) && this.parent !== null) {
             this.parent.invalidateLayout();
         }
 
-    }
+    };
 
 
     this.componentInvalid = true;
@@ -199,39 +132,39 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
     this.invalidateSize = function () {
         this.invalidateDisplayList();
         this.sizeInvalid = true;
-    }
+    };
 
     this.invalidateDisplayList = function () {
         this.componentInvalid = true;
-        if (this.parent != null) {
+        if (this.parent !== null) {
             this.parent.invalidateDisplayList();
         }
-    }
+    };
 
 
     this.invalidateProperties = function () {
         this.invalidateDisplayList();
         this.propertiesInvalid = true;
-    }
+    };
 
     this.commitProperties = function () {
-        if(this._matrixInvalid){
-            this._matrixInvalid=false;
-            this.domElement.style[Modernizr.prefixed('transform')]=this.getMatrix().toString();
+        if (this._matrixInvalid) {
+            this._matrixInvalid = false;
+            this.domElement.style[Modernizr.prefixed('transform')] = this.getMatrix().toString();
         }
-        if(this._styleInvalid){
-            this._styleInvalid=false;
+        if (this._styleInvalid) {
+            this._styleInvalid = false;
             this._commitStyle();
         }
-        if(this._visibilityInvalid){
-            this._visibilityInvalid=false;
-            if(this.getVisible()){
-                this.domElement.style.display='block';
-            }else{
-                this.domElement.style.display='none';
+        if (this._visibilityInvalid) {
+            this._visibilityInvalid = false;
+            if (this.getVisible()) {
+                this.domElement.style.display = 'block';
+            } else {
+                this.domElement.style.display = 'none';
             }
         }
-    }
+    };
 
     this.tack = function () {
         if (this.componentInvalid) {
@@ -247,7 +180,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
             }
 
         }
-    }
+    };
 
     /**
      * Width change handler
@@ -256,9 +189,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.widthChanged = function (event) {
         event.stopPropagation();
-        //$(this).css('width',this.width);
-        if (this.parent != null) this.parent.invalidateLayout();
-    }
+        if (this.parent !== null) { this.parent.invalidateLayout(); }
+    };
 
     /**
      * Height change handler
@@ -267,8 +199,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.heightChanged = function (event) {
         event.stopPropagation();
-        if (this.parent != null) this.parent.invalidateLayout();
-    }
+        if (this.parent !== null) { this.parent.invalidateLayout(); }
+    };
 
     /**
      * X change handler
@@ -277,9 +209,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.xChanged = function (event) {
         event.stopPropagation();
-        if (this.parent != null) this.parent.invalidateLayout();
-        //$(this).css('left',this.x+'px');
-    }
+        if (this.parent !== null) { this.parent.invalidateLayout(); }
+    };
 
     /**
      * Y change handler
@@ -288,9 +219,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.yChanged = function (event) {
         event.stopPropagation();
-        if (this.parent != null) this.parent.invalidateLayout();
-        //$(this).css('top',this.y+'px');
-    }
+        if (this.parent !== null) { this.parent.invalidateLayout(); }
+    };
 
     /**
      * Left change handler
@@ -299,9 +229,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.leftChanged = function (event) {
         event.stopPropagation();
-        //$(this).css('left',this.width);
-        if (this.parent != null) this.parent.invalidateLayout();
-    }
+        if (this.parent !== null) { this.parent.invalidateLayout(); }
+    };
 
     /**
      * Right change handler
@@ -310,9 +239,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.rightChanged = function (event) {
         event.stopPropagation();
-        //$(this).css('right',this.height)
-        if (this.parent != null) this.parent.invalidateLayout();
-    }
+        if (this.parent !== null) { this.parent.invalidateLayout(); }
+    };
 
     /**
      * Top change handler
@@ -321,9 +249,8 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.topChanged = function (event) {
         event.stopPropagation();
-        if (this.parent != null) this.parent.invalidateLayout();
-        //$(this).css('top',this.x+'px');
-    }
+        if (this.parent !== null) { this.parent.invalidateLayout(); }
+    };
 
     /**
      * Bottom change handler
@@ -332,110 +259,118 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent','core.Compone
      */
     this.bottomChanged = function (event) {
         event.stopPropagation();
-        if (this.parent != null) this.parent.invalidateLayout();
-        //$(this).css('bottom',this.y+'px');
-    }
+        if (this.parent !== null) { this.parent.invalidateLayout(); }
+    };
 
     this.positionChanged = function (event) {
         event.stopPropagation();
-        if (this.parent != null) this.parent.invalidateLayout();
-    }
+        if (this.parent !== null) { this.parent.invalidateLayout(); }
+    };
 
     this.classChanged = function (event) {
         event.stopPropagation();
         this.domElement.className = this.getClass();
-    }
+    };
 
-    this._runningTransitions=[];
+    this._runningTransitions = [];
 
-    this.addStateProperty=function(target,property,value,stateName){
-        var stateNames=stateName.split(".");
-        if(this.stateGroups[stateNames[0].trim()]!=undefined){
-            for(var i in this.stateGroups[stateNames[0].trim()]){
-                this.stateGroups[stateNames[0].trim()][i].addProperty(target,property,value,stateNames.slice(1));
+    this.addStateProperty = function (target, property, value, stateName) {
+        var stateNames = stateName.split("."), i;
+        if (this.stateGroups[stateNames[0].trim()] !== undefined) {
+            for (i in this.stateGroups[stateNames[0].trim()]) {
+                if (this.stateGroups[stateNames[0].trim()].hasOwnProperty(i)) { this.stateGroups[stateNames[0].trim()][i].addProperty(target, property, value, stateNames.slice(1)); }
             }
-        }else{
-            Rokkstar.console.warning("State is missing: "+stateNames[0].trim());
+        } else {
+            Rokkstar.console.warning("State is missing: " + stateNames[0].trim());
         }
-    }
+    };
 
     this.stateChanged = function (event) {
-        if(event.oldValue!=event.newValue){
-            for(var i in this._runningTransitions){
-                this._runningTransitions[i].interrupt();
+        var i, from, to, trans, state, prevState, that, self;
+        if (event.oldValue !== event.newValue) {
+            for (i in this._runningTransitions) {
+                if (this._runningTransitions.hasOwnProperty(i)) { this._runningTransitions[i].interrupt(); }
             }
             event.stopPropagation();
-            if(this.states[this.getCurrentState()]!=undefined){
-                var from=event.oldValue;
-                var to=event.newValue;
+            if (this.states[this.getCurrentState()] !== undefined) {
+                from = event.oldValue;
+                to = event.newValue;
+                i = this.transitions.length;
+                trans = null;
+
                 //Searching for applicable transition
-                var i=this.transitions.length;
-                var trans=null;
-                while(i--){
-                    if((this.transitions[i].getFrom()==from || this.transitions[i].getFrom()=='*') && (this.transitions[i].getTo()==to || this.transitions[i].getTo()=='*')){
-                        trans=this.transitions[i];
-                        i=0;
+                while (i--) {
+                    if ((this.transitions[i].getFrom() === from || this.transitions[i].getFrom() === '*') && (this.transitions[i].getTo() === to || this.transitions[i].getTo() === '*')) {
+                        trans = this.transitions[i];
+                        i = 0;
                     }
                 }
-                if(trans==null){
+                if (trans === null) {
                     //Apply state without transition
-                    if(this.states[from]){ this.states[from].deactivate(); }
+                    if (this.states[from]) {
+                        this.states[from].deactivate();
+                    }
                     this.states[to].activate();
-                }else{
+                } else {
                     //Apply state after transition
-                    var state=this.states[to];
-                    var prevState=this.states[from];
-                    var that=this;
-                    var self=trans;
-                    trans.createEventListener('animationEnded',function(){if(prevState){prevState.deactivate();};state.activate();that._runningTransitions.slice(that._runningTransitions.indexOf(self),1);},this,true);
+                    state = this.states[to];
+                    prevState = this.states[from];
+                    that = this;
+                    self = trans;
+                    trans.createEventListener('animationEnded', function () {
+                        if (prevState) {
+                            prevState.deactivate();
+                        }
+                        state.activate();
+                        that._runningTransitions.slice(that._runningTransitions.indexOf(self), 1);
+                    }, this, true);
                     this._runningTransitions.push(trans);
-                    trans.playTransition(this.states[from],this.states[to]);
+                    trans.playTransition(this.states[from], this.states[to]);
                 }
 
-            }else{
+            } else {
                 throw new core.exceptions.Exception('Requested state is missing.');
             }
         }
-    }
+    };
 
-    this._styleInvalid=false;
+    this._styleInvalid = false;
 
-    this._styleChanged=function(event){
+    this._styleChanged = function (event) {
         event.stopPropagation();
-        this._styleInvalid=true;
+        this._styleInvalid = true;
         this.invalidateProperties();
-    }
+    };
 
-    this._commitStyle=function(){
-        this.domElement.style.opacity=this.getAlpha();
-    }
+    this._commitStyle = function () {
+        this.domElement.style.opacity = this.getAlpha();
+    };
 
-    this._matrixInvalid=false;
+    this._matrixInvalid = false;
 
 
-
-    this._matrixChanged=function(event){
-        this._matrixInvalid=true;
+    this._matrixChanged = function (event) {
+        this._matrixInvalid = true;
         this.invalidateProperties();
-    }
+    };
 
-    this._createMatrix=function(){
-        var m=new core.Matrix();
-        m.translate(this.getTranslateX(),this.getTranslateY());
-        m.shear(this.getSkewX()/100.0,this.getSkewY()/100.0);
-        m.scale(this.getScaleX(),this.getScaleY());
+    this._createMatrix = function () {
+        var m = new core.Matrix();
+        m.translate(this.getTranslateX(), this.getTranslateY());
+        m.shear(this.getSkewX() / 100.0, this.getSkewY() / 100.0);
+        m.scale(this.getScaleX(), this.getScaleY());
         m.rotate(this.getRotation());
         this.setMatrix(m);
-    }
+    };
 
-    this._visibilityInvalid=false;
+    this._visibilityInvalid = false;
 
-    this._visibilityChanged=function(event){
-        this._visibilityInvalid=true;
+    this._visibilityChanged = function (event) {
+        this._visibilityInvalid = true;
         this.invalidateProperties();
-    }
+    };
 
-},[new Attr('currentState', undefined),new Attr('class'),new Attr('x',undefined,'integer'),new Attr('y',undefined,'integer'),new Attr('left',undefined,'integer'),new Attr('right',undefined,'integer'),new Attr('top',undefined,'integer'),new Attr('bottom',undefined,'integer'),new Attr('position', 'center'),new Attr('height', undefined),
-new Attr('width', undefined), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('matrix', undefined), new Attr('rotation', 0,'float'), new Attr('scaleX', 1.0,'float'), new Attr('scaleY', 1.0,'float'), new Attr('skewX', 0,'float'), new Attr('skewY', 0,'float'),new Attr('translateX', 0,'integer'), new Attr('translateY', 0,'integer'), new Attr('alpha', 1.0,'float'),
-new Attr('visible',true,'boolean')]);
+}, [new Attr('currentState', undefined), new Attr('class'), new Attr('x', undefined, 'integer'), new Attr('y', undefined, 'integer'), new Attr('left', undefined, 'integer'), new Attr('right', undefined, 'integer'), new Attr('top', undefined, 'integer'), new Attr('bottom', undefined, 'integer'), new Attr('position', 'center'), new Attr('height', undefined),
+    new Attr('width', undefined), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('matrix', undefined), new Attr('rotation', 0, 'float'), new Attr('scaleX', 1.0, 'float'), new Attr('scaleY', 1.0, 'float'), new Attr('skewX', 0, 'float'), new Attr('skewY', 0, 'float'), new Attr('translateX', 0, 'integer'), new Attr('translateY', 0, 'integer'), new Attr('alpha', 1.0, 'float'),
+    new Attr('visible', true, 'boolean')]);
 

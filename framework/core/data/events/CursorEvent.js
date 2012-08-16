@@ -13,11 +13,11 @@
  * @package core.data.events
  */
 core.data.events.CursorEvent = Rokkstar.createClass('core.data.events.CursorEvent', 'core.Event', function () {
-    this.oldLocation=-1;
-    this.newLocation=-1;
-    this.construct=function(type,newLocation,oldLocation){
-        this.callSuper('construct',type);
-        this.newLocation=newLocation;
-        this.oldLocation=oldLocation;
+    this.oldLocation = -1;
+    this.newLocation = -1;
+    this.construct = function (type, newLocation, oldLocation) {
+        this.callSuper('construct', type);
+        this.newLocation = newLocation;
+        this.oldLocation = oldLocation;
     }
 });

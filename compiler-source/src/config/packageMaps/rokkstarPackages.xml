@@ -19,8 +19,11 @@
 	</package>
 	<package name="core.form">
 		<component>Input</component>
+		<component>Textarea</component>
+		<component>TextareaBase</component>
 	</package>
 	<package name="core.form.validators">
 		<component>Validator</component>
+		<component>RegExpValidator</component>
 	</package>
 </packageMap>

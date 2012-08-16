@@ -1,12 +1,12 @@
-core.data._generatedClasses={};
-core.data.IDGenerator={
+core.data._generatedClasses = {};
+core.data.IDGenerator = {
     currentModelId:0,
-    generateModelId:function(){
+    generateModelId:function () {
         this.currentModelId++;
-        return "Entity"+ this.currentModelId.toString();
+        return "Entity" + this.currentModelId.toString();
     },
     currentEntityId:0,
-    generateEntityId:function(){
+    generateEntityId:function () {
         return this.currentEntityId++;
     }
 };

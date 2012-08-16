@@ -16,30 +16,30 @@ core.DrawableComponent = Rokkstar.createClass('core.DrawableComponent', 'core.Vi
      *
      * @type {CanvasRenderingContext2D}
      */
-    this.graphics=null;
+    this.graphics = null;
 
     /**
      *
      * @type {HTMLCanvasElement}
      */
-    this.canvas=null;
+    this.canvas = null;
 
-    this.createDomElement=function(){
-        this.domElement=document.createElement('div');
-        this.domElement.style[Modernizr.prefixed('boxSizing')]='border-box';
-        this.domElement.style.position='absolute';
+    this.createDomElement = function () {
+        this.domElement = document.createElement('div');
+        this.domElement.style[Modernizr.prefixed('boxSizing')] = 'border-box';
+        this.domElement.style.position = 'absolute';
 
-        this.canvas=document.createElement('canvas');
-        this.canvas.style[Modernizr.prefixed('boxSizing')]='border-box';
-        this.canvas.style.position='absolute';
-        var outerPadding=this.getCanvasOuterPadding();
-        this.canvas.style.left="-"+outerPadding+"px";
-        this.canvas.style.top="-"+outerPadding+"px";
-        this.canvas.style.right=outerPadding+"px";
-        this.canvas.style.bottom=outerPadding+"px";
+        this.canvas = document.createElement('canvas');
+        this.canvas.style[Modernizr.prefixed('boxSizing')] = 'border-box';
+        this.canvas.style.position = 'absolute';
+        var outerPadding = this.getCanvasOuterPadding();
+        this.canvas.style.left = "-" + outerPadding + "px";
+        this.canvas.style.top = "-" + outerPadding + "px";
+        this.canvas.style.right = outerPadding + "px";
+        this.canvas.style.bottom = outerPadding + "px";
         this.domElement.appendChild(this.canvas);
 
-        this.graphics=this.canvas.getContext('2d');
+        this.graphics = this.canvas.getContext('2d');
     }
 
-},[new Attr('canvasOuterPadding',20,'integer')]);
+}, [new Attr('canvasOuterPadding', 20, 'integer')]);
