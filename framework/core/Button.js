@@ -7,12 +7,13 @@
  * @constructor
  */
 core.Button = Rokkstar.createClass('core.Button', 'core.SkinnableComponent', function () {
+        "use strict";
 
         this.createAttributes = function () {
             this.callSuper('createAttributes');
             this.buttonCreateAttributes();
             this.declareSkinPart('label', false, 'core.Label');
-        }
+        };
 
         this.init = function () {
             this.callSuper('init');
@@ -24,19 +25,19 @@ core.Button = Rokkstar.createClass('core.Button', 'core.SkinnableComponent', fun
             this.createEventListener('labelPropertyChanged', this.updateLabel, this);
             this.createEventListener('currentStatePropertyChanged', this.cStateChanged, this);
             this.setCurrentState("up");
-        }
+        };
 
         this.updateLabel = function () {
             if (this.hasSkinPart('label')) {
                 this.getSkinPart('label').setText(this.getLabel());
             }
-        }
+        };
 
         this.partAdded = function (partName, instance) {
             if (partName == 'label') {
                 instance.setText(this.getLabel());
             }
-        }
+        };
 
         this.getSkinState = function () {
             if (!this.getEnabled()) {
@@ -44,12 +45,12 @@ core.Button = Rokkstar.createClass('core.Button', 'core.SkinnableComponent', fun
             } else {
                 return this.getCurrentState();
             }
-        }
+        };
 
         this.cStateChanged = function (event) {
             this.invalidateSkinState();
-        }
+        };
 
     },
-    [new Attr('enabled', true, 'boolean'), new Attr('label', 'Button'), new Attr('label', false, 'core.Label'), new Attr('tabIndex', 0, 'integer')],
+    [new Attr('enabled', true, 'boolean'), new Attr('label', false, 'string'), new Attr('tabIndex', 0, 'integer')],
     ['core.behaviours.ButtonBehaviour', 'core.behaviours.FocusableBehaviour']);

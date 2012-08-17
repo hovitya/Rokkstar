@@ -37,7 +37,7 @@ Rokkstar.templates.callSuper=function(functionName){
     }
 
     if(this.superClass.prototype[functionName]==undefined){
-        throw new core.exceptions.TypeException('Requested super method missing:'+functionName);
+        throw new TypeError('Requested super method missing:'+functionName);
     }
     var ret=this.superClass.prototype[functionName].apply(this,args);
 
@@ -116,9 +116,9 @@ Rokkstar.uniqueIds=0;
 
 //Define global functions
 /**
- * Get class instance from string
- * @param className
- * @return {*}
+ * Returns javascript object instance
+ * @param {String} className
+ * @return {Object}
  */
 function getClass(className){
     //Check class reference in cache
@@ -130,7 +130,7 @@ function getClass(className){
     var length=classPath.length;
     for(var i=0;i<length;i++){
         base=base[classPath[i]];
-        if(base==undefined){
+        if(base===undefined){
 
             throw new TypeError('Class not found: '+className,1);
         }
@@ -217,32 +217,44 @@ function Attr(name,defaultValue,type,triggerEvent){
  * @param {*} defaultValue Property default value
  */
 Rokkstar.createAttribute=function(cls,property,defaultValue){
-    cls.prototype._object_scope.push({name:property,val:defaultValue});
+    cls.prototype._object_scope.push({name:property,val:defaultValue,attrib:true});
 
     //generating getters and setters
     var getterName='get'+property.capitalize();
     var setterName='set'+property.capitalize();
-    if(cls.prototype[setterName]==undefined){
-        if(Rokkstar.setterGetterCache[setterName]==undefined){
+    cls.prototype['___'+property]=defaultValue;
+    if(cls.prototype[setterName]===undefined){
+        if(Rokkstar.setterGetterCache[setterName]===undefined){
             Rokkstar.profiling.sgGeneration++;
             Rokkstar.setterGetterCache[setterName]=function(v){
-                this.set(property,v);
+
+                var target;
+                if(this.propertyRedirections.hasOwnProperty(property) && this.propertyRedirections[property]!==null){
+                    target=this.propertyRedirections[property];
+                    target.set(property,v);
+                }else{
+                    target=this;
+                    var oldValue=target['___'+property];
+                    target['___'+property]=Rokkstar.parseAttribute(v,this._attributeTypes[property]);
+                    var event=new core.events.PropertyChangeEvent(property+'PropertyChanged',oldValue,v,property);
+                    target.triggerEvent(event);
+                }
             };
         }
 
         cls.prototype[setterName]=Rokkstar.setterGetterCache[setterName];
     }
-    if(cls.prototype[getterName]==undefined){
-        if(Rokkstar.setterGetterCache[getterName]==undefined){
+    if(cls.prototype[getterName]===undefined){
+        if(Rokkstar.setterGetterCache[getterName]===undefined){
             Rokkstar.profiling.sgGeneration++;
             Rokkstar.setterGetterCache[getterName]=function(){
-                return this.get(property);
+                return this['___'+property];
             };
         }
 
         cls.prototype[getterName]=Rokkstar.setterGetterCache[getterName];
     }
-}
+};
 
 Rokkstar.instanceOf=function(object,type){
     if(typeof object != "object") return false;
@@ -276,9 +288,9 @@ Rokkstar.console.warning=function(message){
  */
 Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,interfaces){
     Rokkstar.classes.push(name);
-    return function(){
+    var classDef= function(){
         var cls=getClass(name);
-        if(cls.prototype.constructed==undefined){
+        if(cls.prototype.constructed===undefined){
 
             cls.prototype._object_scope=[];
             cls.prototype._interfaces=[];
@@ -288,11 +300,11 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
             //constructing prototype
             var reference={};
 
-            if(superClass!=undefined){
+            if(superClass!==undefined){
                 var superCls=getClass(superClass);
                 //Copy prototypes
                 //Check is super class initialized
-                if(superCls.constructed==undefined){
+                if(superCls.constructed===undefined){
                     superCls.apply({},["R::!!NO-CONSTRUCT!!"]);
                 }
                 Rokkstar.Extend(cls.prototype,superCls.prototype);
@@ -305,37 +317,16 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
                 cls.prototype._classHierarchy.push(superClass);
                 //Rokkstar.Extend(cls.prototype._interfaces,superCls.prototype._attributeTypes);
                 cls.prototype.superClass=superCls;
-                //Copy rokkstar object to local namespace
-                cls.prototype.rokk=Rokkstar;
             }else{
                 cls.prototype.callSuper=Rokkstar.templates.callSuper;
                 cls.prototype.callSuper.altered=true;
                 cls.prototype.set=function(property,value){
-                    var target;
-                    if(this.propertyRedirections.hasOwnProperty(property) && this.propertyRedirections[property]!=null){
-                        target=this.propertyRedirections[property];
-                        target.set(property,value);
-                    }else{
-                        target=this;
-                        var oldValue=target[property];
-                        target[property]=Rokkstar.parseAttribute(value,this._attributeTypes[property]);
-                        var event=new core.events.PropertyChangeEvent(property+'PropertyChanged',oldValue,value,property);
-                        target.triggerEvent(event);
-                    }
-                }
+                    return this['set'+property.capitalize()].apply(this,[value]);
+                };
 
                 cls.prototype.get=function(property){
-                    var val=this[property]
-                    //Resolve reference
-                    if(typeof val == "string" && val.substr(0,1)=='$'){
-                        val=eval('var x='+val.substr(1)+'; x');
-                        if(val==undefined){
-                            throw new core.Exception('Cannot resolve reference: '+val);
-                        }
-                        this[property]=this[val];
-                    }
-                    return this[property];
-                }
+                    return this['get'+property.capitalize()].apply(this);
+                };
             }
 
             if(behaviours!=undefined && typeof Array){
@@ -372,7 +363,7 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
                         }
                         cls.prototype[i]=refValue;
                     }else if(i!="_object_scope" && i!="_attributes" && i!="_attributeTypes" && i!="_interfaces"){
-                        cls.prototype._object_scope.push({name:i,val:refValue});
+                        cls.prototype._object_scope.push({name:i,val:refValue,attrib:false});
                     }
                 }
             }
@@ -397,32 +388,47 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
 
         }
 
-
-
-        var j=cls.prototype._object_scope.length;
-        while(--j>=0){
-            var prop=cls.prototype._object_scope[j];
-            if(typeof prop.val == 'object'){
-                if(prop.val==null){
-                    this[prop.name]=null;
-                }else if(Object.prototype.toString.call(prop.val ) === '[object Array]'){
-                    this[prop.name]=[];
-                }else{
-                    this[prop.name]={};
-                }
-            }else{
-                this[prop.name]=prop.val;
-            }
-        }
-
-        //Set type
-        this.__classType=name;
-
         if(arguments.length!=1  || arguments[0]!="R::!!NO-CONSTRUCT!!"){
+
+            var j=cls.prototype._object_scope.length;
+            while(--j>=0){
+                var prop=cls.prototype._object_scope[j];
+                if(prop.attrib){
+                    var scope=this;
+                    var propName=prop.name;
+                    try{
+                        Object.defineProperty(scope, propName, {get: scope["get"+propName.capitalize()], set: scope["set"+propName.capitalize()] });
+                    }catch (e){
+                        throw new Error('Unable to create attribute '+prop.name+" on class "+name+".");
+                    }
+                } else {
+                    if (this[prop.name]!==undefined) {
+                        throw new Error('Unable to create attribute '+prop.name+" on class "+name+": Property or attribute is already exists with the same name (maybe in super class).");
+                    }
+                    if(typeof prop.val == 'object'){
+                        if(prop.val==null){
+                            this[prop.name]=null;
+                        }else if(Object.prototype.toString.call(prop.val ) === '[object Array]'){
+                            this[prop.name]=[];
+                        }else{
+                            this[prop.name]={};
+                        }
+                    }else{
+                        this[prop.name]=prop.val;
+                    }
+                }
+            }
+
+            //Set type
+            this.__classType=name;
+
+
             if(this.construct!=undefined){ this.construct.apply(this,arguments);}
         }
 
-    }
+    };
+    classDef.prototype.__classType="Class";
+    return classDef;
 };
 
 
@@ -489,11 +495,20 @@ String.prototype.trim=function()
 }
 
 //Creating primitive types.
-String.prototype.__classType="string";
-Boolean.prototype.__classType="boolean";
-Function.prototype.__classType="function";
-Number.prototype.__classType="number";
+/*String.prototype.__classType="String";
+Boolean.prototype.__classType="Boolean";
+Function.prototype.__classType="Function";
 
+Function.prototype.toString = function () {
+    return "[object " + this.__classType + "]";
+};
+
+
+Number.prototype.__classType="Number";
+
+Object.prototype.toString = function () {
+    return "[object " + this.__classType + "]";
+}; */
 
 Rokkstar.requestAnimationFrame = Modernizr.prefixed('requestAnimationFrame', window) || function(callback){ window.setTimeout(callback, 1000 / 60); };
 
@@ -592,17 +607,6 @@ Rokkstar.parseDOM=function(element,owner){
  * @function
  */
 Rokkstar.init=function(){
-    //Prepare view
-    /*if($.browser.mobile){
-        if($('body').data('mobileVersion')!=null){
-            document.location=$('body').data('mobileVersion');
-        }
-    }else{
-        if($('body').data('desktopVersion')!=null){
-            document.location=$('body').data('desktopVersion');
-        }
-    }*/
-    //Application bootstrap
     Rokkstar.parseDOM($('body').get(0));
 }
 

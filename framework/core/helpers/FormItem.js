@@ -37,7 +37,7 @@ core.helpers.FormItem = Rokkstar.createClass('core.helpers.FormItem', 'core.Skin
      * @param {integer} newIndex The new tab index.
      */
     this.updateTabIndex = function (newIndex) {
-
+        $(this.domElement).attr('tabindex', newIndex);
     };
 
     /**

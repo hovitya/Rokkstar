@@ -15,7 +15,7 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
 
     this.getElementsNum = function () {
         return this.elements.length;
-    }
+    };
 
     /**
      *
@@ -24,11 +24,11 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
      */
     this.getElementAt = function (position) {
         return this.elements[position];
-    }
+    };
 
     this.getElementIndex = function (element) {
         return this.elements.indexOf(element);
-    }
+    };
 
     this.removeElement = function (element) {
         if (this.getElementIndex(element) != -1) {
@@ -41,7 +41,7 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
             element.triggerEvent("parentChanged");
             this.triggerEvent('elementsPropertyChanged');
         }
-    }
+    };
 
     this.removeElementAt = function (position) {
         if (position >= 0 && position <= this.elements.length) {
@@ -54,7 +54,7 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
             this.elements.splice(position, 1);
             this.triggerEvent('elementsPropertyChanged');
         }
-    }
+    };
 
     this.removeAllElements = function () {
         for (var i in this.elements) {
@@ -64,7 +64,7 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
         }
         this.elements = [];
         this.triggerEvent('elementsPropertyChanged');
-    }
+    };
 
 
     this.addElement = function (element) {
@@ -84,7 +84,7 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
 
         }
         this.triggerEvent('elementsPropertyChanged');
-    }
+    };
 
     this.addElementAt = function (element, position) {
         if (this.elements.indexOf(element) == -1) {
@@ -110,7 +110,7 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
             }
         }
         this.triggerEvent('elementsPropertyChanged');
-    }
+    };
 
 
     this.init = function () {
@@ -121,32 +121,32 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
         this.createEventListener('elementsPropertyChanged', this.elementsChanged, this);
         this.createEventListener('layoutPropertyChanged', this.invalidateLayout, this);
         this.elementsChanged({});
-    }
+    };
 
     this.elementsChanged = function (event) {
         this.invalidateLayout();
-    }
+    };
 
     this.activateElement = function (element) {
         element.createEventListener('sizeChanged', this.invalidateLayout, this);
         element.createEventListener('positionChanged', this.invalidateLayout, this);
-    }
+    };
 
     this.deactivateElement = function (element) {
         element.removeEventListener('sizeChanged', this);
         element.removeEventListener('positionChanged', this);
-    }
+    };
 
     this.refreshLayout = function () {
         if (this.getLayout() == null) this.layout = this.createComponent('core.layouts.ConstraintLayout');
         this.layout.doLayout(this);
-    }
+    };
     this.layoutInvalid = false;
 
     this.invalidateLayout = function () {
         this.invalidateDisplayList();
         this.layoutInvalid = true;
-    }
+    };
 
     this.measure = function (predictedWidth, predictedHeight) {
         var mW = this.measuredWidth;
@@ -155,7 +155,7 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
         if (this.measuredHeight != mH || this.measuredWidth != mW) {
             this.invalidateLayout();
         }
-    }
+    };
 
     this.tack = function () {
         if (this.componentInvalid) {
@@ -168,5 +168,6 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
                 this.elements[i].tack();
             }
         }
-    }
-}, [new Attr('layout', null)]);
+    };
+
+}, [new Attr('layout', null, 'core.layouts.Layout')]);

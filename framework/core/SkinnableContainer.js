@@ -38,7 +38,7 @@
  * @constructor
  */
 core.SkinnableContainer = Rokkstar.createClass('core.SkinnableContainer', 'core.VisualContainer', function () {
-
+    "use strict";
     /**
      * @protected
      * @type {core.layouts.ConstraintLayout}
@@ -61,7 +61,7 @@ core.SkinnableContainer = Rokkstar.createClass('core.SkinnableContainer', 'core.
         } catch (ex) {
             this.pendingElements.push(element);
         }
-    }
+    };
 
     /**
      * @override
@@ -80,7 +80,7 @@ core.SkinnableContainer = Rokkstar.createClass('core.SkinnableContainer', 'core.
 
         }
 
-    }
+    };
 
     /**
      * @override
@@ -88,64 +88,66 @@ core.SkinnableContainer = Rokkstar.createClass('core.SkinnableContainer', 'core.
      */
     this.removeElement = function (element) {
         this.getSkinPart('content').removeElement(element);
-    }
+    };
 
 
     this.removeElementAt = function (position) {
         this.getSkinPart('content').removeElementAt(position);
-    }
+    };
 
     this.removeAllElements = function () {
         this.getSkinPart('content').removeAllElements();
-    }
+    };
 
     this.getElementsNum = function () {
         return this.getSkinPart('content').getElementsNum();
-    }
+    };
 
     this.getElementAt = function (position) {
         return this.getSkinPart('content').getElementAt(position);
-    }
+    };
 
     this.getElementIndex = function (element) {
         return this.getSkinPart('content').getElementIndex(element);
-    }
+    };
 
 
     this.partAdded = function (name, instance) {
-        if (name == 'content') {
-            if (this.constraintLayout == null) this.constraintLayout = this.createComponent('core.layouts.ConstraintLayout');
+        var i;
+        if (name === 'content') {
+            if (this.constraintLayout === null) { this.constraintLayout = this.createComponent('core.layouts.ConstraintLayout'); }
             this.redirectProperty('layout', instance, this.constraintLayout);
-            for (var i in this.pendingElements) {
-                instance.addElement(this.pendingElements[i]);
+            for (i in this.pendingElements) {
+                if (this.pendingElements.hasOwnProperty(i)) { instance.addElement(this.pendingElements[i]); }
             }
             this.pendingElements = [];
         }
-    }
+    };
 
     this.partRemoved = function (name, instance) {
-        if (name == 'content') {
+        var i;
+        if (name === 'content') {
             this.clearPropertyRedirection('layout');
-            for (var i = 0; i < instance.getElementsNum(); i++) {
+            for (i = 0; i < instance.getElementsNum(); i++) {
                 this.pendingElements.push(instance.getElementAt(i));
             }
             instance.removeAllElements();
         }
-    }
+    };
 
 
     this.removeSkin = function (skin) {
         this.callSuper('removeElement', skin);
-    }
+    };
 
     this.addSkin = function (skin) {
         this.callSuper('addElement', skin);
-    }
+    };
 
     this.createAttributes = function () {
         this.callSuper('createAttributes');
         this.declareSkinPart('content', true, 'core.Container');
-    }
+    };
 
     this.init = function () {
         this.callSuper('init');
@@ -153,27 +155,29 @@ core.SkinnableContainer = Rokkstar.createClass('core.SkinnableContainer', 'core.
         for (var i in this.xmlContentArray) {
             this.addElement(this.xmlContentArray[i]);
         }
-    }
+    };
 
     this.tack = function () {
         this.callSuper('tack');
         this.skinnableTack();
-    }
+    };
 
     this.measure = function () {
         var mW = this.measuredWidth;
         var mH = this.measuredHeight;
         this.skinnableMeasure();
-        if ((mH != this.measuredHeight || mW != this.measuredWidth) && this.parent != null) {
+        if ((mH !== this.measuredHeight || mW !== this.measuredWidth) && this.parent != null) {
             this.parent.invalidateLayout();
         }
-    }
+    };
 
 
     this.commitProperties = function () {
         this.callSuper('commitProperties');
         this.skinnableCommitProperties();
-    }
+    };
 
 
-}, [new Attr('skinClass', undefined), new Attr('skin', undefined, 'core.Skin')], ['core.behaviours.SkinnableBehaviour']);
+}, [new Attr('skinClass', undefined, 'string'),
+    new Attr('skin', undefined, 'core.Skin')],
+    ['core.behaviours.SkinnableBehaviour']);

@@ -69,7 +69,7 @@ core.form.validators.Validator = Rokkstar.createClass('core.form.validators.Vali
      * @private
      */
     this.__sourceChanged = function (event) {
-        if (this.trigger === undefined || this.trigger === null) {
+        if (this.___trigger === undefined || this.___trigger === null) {
             if (event.oldValue) { event.oldValue.deleteEventListener(this.getTriggeredEvent(), this.__trigger, this); }
             event.newValue.createEventListener(this.getTriggeredEvent(), this.__trigger, this);
         }
@@ -79,13 +79,13 @@ core.form.validators.Validator = Rokkstar.createClass('core.form.validators.Vali
 
 
     this.getTrigger = function () {
-        if (this.trigger !== undefined && this.trigger !== null) { return this.trigger; }
+        if (this.___trigger !== undefined && this.___trigger !== null) { return this.___trigger; }
         return this.source;
     };
 
 
     this.getListener = function () {
-        if (this.listener !== undefined && this.listener !== null) { return this.listener; }
+        if (this.___listener !== undefined && this.___listener !== null) { return this.___listener; }
         return this.source;
     };
 

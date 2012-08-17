@@ -62,20 +62,6 @@ core.behaviours.SkinnableBehaviour = function () {
         );
     };
 
-    /**
-     * Current skin instance
-     * @private
-     * @type {core.Skin}
-     */
-    this.skin = null;
-
-    /**
-     * Returns current skin instance
-     * @return {core.Skin}
-     */
-    this.getSkin = function () {
-        return this.skin;
-    };
 
     /**
      * Change skin dock
@@ -116,26 +102,26 @@ core.behaviours.SkinnableBehaviour = function () {
     };
 
     this.getWidth = function () {
-        if (this.width === undefined) {
+        if (this.___width === undefined) {
             if (this.skin !== null && this.skin !== undefined) {
                 return this.skin.getWidth();
             } else {
                 return "0px";
             }
         } else {
-            return this.width;
+            return this.___width;
         }
     };
 
     this.getHeight = function () {
-        if (this.height === undefined) {
+        if (this.___height === undefined) {
             if (this.skin !== null && this.skin !== undefined) {
                 return this.skin.getHeight();
             } else {
                 return "0px";
             }
         } else {
-            return this.height;
+            return this.___height;
         }
     };
 

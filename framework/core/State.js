@@ -24,7 +24,7 @@ core.State = Rokkstar.createClass('core.State', 'core.Component', function () {
         this.createEventListener('stateGroupsPropertyChanged', this.__stateGroupsChanged, this);
         this.createEventListener('namePropertyChanged', this.__stateNameChanged, this);
 
-    }
+    };
 
     /**
      *
@@ -40,7 +40,7 @@ core.State = Rokkstar.createClass('core.State', 'core.Component', function () {
         this.host.states[newName] = this;
         if (this.host.stateGroups[newName] == undefined) this.host.stateGroups[newName] = [];
         this.host.stateGroups[newName].push(this);
-    }
+    };
 
     /**
      *
@@ -84,12 +84,12 @@ core.State = Rokkstar.createClass('core.State', 'core.Component', function () {
                 activated.push(this.properties[i].property);
             }
         }
-    }
+    };
 
     this.deactivate = function () {
         for (var i in this.properties) {
             var target = this.properties[i].target;
             target["set" + this.properties[i].property.capitalize()].apply(target, [this.properties[i]._prev]);
         }
-    }
+    };
 }, [new Attr("name", "", "string"), new Attr("stateGroups", "", "string")]);

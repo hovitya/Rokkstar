@@ -43,6 +43,7 @@ core.Animation = Rokkstar.createClass('core.Animation', 'core.helpers.AnimationB
         this.createEventListener('easingPropertyChanged', this.updateTween, this);
     };
 
+
     this.createTween = function () {
         var scope, a;
         this.tween = new Tween([], '', '', 0, 0, this.getDuration(), this.getSuffix());
@@ -66,7 +67,9 @@ core.Animation = Rokkstar.createClass('core.Animation', 'core.helpers.AnimationB
         this.tween.obj = [this.getTarget()];
         this.tween.begin = this.startValue;
         this.tween.setFinish(this.endValue);
-    }
+    };
 
 
-}, [new Attr('target', null, 'object'), new Attr('type', 'integer', 'string'), new Attr('suffix', '', 'string'), new Attr('duration', 0.5, 'float'), new Attr('easing', Tween.regularEaseInOut, 'function')], ['core.behaviours.ContainerBehaviour']);
+}, [new Attr('target', null, 'object'), new Attr('type', 'integer', 'string'), new Attr('suffix', '', 'string'),
+    new Attr('duration', 0.5, 'float'), new Attr('easing', Tween.regularEaseInOut, 'function')],
+    ['core.behaviours.ContainerBehaviour']);

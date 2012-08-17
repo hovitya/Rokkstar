@@ -25,5 +25,6 @@
 	<package name="core.form.validators">
 		<component>Validator</component>
 		<component>RegExpValidator</component>
+		<component>NumberValidator</component>
 	</package>
 </packageMap>

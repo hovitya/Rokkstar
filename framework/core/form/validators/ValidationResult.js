@@ -13,6 +13,8 @@
  * @package core.form.validators
  */
 core.form.validators.ValidationResult = Rokkstar.createClass('core.form.validators.ValidationResult', undefined, function () {
+    "use strict";
+
     this.isError = false;
     this.errorMessage = "";
     this.errorCode = "";
@@ -23,5 +25,5 @@ core.form.validators.ValidationResult = Rokkstar.createClass('core.form.validato
         this.subField = subField;
         this.errorMessage = errorMessage;
         this.errorCode = errorCode;
-    }
+    };
 });

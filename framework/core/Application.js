@@ -1,38 +1,36 @@
 core.Application = Rokkstar.createClass('core.Application', 'core.VisualContainer', function () {
-
+    "use strict";
 
     this.init = function () {
-
-
         this.callSuper('init');
-        $(this.domElement).css({left:'0px', right:'0px', top:'0px', bottom:'0px'});
+        $(this.domElement).css({left: '0px', right: '0px', top: '0px', bottom: '0px'});
         this.invalidateSize();
         var target = this;
         this.callTick = function () {
             target.tick();
-        }
+        };
         $(window).bind('resize', $.proxy(function () {
             this.invalidateSize();
         }, this));
-    }
+    };
 
     this.processId = -1;
 
     this.start = function () {
         this.processId = setTimeout(this.callTick, Math.round(1000 / parseInt(this.getFps())));
-    }
+    };
 
     this.callTick = null;
 
 
     this.tick = function () {
-        var time = Rokkstar.GetMicrotime();
+        var time = Rokkstar.GetMicrotime(), elapsed;
 
         this.tack();
 
-        var elapsed = (Rokkstar.GetMicrotime() - time) * 1000.0;
+        elapsed = (Rokkstar.GetMicrotime() - time) * 1000.0;
         this.processId = setTimeout(this.callTick, Math.round(1000.0 / parseFloat(this.getFps()) - elapsed));
-    }
+    };
 
 
     this.tack = function () {
@@ -41,5 +39,7 @@ core.Application = Rokkstar.createClass('core.Application', 'core.VisualContaine
             this.callSuper('tack');
             //console.profileEnd();
         }
-    }
-}, [new Attr('fps', 24), new Attr('device', 'desktop', 'string'), new Attr('orientation', 'portrait', 'string')]);
+    };
+}, [new Attr('fps', 24),
+    new Attr('device', 'desktop', 'string'),
+    new Attr('orientation', 'portrait', 'string')]);
