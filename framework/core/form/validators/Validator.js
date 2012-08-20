@@ -8,7 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /**
- * The Validator class is the base class for all Rokkstar validators. This class implements the ability for a validator to make a field required, which means that the user must enter a value in the field or the validation fails.
+ * The Validator class is the base class for all Rokkstar validators. This class implements the ability for a validator
+ * to make a field required, which means that the user must enter a value in the field or the validation fails.
  * @class
  * @name Validator
  * @package core.form.validators
