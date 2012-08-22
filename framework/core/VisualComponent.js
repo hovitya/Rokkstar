@@ -80,7 +80,12 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
         this.createEventListener('translateXPropertyChanged', this._createMatrix, this);
         this.createEventListener('translateYPropertyChanged', this._createMatrix, this);
         this.createEventListener('visiblePropertyChanged', this._visibilityChanged, this);
-
+        this.createEventListener('gridRowPropertyChanged', this.__gridChanged, this);
+        this.createEventListener('gridColumnPropertyChanged', this.__gridChanged, this);
+        this.createEventListener('gridRowSpanPropertyChanged', this.__gridChanged, this);
+        this.createEventListener('gridColumnSpanPropertyChanged', this.__gridChanged, this);
+        this.createEventListener('gridVerticalAlignPropertyChanged', this.__gridChanged, this);
+        this.createEventListener('gridHorizontalAlignPropertyChanged', this.__gridChanged, this);
         this.createEventListener('alphaPropertyChanged', this._styleChanged, this);
 
         //Find state properties
@@ -270,6 +275,16 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
     this.classChanged = function (event) {
         event.stopPropagation();
         this.domElement.className = this.getClass();
+    };
+
+    /**
+     * Grid change handler
+     * @private
+     * @param {core.Event} event
+     */
+    this.__gridChanged = function (event) {
+        event.stopPropagation();
+        if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
     this._runningTransitions = [];

@@ -1,4 +1,5 @@
 core.network.HTTPService = Rokkstar.createClass('core.network.HTTPService', 'core.Component', function () {
+    "use strict";
     /**
      *
      * @type {Array}
@@ -7,13 +8,13 @@ core.network.HTTPService = Rokkstar.createClass('core.network.HTTPService', 'cor
     this.__runningConnections = [];
 
     this.send = function (data) {
-        if (this.getConcurrency() == 'single' && this.__runningConnections.length > 0) {
+        if (this.getConcurrency() === 'single' && this.__runningConnections.length > 0) {
             var event = core.network.events.FaultEvent('fault');
             event.faultMessage = 'Cannot send new request till current one is not finished.';
             this.triggerEvent(event);
             return null;
         }
-        if (this.getConcurrency() == 'last') {
+        if (this.getConcurrency() === 'last') {
             for (var i in this.__runningConnections) {
                 this.__runningConnections[i].abort();
             }

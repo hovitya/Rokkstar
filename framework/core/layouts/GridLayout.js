@@ -35,9 +35,10 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
         var parsedData, i;
         event.newValue.replace(/\s+/g, " ");
         parsedData = event.newValue.split(' ');
-        i = parsedData.length;
-        while (--i) {
+        i = parsedData.length - 1;
+        while (i >= 0) {
             parsedData[i] = parsedData[i].trim();
+            i = i - 1;
         }
         if (event.propertyName === 'columns') {
             this.parsedColumns = parsedData;
@@ -54,7 +55,7 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
     this.doLayout = function (container) {
         var parsedCols = core.layouts.GridLayout.ParseCharacteristicArray(this.parsedColumns, container.measuredWidth - this.getPaddingLeft() - this.getPaddingRight()),
             parsedRows = core.layouts.GridLayout.ParseCharacteristicArray(this.parsedRows, container.measuredHeight - this.getPaddingTop() - this.getPaddingBottom()),
-            i = container.elements.length,
+            i = container.elements.length - 1,
             element,
             position,
             itemNum,
@@ -76,7 +77,7 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
             verticallyPositioned = false,
             align;
 
-        while (--i) {
+        while (i >= 0) {
             element = container.elements[i];
 
             //Determining grid area
@@ -102,17 +103,17 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
             //-------------------------
 
             span = element.getGridColumnSpan();
-            if (!isNaN(span) && span !== undefined && span !== null) {
+            if (isNaN(span) || span === undefined || span === null) {
                 //Default span is 1
                 itemNum = element.getGridColumn() - 1;
             } else {
                 //Using span value
-                itemNum = element.getGridColumn() - 2 + element.getGridColumnSpan();
+                itemNum = element.getGridColumn() - 2 + span;
             }
 
-            if (itemNum >= 0 && itemNum < parsedCols.length) {
-                gridArea.end.x = parsedCols[itemNum] + this.getPaddingLeft();
-            } else if (itemNum === parsedCols.length) {
+            if (itemNum >= 0 && itemNum < parsedCols.length - 1) {
+                gridArea.end.x = parsedCols[itemNum] + this.getPaddingLeft() + gridArea.start.x;
+            } else if (itemNum === parsedCols.length - 1) {
                 gridArea.end.x = container.measuredWidth - this.getPaddingRight();
             } else {
                 throw new Error("Grid column span out of bounds.");
@@ -138,7 +139,7 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
             //-------------------------
 
             span = element.getGridRowSpan();
-            if (!isNaN(span) && span !== undefined && span !== null) {
+            if (isNaN(span) || span === undefined || span === null) {
                 //Default span is 1
                 itemNum = element.getGridRow() - 1;
             } else {
@@ -146,9 +147,9 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
                 itemNum = element.getGridRow() - 2 + span;
             }
 
-            if (itemNum >= 0 && itemNum < parsedRows.length) {
-                gridArea.end.y = parsedRows[itemNum] + this.getPaddingTop();
-            } else if (itemNum === parsedRows.length) {
+            if (itemNum >= 0 && itemNum < parsedRows.length - 1) {
+                gridArea.end.y = parsedRows[itemNum] + this.getPaddingTop() + gridArea.start.y;
+            } else if (itemNum === parsedRows.length - 1) {
                 gridArea.end.y = container.measuredHeight - this.getPaddingBottom();
             } else {
                 throw new Error("Grid row span out of bounds.");
@@ -158,7 +159,7 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
             //Positioning element inside the grid area
             //---------------------------------------------
 
-            position = new core.LayoutPosition(gridArea.end.x - gridArea.start.x, gridArea.end.y - gridArea.start.y, 0, 0, 0, 0);
+            position = new core.helpers.LayoutPosition(gridArea.end.x - gridArea.start.x, gridArea.end.y - gridArea.start.y, 0, 0, 0, 0);
             left = element.getLeft();
             right = element.getRight();
             top = element.getTop();
@@ -248,6 +249,7 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
 
             position.apply(element);
             element.measure();
+            i = i - 1;
         }
 
     };
@@ -266,13 +268,13 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
 core.layouts.GridLayout.ParseCharacteristicArray = function (array, referenceValue) {
     "use strict";
     var returnArray = [],
-        i = array.length,
+        i = array.length - 1,
         element,
         currentValue = referenceValue,
         maxFragments = 0,
         fragmentSize = 0;
     //Parsing pixels
-    while (--i) {
+    while (i >= 0) {
         element = array[i];
         if (Rokkstar.globals.regex.pixelFormat.test(element) || Rokkstar.globals.regex.integerFormat.test(element)) {
             returnArray[i] = parseInt(element.replace('px', ''), 10);
@@ -280,29 +282,32 @@ core.layouts.GridLayout.ParseCharacteristicArray = function (array, referenceVal
         } else if (Rokkstar.globals.regex.fragmentFormat.test(element)) {
             maxFragments += parseInt(element.replace('fr', ''), 10);
         }
+        i = i - 1;
     }
     referenceValue = currentValue;
 
     //Parsing percents
-    i = array.length;
-    while (--i) {
+    i = array.length - 1;
+    while (i >= 0) {
         element = array[i];
         if (Rokkstar.globals.regex.percentFormat.test(element)) {
             returnArray[i] = Math.round(parseFloat(element.replace('%', '')) / 100.0 * referenceValue);
             currentValue -= returnArray[i];
         }
+        i = i - 1;
     }
     referenceValue = currentValue;
 
     //Parsing fragments
     if (maxFragments > 0) {
         fragmentSize = referenceValue / maxFragments;
-        i = array.length;
-        while (--i) {
+        i = array.length - 1;
+        while (i >= 0) {
             element = array[i];
             if (Rokkstar.globals.regex.fragmentFormat.test(element)) {
                 returnArray[i] = Math.round(parseInt(element.replace('fr', ''), 10) * fragmentSize);
             }
+            i = i - 1;
         }
     }
 
