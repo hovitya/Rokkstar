@@ -13,6 +13,7 @@
 		<component>FormLayout</component>
 		<component>VerticalLayout</component>
 		<component>ParallaxLayout</component>
+		<component>GridLayout</component>
 	</package>
 	<package name="core.network">
 		<component>HTTPService</component>

@@ -24,9 +24,13 @@ Rokkstar.globals={};
 
 Rokkstar.globals.regex={};
 
-Rokkstar.globals.regex.pixelFormat=/^[0-9]+px$/;
+Rokkstar.globals.regex.pixelFormat = /^[0-9]+px$/;
 
-Rokkstar.globals.regex.percentFormat=/^[0-9]+%$/;
+Rokkstar.globals.regex.integerFormat = /^[0-9]+px$/;
+
+Rokkstar.globals.regex.fragmentFormat = /^[0-9]+fr$/;
+
+Rokkstar.globals.regex.percentFormat = /^[0-9]+%$/;
 
 Rokkstar.profiling={sgGeneration:0,classExtension:{},initCount:0,createdComponents:{}};
 

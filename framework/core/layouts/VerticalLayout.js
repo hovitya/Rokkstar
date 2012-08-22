@@ -7,6 +7,8 @@
  * @constructor
  */
 core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout', 'core.layouts.AlignmentLayout', function () {
+    "use strict";
+
     /**
      *
      * @param {core.VisualContainer} div Parent div
@@ -15,46 +17,47 @@ core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout'
         //this.callSuper('doLayout',div);
         this.lastDiv = div;
 
-        var containerWidth = parseInt(div.measuredWidth);
-        var containerHeight = parseInt(div.measuredHeight);
-        var layout = this;
-        var elements = div.elements;
-        var verticalAlign = this.getVerticalAlign();
-        var gap = parseInt(this.getGap());
+        var containerWidth = parseInt(div.measuredWidth, 10), containerHeight = parseInt(div.measuredHeight, 10),
+            layout = this, elements = div.elements, verticalAlign = this.getVerticalAlign(),
+            gap = parseInt(this.getGap(), 10), horizontalAlign = this.getHorizontalAlign(),
+            paddingLeft = parseInt(this.getPaddingLeft(), 10), paddingRight = parseInt(this.getPaddingRight(), 10),
+            paddingTop = parseInt(this.getPaddingTop(), 10), paddingBottom = parseInt(this.getPaddingBottom(), 10),
+            elementsLength = elements.length,
+            position = new core.helpers.LayoutPosition(containerWidth,
+                containerHeight,
+                paddingLeft,
+                paddingRight,
+                paddingTop,
+                paddingBottom),
+            i = 0, currentTop, currentBottom, width, height, element, widthString, heightString, space, correction;
 
-        var horizontalAlign = this.getHorizontalAlign();
-        var paddingLeft = parseInt(this.getPaddingLeft());
-        var paddingRight = parseInt(this.getPaddingRight());
-        var paddingTop = parseInt(this.getPaddingTop());
-        var paddingBottom = parseInt(this.getPaddingBottom());
-        var elementsLength = elements.length;
-        var position = new core.helpers.LayoutPosition(containerWidth, containerHeight, paddingLeft, paddingRight, paddingTop, paddingBottom);
-
-        var i = 0;
-        if (verticalAlign == 'top' || verticalAlign == 'middle') {
-            var currentTop = paddingTop;
+        if (verticalAlign === 'top' || verticalAlign === 'middle') {
+            currentTop = paddingTop;
             i = elementsLength;
             while (--i >= 0) {
-                var element = div.elements[i];
-                var domElement = element.domElement;
-                var widthString = element.getWidth();
-                var heightString = element.getHeight();
+                element = div.elements[i];
+                widthString = element.getWidth();
+                heightString = element.getHeight();
                 position.clear();
-                position.width = layout.stringToPixel(widthString, containerWidth, paddingLeft, paddingRight);
-                position.height = layout.stringToPixel(heightString, containerHeight, paddingTop, paddingBottom);
+                position.width = widthString; //layout.stringToPixel(widthString, containerWidth, paddingLeft, paddingRight);
+                position.height = heightString; //layout.stringToPixel(heightString, containerHeight, paddingTop, paddingBottom);
+                position.minWidth = element.getMinWidth();
+                position.minHeight = element.getMinHeight();
+                position.maxWidth = element.getMaxWidth();
+                position.maxHeight = element.getMaxHeight();
 
 
-                var width = position.getPredictedWidth();
-                var height = position.getPredictedHeight();
+                width = position.getPredictedWidth();
+                height = position.getPredictedHeight();
 
-                if (horizontalAlign == 'left') {
+                if (horizontalAlign === 'left') {
                     position.top = currentTop;
                     position.left = paddingLeft;
-                } else if (horizontalAlign == 'right') {
+                } else if (horizontalAlign === 'right') {
                     position.top = currentTop;
                     position.right = paddingRight;
                 } else {
-                    var space = Math.round((containerWidth - paddingLeft - paddingRight - width) / 2);
+                    space = Math.round((containerWidth - paddingLeft - paddingRight - width) / 2);
                     position.top = currentTop;
                     position.left = space;
                 }
@@ -62,31 +65,35 @@ core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout'
                 position.apply(element);
                 element.measure(width, height);
             }
-        } else if (verticalAlign == 'bottom') {
-            var currentBottom = paddingBottom;
+        } else if (verticalAlign === 'bottom') {
+            currentBottom = paddingBottom;
             i = elementsLength;
             while (--i >= 0) {
-                var element = div.elements[i];
-                var domElement = element.domElement;
-                var widthString = element.getWidth();
-                var heightString = element.getHeight();
+                element = div.elements[i];
+                widthString = element.getWidth();
+                heightString = element.getHeight();
                 position.clear();
-
+                position.width = widthString; //layout.stringToPixel(widthString, containerWidth, paddingLeft, paddingRight);
+                position.height = heightString; //layout.stringToPixel(heightString, containerHeight, paddingTop, paddingBottom);
+                position.minWidth = element.getMinWidth();
+                position.minHeight = element.getMinHeight();
+                position.maxWidth = element.getMaxWidth();
+                position.maxHeight = element.getMaxHeight();
 
                 position.width = layout.stringToPixel(widthString, containerWidth, paddingLeft, paddingRight);
                 position.height = layout.stringToPixel(heightString, containerHeight, paddingTop, paddingBottom);
 
-                var width = position.getPredictedWidth();
-                var height = position.getPredictedWidth();
+                width = position.getPredictedWidth();
+                height = position.getPredictedWidth();
 
-                if (horizontalAlign == 'left') {
+                if (horizontalAlign === 'left') {
                     position.bottom = currentBottom;
                     position.left = paddingLeft;
-                } else if (this.getHorizontalAlign() == 'right') {
+                } else if (this.getHorizontalAlign() === 'right') {
                     position.bottom = currentBottom;
                     position.right = paddingRight;
                 } else {
-                    var space = Math.round((containerWidth - paddingLeft - paddingRight - width) / 2);
+                    space = Math.round((containerWidth - paddingLeft - paddingRight - width) / 2);
                     position.bottom = currentBottom;
                     position.left = space;
                 }
@@ -96,17 +103,17 @@ core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout'
             }
         }
 
-        if (verticalAlign == 'middle') {
+        if (verticalAlign === 'middle') {
             //Fixing positions
-            currentTop -= parseInt(gap);
-            var correction = containerHeight - currentTop;
+            currentTop -= parseInt(gap, 10);
+            correction = containerHeight - currentTop;
             correction = Math.round(correction / 2);
             i = elementsLength;
             while (--i >= 0) {
                 element = elements[i];
-                element.domElement.style.top = (parseInt(elements[i].domElement.style.top) + correction) + "px";
+                element.domElement.style.top = (parseInt(elements[i].domElement.style.top, 10) + correction) + "px";
             }
 
         }
-    }
+    };
 });

@@ -1,5 +1,5 @@
 core.layouts.BorderLayout = Rokkstar.createClass('core.layouts.BorderLayout', 'core.layouts.Layout', function () {
-
+    "use strict";
 
     this.init = function () {
         this.callSuper('init');
@@ -8,7 +8,7 @@ core.layouts.BorderLayout = Rokkstar.createClass('core.layouts.BorderLayout', 'c
         this.createEventListener('gapTopPropertyChanged', this.selfRefreshLayout, this);
         this.createEventListener('gapBottomPropertyChanged', this.selfRefreshLayout, this);
         this.createEventListener('gapLeftPropertyChanged', this.selfRefreshLayout, this);
-    }
+    };
 
     this.currentHandle = null;
 
@@ -19,127 +19,137 @@ core.layouts.BorderLayout = Rokkstar.createClass('core.layouts.BorderLayout', 'c
     this.doLayout = function (div) {
         this.callSuper('doLayout', div);
 
-        if (div._registeredHandles == undefined) {
+        if (div._registeredHandles === undefined) {
             div._registeredHandles = {};
         }
 
-        var gap = this.getGap();
-        var leftGap = this.getGapLeft();
-        var rightGap = this.getGapRight();
-        var topGap = this.getGapTop();
-        var bottomGap = this.getGapBottom();
+        var gap = this.getGap(),
+            leftGap = this.getGapLeft(),
+            rightGap = this.getGapRight(),
+            topGap = this.getGapTop(),
+            bottomGap = this.getGapBottom(),
+            leftPadding = this.getPaddingLeft(),
+            rightPadding = this.getPaddingRight(),
+            topPadding = this.getPaddingTop(),
+            bottomPadding = this.getPaddingBottom(),
+            position = new core.helpers.LayoutPosition(div.measuredWidth, div.measuredHeight, leftPadding, rightPadding, topPadding, bottomPadding),
+            topSlot = null,
+            leftSlot = null,
+            rightSlot = null,
+            bottomSlot = null,
+            centerSlot = null,
+            i,
+            element,
+            topPosition,
+            handle,
+            bottomPosition,
+            leftPosition,
+            rightPosition;
 
-        var leftPadding = this.getPaddingLeft();
-        var rightPadding = this.getPaddingRight();
-        var topPadding = this.getPaddingTop();
-        var bottomPadding = this.getPaddingBottom();
-
-        var position = new core.helpers.LayoutPosition();
-
-        if (leftGap == undefined) {
+        if (leftGap === undefined || leftGap === null || isNaN(leftGap)) {
             leftGap = gap;
         }
-        if (rightGap == undefined) {
+        if (rightGap === undefined || rightGap === null || isNaN(rightGap)) {
             rightGap = gap;
         }
-        if (topGap == undefined) {
+        if (topGap === undefined || topGap === null || isNaN(topGap)) {
             topGap = gap;
         }
-        if (bottomGap == undefined) {
+        if (bottomGap === undefined || bottomGap === null || isNaN(bottomGap)) {
             bottomGap = gap;
         }
-        var topSlot = null;
-        var leftSlot = null;
-        var rightSlot = null;
-        var bottomSlot = null;
-        var centerSlot = null;
-        var i = div.elements.length;
+
+        i = div.elements.length;
         while (--i >= 0) {
-            var element = div.elements[i];
+            element = div.elements[i];
             switch (element.getPosition()) {
-                case 'center':
-                    if (centerSlot == null) {
-                        centerSlot = element;
-                    } else {
-                        throw new core.exceptions.Exception('Multiple "center" part found for a border layout.');
-                    }
-                    break;
-                case 'left':
-                    if (leftSlot == null) {
-                        leftSlot = element;
-                    } else {
-                        throw new core.exceptions.Exception('Multiple "left" part found for a border layout.');
-                    }
-                    break;
-                case 'right':
-                    if (rightSlot == null) {
-                        rightSlot = element;
-                    } else {
-                        throw new core.exceptions.Exception('Multiple "right" part found for a border layout.');
-                    }
-                    break;
-                case 'bottom':
-                    if (bottomSlot == null) {
-                        bottomSlot = element;
-                    } else {
-                        throw new core.exceptions.Exception('Multiple "bottom" part found for a border layout.');
-                    }
-                    break;
-                case 'top':
-                    if (topSlot == null) {
-                        topSlot = element;
-                    } else {
-                        throw new core.exceptions.Exception('Multiple "top" part found for a border layout.');
-                    }
-                    break;
+            case 'center':
+                if (centerSlot === null) {
+                    centerSlot = element;
+                } else {
+                    throw new Error('Multiple "center" part found for a border layout.');
+                }
+                break;
+            case 'left':
+                if (leftSlot === null) {
+                    leftSlot = element;
+                } else {
+                    throw new Error('Multiple "left" part found for a border layout.');
+                }
+                break;
+            case 'right':
+                if (rightSlot === null) {
+                    rightSlot = element;
+                } else {
+                    throw new Error('Multiple "right" part found for a border layout.');
+                }
+                break;
+            case 'bottom':
+                if (bottomSlot === null) {
+                    bottomSlot = element;
+                } else {
+                    throw new Error('Multiple "bottom" part found for a border layout.');
+                }
+                break;
+            case 'top':
+                if (topSlot === null) {
+                    topSlot = element;
+                } else {
+                    throw new Error('Multiple "top" part found for a border layout.');
+                }
+                break;
             }
         }
 
 
         //Create top element
-        var topPosition = topPadding;
-        if (topSlot != null) {
+        topPosition = topPadding;
+        if (topSlot !== null) {
             position.clear();
             position.top = topPadding;
             position.left = leftPadding;
             position.right = rightPadding;
-            position.height = this.stringToPixel(topSlot.getHeight(), div.measuredHeight, topPadding, bottomPadding);
+            position.height = topSlot.getHeight();
+            position.minHeight = topSlot.getMinHeight();
+            position.maxHeight = topSlot.getMaxHeight();
             position.apply(topSlot);
             topSlot.measure();
 
             //Create top gap
-            if (div._registeredHandles.top == undefined) {
+            if (div._registeredHandles.top === undefined) {
                 div._registeredHandles.top = document.createElement('div');
             }
-            var handle = div._registeredHandles.top;
+            handle = div._registeredHandles.top;
             handle.className = "coreTopBorderHandle coreUpDownHandle";
 
 
             handle.style.position = 'absolute';
-            handle.style.top = (parseInt(topPadding) + parseInt(topSlot.measuredHeight)) + 'px';
+            handle.style.top = (parseInt(topPadding, 10) + parseInt(topSlot.measuredHeight, 10)) + 'px';
             handle.style.left = leftPadding + 'px';
             handle.style.right = rightPadding + 'px';
             handle.style.height = topGap + 'px';
             div.domElement.appendChild(handle);
             handle.parentPanel = topSlot;
             handle.addEventListener('mousedown', this.handleClickedProxy);
-            topPosition = parseInt(topPadding) + parseInt(topSlot.measuredHeight) + parseInt(topGap);
+            topPosition = parseInt(topPadding, 10) + parseInt(topSlot.measuredHeight, 10) + parseInt(topGap, 10);
         }
 
 
         //Create bottom element
-        var bottomPosition = bottomPadding;
-        if (bottomSlot != null) {
+        bottomPosition = bottomPadding;
+        if (bottomSlot !== null) {
             position.clear();
             position.bottom = bottomPadding;
             position.left = leftPadding;
             position.right = rightPadding;
-            position.height = this.stringToPixel(bottomSlot.getHeight(), div.measuredHeight, topPadding, bottomPadding);
+            position.height = bottomSlot.getHeight();
+            position.minHeight = bottomSlot.getMinHeight();
+            position.maxHeight = bottomSlot.getMaxHeight();
             position.apply(bottomSlot);
             bottomSlot.measure();
 
             //Create bottom gap
-            if (div._registeredHandles.bottom == undefined) {
+            if (div._registeredHandles.bottom === undefined) {
                 div._registeredHandles.bottom = document.createElement('div');
             }
             handle = div._registeredHandles.bottom;
@@ -147,57 +157,61 @@ core.layouts.BorderLayout = Rokkstar.createClass('core.layouts.BorderLayout', 'c
 
 
             handle.style.position = 'absolute';
-            handle.style.bottom = (parseInt(bottomPadding) + parseInt(bottomSlot.measuredHeight)) + 'px';
+            handle.style.bottom = (parseInt(bottomPadding, 10) + parseInt(bottomSlot.measuredHeight, 10)) + 'px';
             handle.style.left = leftPadding + 'px';
             handle.style.right = rightPadding + 'px';
             handle.style.height = bottomGap + "px";
             div.domElement.appendChild(handle);
             handle.parentPanel = bottomSlot;
             handle.addEventListener('mousedown', this.handleClickedProxy);
-            bottomPosition = parseInt(bottomPadding) + parseInt(bottomSlot.measuredHeight) + parseInt(bottomGap);
+            bottomPosition = parseInt(bottomPadding, 10) + parseInt(bottomSlot.measuredHeight, 10) + parseInt(bottomGap, 10);
         }
 
         //Create left element
-        var leftPosition = leftPadding;
-        if (leftSlot != null) {
+        leftPosition = leftPadding;
+        if (leftSlot !== null) {
             position.clear();
             position.bottom = bottomPosition;
             position.left = leftPadding;
             position.top = topPosition;
-            position.width = this.stringToPixel(leftSlot.getWidth(), div.measuredWidth, leftPadding, rightPadding);
+            position.width = leftSlot.getWidth();
+            position.minWidth = leftSlot.getMinWidth();
+            position.maxWidth = leftSlot.getMaxWidth();
             position.apply(leftSlot);
             leftSlot.measure();
 
             //Create left gap
             handle = document.createElement('div');
-            if (div._registeredHandles.left == undefined) {
+            if (div._registeredHandles.left === undefined) {
                 div._registeredHandles.left = document.createElement('div');
             }
-            var handle = div._registeredHandles.left;
+            handle = div._registeredHandles.left;
             handle.className = "coreLeftBorderHandle coreLeftRightHandle";
 
 
             handle.style.position = 'absolute';
             handle.style.bottom = bottomPosition + 'px';
-            handle.style.left = (parseInt(leftPadding) + parseInt(leftSlot.measuredWidth)) + 'px';
+            handle.style.left = (parseInt(leftPadding, 10) + parseInt(leftSlot.measuredWidth, 10)) + 'px';
             handle.style.top = topPosition + 'px';
             handle.style.width = leftGap + "px";
             div.domElement.appendChild(handle);
             handle.parentPanel = leftSlot;
 
             handle.addEventListener('mousedown', this.handleClickedProxy);
-            leftPosition = parseInt(leftPadding) + parseInt(leftSlot.measuredWidth) + parseInt(leftGap);
+            leftPosition = parseInt(leftPadding, 10) + parseInt(leftSlot.measuredWidth, 10) + parseInt(leftGap, 10);
         }
 
         //Create right element
-        var rightPosition = rightPadding;
-        if (rightSlot != null) {
+        rightPosition = rightPadding;
+        if (rightSlot !== null) {
 
             position.clear();
             position.bottom = bottomPosition;
             position.right = rightPadding;
             position.top = topPosition;
-            position.width = this.stringToPixel(rightSlot.getWidth(), div.measuredWidth, leftPadding, rightPadding);
+            position.width = rightSlot.getWidth();
+            position.minWidth = rightSlot.getMinWidth();
+            position.maxWidth = rightSlot.getMaxWidth();
             position.apply(rightSlot);
             rightSlot.measure();
 
@@ -211,16 +225,16 @@ core.layouts.BorderLayout = Rokkstar.createClass('core.layouts.BorderLayout', 'c
 
             handle.style.position = 'absolute';
             handle.style.bottom = bottomPosition + 'px';
-            handle.style.right = (parseInt(rightPadding) + parseInt(rightSlot.measuredWidth)) + 'px';
+            handle.style.right = (parseInt(rightPadding, 10) + parseInt(rightSlot.measuredWidth, 10)) + 'px';
             handle.style.top = topPosition + 'px';
             handle.style.width = rightGap + "px";
             div.domElement.appendChild(handle);
             handle.parentPanel = rightSlot;
             handle.addEventListener('mousedown', this.handleClickedProxy);
-            rightPosition = parseInt(rightPadding) + parseInt(rightSlot.measuredWidth) + parseInt(rightGap);
+            rightPosition = parseInt(rightPadding, 10) + parseInt(rightSlot.measuredWidth, 10) + parseInt(rightGap, 10);
         }
 
-        if (centerSlot != null) {
+        if (centerSlot !== null) {
             position.clear();
             position.left = leftPosition;
             position.right = rightPosition;
@@ -231,7 +245,7 @@ core.layouts.BorderLayout = Rokkstar.createClass('core.layouts.BorderLayout', 'c
         }
 
 
-    }
+    };
 
     this.handleClicked = function (event) {
         this.currentHandle = event.currentTarget;
@@ -246,36 +260,71 @@ core.layouts.BorderLayout = Rokkstar.createClass('core.layouts.BorderLayout', 'c
 
     this.handleClickedProxy = $.proxy(this.handleClicked, this);
 
-    this.lastPoint = {x:0, y:0};
+    this.lastPoint = {x: 0, y: 0};
     this.resizeValue = 0;
 
     this.handleMove = function (event) {
-        var $ch = $(this.currentHandle);
+        var $ch = $(this.currentHandle),
+            panel = this.currentHandle.parentPanel,
+            enable = true;
         if ($ch.hasClass('coreRightBorderHandle')) {
-            $ch.css({
-                right:(parseInt($ch.css('right')) + Math.round(this.lastPoint.x - event.pageX)) + 'px'
-
-            });
-            this.resizeValue += Math.round(this.lastPoint.x - event.pageX);
+            if (!isNaN(panel.getMinWidth()) && panel.getMinWidth() > panel.measuredWidth + this.resizeValue + Math.round(this.lastPoint.x - event.pageX)) {
+                enable = false;
+            }
+            if (!isNaN(panel.getMaxWidth()) && panel.getMaxWidth() < panel.measuredWidth + this.resizeValue + Math.round(this.lastPoint.x - event.pageX)) {
+                enable = false;
+            }
+            if (enable) {
+                $ch.css({
+                    right: (parseInt($ch.css('right'), 10) + Math.round(this.lastPoint.x - event.pageX)) + 'px'
+                });
+                this.resizeValue += Math.round(this.lastPoint.x - event.pageX);
+            }
         } else if ($ch.hasClass('coreBottomBorderHandle')) {
-            $ch.css({
-                bottom:(parseInt($ch.css('bottom')) + Math.round(this.lastPoint.y - event.pageY)) + 'px'
-            });
-            this.resizeValue += Math.round(this.lastPoint.y - event.pageY);
+            if (!isNaN(panel.getMinHeight()) && panel.getMinHeight() > panel.measuredHeight + this.resizeValue + Math.round(this.lastPoint.y - event.pageY)) {
+                enable = false;
+            }
+            if (!isNaN(panel.getMaxHeight()) && panel.getMaxHeight() < panel.measuredHeight + this.resizeValue + Math.round(this.lastPoint.y - event.pageY)) {
+                enable = false;
+            }
+            if (enable) {
+                $ch.css({
+                    bottom: (parseInt($ch.css('bottom'), 10) + Math.round(this.lastPoint.y - event.pageY)) + 'px'
+                });
+                this.resizeValue += Math.round(this.lastPoint.y - event.pageY);
+            }
         } else if ($ch.hasClass('coreLeftBorderHandle')) {
-            $ch.css({
-                left:(parseInt($ch.css('left')) + Math.round(event.pageX - this.lastPoint.x)) + 'px'
-            });
-            this.resizeValue += Math.round(event.pageX - this.lastPoint.x);
+            if (!isNaN(panel.getMinWidth()) && panel.getMinWidth() > panel.measuredWidth + this.resizeValue + Math.round(event.pageX - this.lastPoint.x)) {
+                enable = false;
+            }
+            if (!isNaN(panel.getMaxWidth()) && panel.getMaxWidth() < panel.measuredWidth + this.resizeValue + Math.round(event.pageX - this.lastPoint.x)) {
+                enable = false;
+            }
+            if (enable) {
+                $ch.css({
+                    left: (parseInt($ch.css('left'), 10) + Math.round(event.pageX - this.lastPoint.x)) + 'px'
+                });
+                this.resizeValue += Math.round(event.pageX - this.lastPoint.x);
+            }
         } else if ($ch.hasClass('coreTopBorderHandle')) {
-            $ch.css({
-                top:(parseInt($ch.css('top')) + Math.round(event.pageY - this.lastPoint.y)) + 'px'
-            });
-            this.resizeValue += Math.round(event.pageY - this.lastPoint.y);
+            if (!isNaN(panel.getMinHeight()) && panel.getMinHeight() > panel.measuredHeight + this.resizeValue + Math.round(event.pageY - this.lastPoint.y)) {
+                enable = false;
+            }
+            if (!isNaN(panel.getMaxHeight()) && panel.getMaxHeight() < panel.measuredHeight + this.resizeValue + Math.round(event.pageY - this.lastPoint.y)) {
+                enable = false;
+            }
+            if (enable) {
+                $ch.css({
+                    top: (parseInt($ch.css('top'), 10) + Math.round(event.pageY - this.lastPoint.y)) + 'px'
+                });
+                this.resizeValue += Math.round(event.pageY - this.lastPoint.y);
+            }
         }
-        this.lastPoint.x = event.pageX;
-        this.lastPoint.y = event.pageY;
-    }
+        if (enable) {
+            this.lastPoint.x = event.pageX;
+            this.lastPoint.y = event.pageY;
+        }
+    };
 
     this.handleMoveProxy = $.proxy(this.handleMove, this);
 
@@ -285,14 +334,14 @@ core.layouts.BorderLayout = Rokkstar.createClass('core.layouts.BorderLayout', 'c
 
         var $ch = $(this.currentHandle);
         if ($ch.hasClass('coreLeftRightHandle')) {
-            this.currentHandle.parentPanel.setWidth((parseInt(this.currentHandle.parentPanel.measuredWidth) + this.resizeValue) + "px");
+            this.currentHandle.parentPanel.setWidth((parseInt(this.currentHandle.parentPanel.measuredWidth, 10) + this.resizeValue) + "px");
         } else {
-            this.currentHandle.parentPanel.setHeight((parseInt(this.currentHandle.parentPanel.measuredHeight) + this.resizeValue) + "px");
+            this.currentHandle.parentPanel.setHeight((parseInt(this.currentHandle.parentPanel.measuredHeight, 10) + this.resizeValue) + "px");
         }
         $ch.removeClass("coreHandleHighlight");
         this.currentHandle = null;
 
-    }
+    };
 
     this.handleUpProxy = $.proxy(this.handleUp, this);
 
