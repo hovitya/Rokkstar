@@ -7,6 +7,7 @@
  * @constructor
  */
 core.Label = Rokkstar.createClass('core.Label', 'core.VisualComponent', function () {
+    "use strict";
     this.init = function () {
         this.callSuper('init');
         this.createEventListener('textPropertyChanged', this._updateText, this);
@@ -16,29 +17,29 @@ core.Label = Rokkstar.createClass('core.Label', 'core.VisualComponent', function
         this.setWidth('auto');
         this.setHeight('auto');
         this.domElement.innerHTML = this.getText();
-    }
+    };
     /**
      * @private
      *
      */
     this._updateText = function () {
         this.domElement.innerHTML = this.getText();
-        if (this.getWidth() == 'auto' || this.getHeight() == 'auto') {
+        if (this.getWidth() === 'auto' || this.getHeight() === 'auto') {
             this.invalidateSize();
         }
-    }
+    };
 
     this.measure = function (pw, ph) {
         this.callSuper('measure', pw, ph);
         this.domElement.style.lineHeight = this.measuredHeight + "px";
-    }
+    };
 
     this.fontInvalid = true;
 
     this.invalidateFont = function () {
         this.fontInvalid = true;
         this.invalidateProperties();
-    }
+    };
 
     this.commitProperties = function () {
         this.callSuper('commitProperties');
@@ -48,5 +49,5 @@ core.Label = Rokkstar.createClass('core.Label', 'core.VisualComponent', function
             this.domElement.style.color = this.getFontColor();
             this.domElement.style.textAlign = this.getTextAlign();
         }
-    }
-}, [new Attr('text', ''), new Attr('fontFamily', 'PTSansRegular', 'string'), new Attr('fontColor', '#000000', 'string'), new Attr('fontSize', 12, 'integer'), new Attr('textAlign', 'left', 'string')]);
+    };
+}, [new Attr('text', '', 'string'), new Attr('fontFamily', 'PTSansRegular', 'string'), new Attr('fontColor', '#000000', 'string'), new Attr('fontSize', 12, 'integer'), new Attr('textAlign', 'left', 'string')]);

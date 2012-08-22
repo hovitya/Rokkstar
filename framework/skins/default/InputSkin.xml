@@ -1,11 +1,12 @@
 <rx:Skin xmlns:r="http://www.imagix-interactive/2012/Rokkstar" height="28px" width="100%" xmlns:rx="http://www.imagix-interactive/2012/Rokkstar/components">
     <r:states>
         <rx:State name="normal"/>
+        <rx:State name="over"/>
         <rx:State name="invalid"/>
         <rx:State name="active"/>
         <rx:State name="disabled"/>
     </r:states>
-    <rx:BoxContainer backgroundColor="#FFFFFF" borderColor.normal="#CCCCCC" borderColor.invalid="#FF0000" borderColor.disabled="#CCCCCC" borderColor.active="#03c4ff" top="0" left="0" right="0" bottom="0" shadow="true" shadowOffsetX="1" shadowOffsetY="1" shadowBlur="8.0" corner="5">
+    <rx:BoxContainer backgroundColor="#FFFFFF" borderColor="#CCCCCC" alpha="1.0" alpha.over="0.8" borderColor.invalid="#FF0000" borderColor.disabled="#CCCCCC" borderColor.active="#03c4ff" top="0" left="0" right="0" bottom="0" shadow="true" shadowOffsetX="1" shadowOffsetY="1" shadowBlur="8.0" corner="5">
         <r:layout>
             <rx:ConstraintLayout paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5"/>
         </r:layout>
