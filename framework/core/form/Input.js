@@ -34,6 +34,7 @@ core.form.Input = Rokkstar.createClass('core.form.Input', 'core.helpers.FormItem
             instance.createEventListener('focus', this.focused, this);
             instance.createEventListener('blur', this.blurred, this);
             instance.createEventListener('valuePropertyChanged', this._inputChanged, this);
+            instance.setValue(this.getValue());
         }
     };
 
