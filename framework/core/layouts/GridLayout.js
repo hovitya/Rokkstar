@@ -48,6 +48,7 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
         this.selfRefreshLayout();
     };
 
+
     /**
      *
      * @param {core.VisualContainer} container
@@ -112,7 +113,7 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
             }
 
             if (itemNum >= 0 && itemNum < parsedCols.length - 1) {
-                gridArea.end.x = parsedCols[itemNum] + this.getPaddingLeft() + gridArea.start.x;
+                gridArea.end.x = parsedCols[itemNum] + this.getPaddingLeft();
             } else if (itemNum === parsedCols.length - 1) {
                 gridArea.end.x = container.measuredWidth - this.getPaddingRight();
             } else {
@@ -148,7 +149,7 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
             }
 
             if (itemNum >= 0 && itemNum < parsedRows.length - 1) {
-                gridArea.end.y = parsedRows[itemNum] + this.getPaddingTop() + gridArea.start.y;
+                gridArea.end.y = parsedRows[itemNum] + this.getPaddingTop();
             } else if (itemNum === parsedRows.length - 1) {
                 gridArea.end.y = container.measuredHeight - this.getPaddingBottom();
             } else {
@@ -169,9 +170,9 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
             width = element.getWidth();
             height = element.getHeight();
             paddingTop = gridArea.start.y;
-            paddingBottom = gridArea.end.y;
+            paddingBottom = container.measuredHeight - gridArea.end.y;
             paddingLeft = gridArea.start.x;
-            paddingRight = gridArea.end.x;
+            paddingRight = container.measuredWidth - gridArea.end.x;
             verticallyPositioned = false;
             horizontallyPositioned = false;
 
@@ -218,14 +219,14 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
                     break;
                 case 'center':
                     width = position.getPredictedWidth();
-                    position.left = Math.round((position.parentWidth - width) / 2);
+                    position.left = Math.round((position.parentWidth - width) / 2) + paddingLeft;
                     break;
                 }
             }
 
             if (!verticallyPositioned) {
                 //This element is not horizontally positioned so we use gridHorizontalAlign rule
-                align = element.getGridHorizontalAlign();
+                align = element.getGridVerticalAlign();
                 switch (align) {
                 case 'justify':
                     //Stretching
@@ -239,10 +240,9 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
                 case 'bottom':
                     position.bottom = paddingBottom;
                     break;
-                case 'center':
+                case 'middle':
                     height = position.getPredictedHeight();
-                    position.top = Math.round((position.parentHeight - height) / 2);
-                    position.bottom = undefined;
+                    position.top = Math.round((position.parentHeight - height) / 2) + paddingTop;
                     break;
                 }
             }
@@ -310,6 +310,8 @@ core.layouts.GridLayout.ParseCharacteristicArray = function (array, referenceVal
             i = i - 1;
         }
     }
-
+    for (i = 1; i < returnArray.length; i++) {
+        returnArray[i] = returnArray[i - 1] + returnArray[i];
+    }
     return returnArray;
 };

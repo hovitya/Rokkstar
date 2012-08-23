@@ -385,6 +385,53 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
         this.invalidateProperties();
     };
 
+
+    //Getters
+
+    this.getGridRow = function () {
+        if (isNaN(this.___gridRow) || this.___gridRow === undefined || this.___gridRow === null) {
+            return 1;
+        }
+        return this.___gridRow;
+    };
+
+    this.getGridColumn = function () {
+        if (isNaN(this.___gridColumn) || this.___gridColumn === undefined || this.___gridColumn === null) {
+            return 1;
+        }
+        return this.___gridColumn;
+    };
+
+    this.getGridRowSpan = function () {
+        if (isNaN(this.___gridRowSpan) || this.___gridRowSpan === undefined || this.___gridRowSpan === null) {
+            return 1;
+        }
+        return this.___gridRowSpan;
+    };
+
+    this.getGridColumnSpan = function () {
+        if (isNaN(this.___gridColumnSpan) || this.___gridColumnSpan === undefined || this.___gridColumnSpan === null) {
+            return 1;
+        }
+        return this.___gridColumnSpan;
+    };
+
+    this.getGridVerticalAlign = function () {
+        var correctValues = ["top", "middle", "bottom", "justify"];
+        if (correctValues.indexOf(this.___gridVerticalAlign) === -1) {
+            return correctValues[0];
+        }
+        return this.___gridVerticalAlign;
+    };
+
+    this.getGridHorizontalAlign = function () {
+        var correctValues = ["left", "center", "right", "justify"];
+        if (correctValues.indexOf(this.___gridHorizontalAlign) === -1) {
+            return correctValues[0];
+        }
+        return this.___gridHorizontalAlign;
+    };
+
 }, [new Attr('currentState', undefined), new Attr('class'), new Attr('x', undefined, 'integer'), new Attr('y', undefined, 'integer'), new Attr('left', undefined, 'integer'), new Attr('right', undefined, 'integer'), new Attr('top', undefined, 'integer'), new Attr('bottom', undefined, 'integer'), new Attr('position', 'center', 'string'), new Attr('height', undefined, 'string'),
     new Attr('width', undefined), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('matrix', undefined), new Attr('rotation', 0, 'float'), new Attr('scaleX', 1.0, 'float'), new Attr('scaleY', 1.0, 'float'), new Attr('skewX', 0, 'float'), new Attr('skewY', 0, 'float'), new Attr('translateX', 0, 'integer'), new Attr('translateY', 0, 'integer'), new Attr('alpha', 1.0, 'float'),
     new Attr('visible', true, 'boolean'), new Attr('minWidth', NaN, 'integer'), new Attr('minHeight', NaN, 'integer'),
