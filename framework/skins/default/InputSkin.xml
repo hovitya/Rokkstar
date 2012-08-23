@@ -6,10 +6,9 @@
         <rx:State name="active"/>
         <rx:State name="disabled"/>
     </r:states>
-    <rx:BoxContainer backgroundColor="#FFFFFF" borderColor="#CCCCCC" alpha="1.0" alpha.over="0.8" borderColor.invalid="#FF0000" borderColor.disabled="#CCCCCC" borderColor.active="#03c4ff" top="0" left="0" right="0" bottom="0" shadow="true" shadowOffsetX="1" shadowOffsetY="1" shadowBlur="8.0" corner="5">
-        <r:layout>
-            <rx:ConstraintLayout paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5"/>
-        </r:layout>
-        <rx:InputBase x="0" y="0" width="100%" height="100%" id="input" disabled.normal="false" disabled.invalid="false"  disabled.active="false" disabled.disabled="true"/>
-    </rx:BoxContainer>
+    <r:layout>
+        <rx:GridLayout columns="5px 1fr 5px" rows="5px 1fr 5px"/>
+    </r:layout>
+    <rx:Box gridColumn="1" gridRow="1" gridColumnSpan="3" gridRowSpan="3" backgroundColor="#FFFFFF" borderColor="#CCCCCC" alpha="1.0" alpha.over="0.8" borderColor.invalid="#FF0000" borderColor.disabled="#CCCCCC" borderColor.active="#03c4ff" top="0" left="0" right="0" bottom="0" shadow="true" shadowOffsetX="1" shadowOffsetY="1" shadowBlur="8.0" corner="5"/>
+    <rx:InputBase gridColumn="2" gridRow="2" x="0" y="0" width="100%" height="100%" id="input" disabled.normal="false" disabled.invalid="false"  disabled.active="false" disabled.disabled="true"/>
 </rx:Skin>
