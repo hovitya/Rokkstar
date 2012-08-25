@@ -12,21 +12,24 @@
  * @name IList
  * @package core.data
  */
+(function () {
+    "use strict";
+}());
 core.data.IList = {
-    addItem:function (item) {
+    addItem: function (item) {
     },
-    addItemAt:function (item, index) {
+    addItemAt: function (item, index) {
     },
-    getItemAt:function (index) {
+    getItemAt: function (index) {
     },
-    getItemIndex:function (item) {
+    getItemIndex: function (item) {
     },
-    removesAll:function () {
+    removesAll: function () {
     },
-    removeItemAt:function (index) {
+    removeItemAt: function (index) {
     },
-    setItemAt:function (index, index) {
+    setItemAt: function (index, item) {
     },
-    toArray:function () {
+    toArray: function () {
     }
 };

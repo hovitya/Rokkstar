@@ -28,4 +28,8 @@
 		<component>RegExpValidator</component>
 		<component>NumberValidator</component>
 	</package>
+    <package name="core.components">
+    	<component>DataGroup</component>
+    	<component>ItemRenderer</component>
+    </package>
 </packageMap>

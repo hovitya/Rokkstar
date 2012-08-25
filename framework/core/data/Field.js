@@ -11,8 +11,8 @@ core.data.Field = Rokkstar.createClass('core.data.Field', 'core.Component', func
     };
 
     this.getPropertyName = function () {
-        if (this.propertyName === undefined) { return this.getName(); }
-        return this.propertyName;
+        if (this.___propertyName === undefined) { return this.getName(); }
+        return this.___propertyName;
     };
 
     this.init = function () {
@@ -21,14 +21,14 @@ core.data.Field = Rokkstar.createClass('core.data.Field', 'core.Component', func
     };
 
     this.invalidateFactory = function () {
-        this.factory = undefined;
+        this.___factory = undefined;
     };
 
     this.getFactory = function () {
-        if (this.factory) { return this.factory; }
+        if (this.___factory) { return this.___factory; }
         if (this.factoryClass) {
-            this.factory = new this.factoryClass;
-            return this.factory;
+            this.___factory = new this.factoryClass;
+            return this.___factory;
         }
         return undefined;
     };

@@ -9,7 +9,7 @@
  * @constructor
  */
 core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.VisualComponent', function () {
-    extend(this, 'core.VisualComponent');
+    "use strict";
 
     this.elements = [];
 

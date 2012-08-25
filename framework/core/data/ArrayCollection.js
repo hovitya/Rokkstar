@@ -60,7 +60,7 @@ core.data.ArrayCollection = Rokkstar.createClass('core.data.ArrayCollection', 'c
     };
 
     this.contains = function (value) {
-        return (this.view.indexOf(value) != -1);
+        return (this.view.indexOf(value) !== -1);
     };
 
     this.length = function () {
@@ -68,7 +68,8 @@ core.data.ArrayCollection = Rokkstar.createClass('core.data.ArrayCollection', 'c
     };
 
     this.addItem = function (item) {
-        var source = this.getSource();
+        var source = this.getSource(),
+            oldIndex;
         if (this.view.indexOf(item) === -1) {
             //Add new item
             source.push(item);
@@ -76,7 +77,7 @@ core.data.ArrayCollection = Rokkstar.createClass('core.data.ArrayCollection', 'c
             this.triggerEvent(new core.data.events.CollectionEvent('collectionChanged', 'add', this.view.length - 1, -1, [item]));
         } else {
             //Moves item to end
-            var oldIndex = this.view.indexOf(item);
+            oldIndex = this.view.indexOf(item);
             source.splice(source.indexOf(item), 1);
             source.push(item);
             this.view.splice(oldIndex, 1);

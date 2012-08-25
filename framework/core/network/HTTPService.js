@@ -87,10 +87,10 @@ core.network.HTTPService = Rokkstar.createClass('core.network.HTTPService', 'cor
      * @return {core.data.Model}
      */
     this.getModel = function () {
-        if (this.model) return this.model;
-        if (this.modelClass) {
-            this.model = new this.modelClass;
-            return this.model;
+        if (this.___model) return this.___model;
+        if (this.getModelClass()) {
+            this.___model = new this.getModelClass();
+            return this.___model;
         }
         return undefined;
     }
