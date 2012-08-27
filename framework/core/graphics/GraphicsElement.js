@@ -1,9 +1,12 @@
 /**
  *
  * @constructs
+ * @name GraphicsElement
+ * @package core.graphics
  * @augments core.DrawableComponent
  */
 core.graphics.GraphicsElement = Rokkstar.createClass('core.graphics.GraphicsElement', 'core.DrawableComponent', function () {
+    "use strict";
 
     this.drawingInvalid = true;
 
@@ -12,30 +15,31 @@ core.graphics.GraphicsElement = Rokkstar.createClass('core.graphics.GraphicsElem
     this.init = function () {
         this.callSuper('init');
         this.createEventListener('filtersPropertyChanged', this._filtersChanged, this);
-    }
+    };
 
     this.measure = function () {
-        var mw = this.measuredWidth;
-        var mh = this.measuredHeight;
+        var mw = this.measuredWidth,
+            mh = this.measuredHeight,
+            outerPadding;
         this.callSuper('measure');
         //Repaint graphics
-        if (mw != this.measuredWidth || mh != this.measuredHeight) {
+        if (mw !== this.measuredWidth || mh !== this.measuredHeight) {
             //Reset size
-            var outerPadding = this.getCanvasOuterPadding();
+            outerPadding = this.getCanvasOuterPadding();
             this.canvas.width = this.measuredWidth + 2 * outerPadding;
             this.canvas.height = this.measuredHeight + 2 * outerPadding;
             this.invalidateDrawing();
         }
-    }
+    };
 
     this.sizeReset = function () {
 
-    }
+    };
 
     this.invalidateDrawing = function () {
         this.drawingInvalid = true;
         this.invalidateProperties();
-    }
+    };
 
     this.commitProperties = function () {
         this.callSuper('commitProperties');
@@ -56,13 +60,13 @@ core.graphics.GraphicsElement = Rokkstar.createClass('core.graphics.GraphicsElem
             //Call drawing during next animation frame
             Rokkstar.requestAnimationFrame(this.drawProxy);
         }
-    }
+    };
 
     this.drawProxy = null;
 
     this.clearGraphics = function () {
         this.graphics.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
+    };
 
     this._filtersChanged = function (event) {
         var oldFilters = event.oldValue;
@@ -76,11 +80,11 @@ core.graphics.GraphicsElement = Rokkstar.createClass('core.graphics.GraphicsElem
         while (--j >= 0) {
             newFilters[j].createEventListener('change', this.invalidateFilters, this);
         }
-    }
+    };
 
     this.invalidateFilters = function () {
         this.invalidateDrawing();
-    }
+    };
 
     /**
      * Draws graphics.
@@ -88,6 +92,6 @@ core.graphics.GraphicsElement = Rokkstar.createClass('core.graphics.GraphicsElem
      */
     this.draw = function (graphics) {
 
-    }
+    };
 
 }, [new Attr('filters', [], 'array')]);

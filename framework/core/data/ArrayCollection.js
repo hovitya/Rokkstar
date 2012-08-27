@@ -1,6 +1,7 @@
 /**
  * @class
  * @name ArrayCollection
+ * @augments core.Component
  * @package core.data
  */
 core.data.ArrayCollection = Rokkstar.createClass('core.data.ArrayCollection', 'core.Component', function () {
