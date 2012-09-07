@@ -11,14 +11,14 @@ core.Group = Rokkstar.createClass('core.Group', 'core.VisualContainer', function
     this.init = function () {
         this.callSuper('init');
         this.createEventListener('clipAndEnableScrollingPropertyChanged', this.invalidateScrolling, this);
-    }
+    };
 
     this.scrollingInvalid = true;
 
     this.invalidateScrolling = function () {
         this.scrollingInvalid = true;
         this.invalidateProperties();
-    }
+    };
 
     this.commitProperties = function () {
         this.callSuper('commitProperties');
@@ -30,7 +30,7 @@ core.Group = Rokkstar.createClass('core.Group', 'core.VisualContainer', function
                 $(this.domElement).css({overflow:'visible'})
             }
         }
-    }
+    };
 
 
 }, [new Attr('clipAndEnableScrolling', false, 'boolean')]);

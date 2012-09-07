@@ -18,7 +18,7 @@ core.Matrix = Rokkstar.createClass('core.Matrix', undefined, function () {
     this.f = 0;
 
     this.construct = function (a, b, c, d, e, f) {
-        if (a !== null) {
+        if (a !== null && a !== undefined) {
             this.a = +a;
             this.b = +b;
             this.c = +c;
@@ -89,7 +89,7 @@ core.Matrix = Rokkstar.createClass('core.Matrix', undefined, function () {
     };
 
     this.shear = function (x, y, cx, cy) {
-        y === null && (y = x);
+        (y === null || y === undefined) && (y = x);
         (cx || cy) && this.add(1, 0, 0, 1, cx, cy);
         this.add(1, x, y, 1, 0, 0);
         (cx || cy) && this.add(1, 0, 0, 1, -cx, -cy);
@@ -97,7 +97,7 @@ core.Matrix = Rokkstar.createClass('core.Matrix', undefined, function () {
     }
 
     this.scale = function (x, y, cx, cy) {
-        y === null && (y = x);
+        (y === null || y === undefined) && (y = x);
         (cx || cy) && this.add(1, 0, 0, 1, cx, cy);
         this.add(x, 0, 0, y, 0, 0);
         (cx || cy) && this.add(1, 0, 0, 1, -cx, -cy);

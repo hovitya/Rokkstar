@@ -58,8 +58,8 @@ core.graphics.ClosedGraphicsElement = Rokkstar.createClass('core.graphics.Closed
             graphics.shadowColor = "rgba(0,0,0,0.0)";
         }
         this.drawPath(graphics, x, y, width, height);
-        if (this.getFill() != null) {
-            this.getFill().callFill(graphics);
+        if (this.getFill() !== null && this.getFill() !== undefined) {
+            this.getFill().callFill(graphics, x, y, width, height);
             //Turn off shadow if already drawn under fill
             graphics.shadowColor = "rgba(0,0,0,0.0)";
         }

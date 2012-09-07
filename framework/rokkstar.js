@@ -325,11 +325,19 @@ Rokkstar.createClass=function(name,superClass,structure,attributes,behaviours,in
                 cls.prototype.callSuper=Rokkstar.templates.callSuper;
                 cls.prototype.callSuper.altered=true;
                 cls.prototype.set=function(property,value){
-                    return this['set'+property.capitalize()].apply(this,[value]);
+                    var func = this['set'+property.capitalize()];
+                    if(func === undefined ) {
+                        throw new Error("The following attribute not found: " + property + ". Class: " + this.__classType);
+                    }
+                    return func.apply(this,[value]);
                 };
 
                 cls.prototype.get=function(property){
-                    return this['get'+property.capitalize()].apply(this);
+                    var func = this['get'+property.capitalize()];
+                    if(func === undefined ) {
+                        throw new Error("The following attribute not found: " + property + ". Class: " + this.__classType);
+                    }
+                    return func.apply(this);
                 };
             }
 
@@ -470,7 +478,9 @@ Rokkstar.parseAttribute=function(val,typeForcing){
             object.unserialize(val);
             ret=object;
         }else if(typeof val == 'object'){
-            if(!Rokkstar.instanceOf(val,typeForcing)) throw new TypeError('Type mismatch. Requested type: '+typeForcing);
+            if(!Rokkstar.instanceOf(val,typeForcing)) {
+                throw new TypeError('Type mismatch. Requested type: '+typeForcing);
+            }
             ret=val;
         }else{
             throw new TypeError('Unknown attribute type.');
@@ -635,4 +645,4 @@ $(function(){
 });
 
 
-Rokkstar.globals.DOMEvents=['mouseover','mouseout','mousemove','blur','mouseup','mousedown','touchend','touchstart','keyup','keydown','focus'];
+Rokkstar.globals.DOMEvents=['mouseover','mouseout','mousemove','blur','mouseup','mousedown','touchend','touchstart','keyup','keydown','focus','onload'];

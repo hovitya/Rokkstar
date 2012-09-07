@@ -13,6 +13,7 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
 
     this.elements = [];
 
+
     this.getElementsNum = function () {
         return this.elements.length;
     };

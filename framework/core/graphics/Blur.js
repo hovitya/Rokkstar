@@ -12,5 +12,5 @@ core.graphics.Blur = Rokkstar.createClass('core.graphics.Blur', 'core.graphics.F
 
     this.apply = function (canvas) {
         stackBlurImage(canvas, this.getRadius(), true);
-    }
+    };
 }, [new Attr('radius', 10, 'integer')])

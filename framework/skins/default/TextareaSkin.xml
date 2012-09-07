@@ -1,6 +1,7 @@
 <rx:Skin xmlns:r="http://www.imagix-interactive/2012/Rokkstar" height="100px" width="100%" xmlns:rx="http://www.imagix-interactive/2012/Rokkstar/components">
     <r:states>
         <rx:State name="normal"/>
+        <rx:State name="over"/>
         <rx:State name="invalid"/>
         <rx:State name="active"/>
         <rx:State name="disabled"/>

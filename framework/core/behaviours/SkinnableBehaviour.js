@@ -98,11 +98,12 @@ core.behaviours.SkinnableBehaviour = function () {
         this.skin.hostComponent = this;
 
         this.attachSkin();
+        this.invalidateSize();
         this.invalidateSkinState();
     };
 
-    this.getWidth = function () {
-        if (this.___width === undefined) {
+    this.getContentWidth = function () {
+        if (this.___width === "auto") {
             if (this.skin !== null && this.skin !== undefined) {
                 return this.skin.getWidth();
             } else {
@@ -113,8 +114,8 @@ core.behaviours.SkinnableBehaviour = function () {
         }
     };
 
-    this.getHeight = function () {
-        if (this.___height === undefined) {
+    this.getContentHeight = function () {
+        if (this.___height === "auto") {
             if (this.skin !== null && this.skin !== undefined) {
                 return this.skin.getHeight();
             } else {

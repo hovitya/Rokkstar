@@ -76,12 +76,12 @@ core.State = Rokkstar.createClass('core.State', 'core.Component', function () {
     this.activate = function () {
         var activated = [];
         for (var i in this.properties) {
-            if (activated.indexOf(this.properties[i].property) == -1) {
+            if (activated.indexOf(this.properties[i]) === -1) {
                 var target = this.properties[i].target;
                 //Saving previous value
                 this.properties[i]._prev = target["get" + this.properties[i].property.capitalize()].apply(target, []);
                 target["set" + this.properties[i].property.capitalize()].apply(target, [this.properties[i].value]);
-                activated.push(this.properties[i].property);
+                activated.push(this.properties[i]);
             }
         }
     };

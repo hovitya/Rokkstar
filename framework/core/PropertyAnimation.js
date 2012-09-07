@@ -36,7 +36,7 @@ core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.An
             i = endProp.length;
             var prop = this.getProperty();
             while (i--) {
-                if (endProp[i].property == prop) {
+                if (endProp[i].property === prop && endProp[i].target === this.getTarget()) {
                     end = endProp[i].value;
                 }
             }

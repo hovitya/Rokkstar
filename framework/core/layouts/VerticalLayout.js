@@ -33,8 +33,8 @@ core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout'
 
         if (verticalAlign === 'top' || verticalAlign === 'middle') {
             currentTop = paddingTop;
-            i = elementsLength;
-            while (--i >= 0) {
+            i = 0;
+            while (i < elementsLength) {
                 element = div.elements[i];
                 widthString = element.getWidth();
                 heightString = element.getHeight();
@@ -64,11 +64,12 @@ core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout'
                 currentTop = currentTop + height + gap;
                 position.apply(element);
                 element.measure(width, height);
+                i++;
             }
         } else if (verticalAlign === 'bottom') {
             currentBottom = paddingBottom;
-            i = elementsLength;
-            while (--i >= 0) {
+            i = 0;
+            while (i < elementsLength) {
                 element = div.elements[i];
                 widthString = element.getWidth();
                 heightString = element.getHeight();
@@ -100,6 +101,7 @@ core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout'
                 currentBottom = currentBottom + height + gap;
                 position.apply(element);
                 element.measure(width, height);
+                i++;
             }
         }
 
@@ -108,10 +110,11 @@ core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout'
             currentTop -= parseInt(gap, 10);
             correction = containerHeight - currentTop;
             correction = Math.round(correction / 2);
-            i = elementsLength;
-            while (--i >= 0) {
+            i = 0;
+            while (i < elementsLength) {
                 element = elements[i];
                 element.domElement.style.top = (parseInt(elements[i].domElement.style.top, 10) + correction) + "px";
+                i++;
             }
 
         }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packageMap namespace="http://www.imagix-interactive/2012/Rokkstar/components" default="core">
+	<package name="core.data">
+		<component>ArrayCollection</component>	
+		<component>Field</component>
+		<component>Model</component>
+		<component>Request</component>	
+	</package>
+	<package name="core.layouts">
+		<component>BorderLayout</component>
+		<component>HorizontalLayout</component>
+		<component>ConstraintLayout</component>
+		<component>FormLayout</component>
+		<component>VerticalLayout</component>
+		<component>ParallaxLayout</component>
+		<component>GridLayout</component>
+	</package>
+	<package name="core.network">
+		<component>HTTPService</component>
+	</package>
+	<package name="core.form">
+		<component>Input</component>
+		<component>Textarea</component>
+		<component>TextareaBase</component>
+	</package>
+	<package name="core.form.validators">
+		<component>Validator</component>
+		<component>RegExpValidator</component>
+		<component>NumberValidator</component>
+	</package>
+    <package name="core.components">
+    	<component>DataGroup</component>
+    	<component>ItemRenderer</component>
+    </package>
+</packageMap>

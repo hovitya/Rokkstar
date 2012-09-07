@@ -14,6 +14,73 @@
  */
 core.components.ItemRenderer = Rokkstar.createClass('core.components.ItemRenderer', 'core.Group', function () {
     "use strict";
+
+    this.init = function () {
+        this.callSuper('init');
+        this.createEventListener("mouseover", this.buttonMouseEnter, this);
+        this.createEventListener("mouseout", this.buttonMouseLeave, this);
+        this.createEventListener("blur", this.buttonMouseLeave, this);
+        this.createEventListener("mouseup", this.buttonMouseUp, this);
+        this.createEventListener("mousedown", this.buttonMouseDown, this);
+        this.createEventListener("touchend", this.buttonMouseUp, this);
+        this.createEventListener("touchstart", this.buttonMouseDown, this);
+    };
+
+    this.rendererStateInvalid = false;
+    this.mouseOver = false;
+    this.mouseDown = false;
+
+    this.invalidateRendererState = function () {
+        this.rendererStateInvalid = true;
+        this.invalidateProperties();
+    };
+
+    this.buttonMouseEnter = function (event) {
+        this.mouseOver = true;
+        this.invalidateRendererState();
+    };
+
+    this.buttonMouseLeave = function (event) {
+        this.mouseOver = false;
+        this.mouseDown = false;
+        this.invalidateRendererState();
+    };
+
+    this.buttonMouseDown = function (event) {
+        this.mouseDown = true;
+        this.invalidateRendererState();
+    };
+
+    this.buttonMouseUp = function (event) {
+        this.mouseDown = false;
+        this.invalidateRendererState();
+        this.triggerEvent('click');
+    };
+
+    this.commitProperties = function () {
+        this.callSuper('commitProperties');
+        if (this.rendererStateInvalid) {
+            var postfix = "",
+                state = "up";
+            this.rendererStateInvalid = false;
+            if (this.getSelected()) {
+                postfix = "AndSelected";
+            }
+            if (this.mouseDown) {
+                state = "down";
+            } else if (this.mouseOver) {
+                state = "over";
+            }
+            //Trying postfixed version
+            if (this.hasState(state + postfix)) {
+                this.setCurrentState(state + postfix);
+            } else if (this.hasState(state)) {
+                this.setCurrentState(state);
+            }
+        }
+    };
+
 }, [
-    new Attr('data', null, 'object')
+    new Attr('data', null, 'object'),
+    new Attr('selected', false, 'boolean')
 ]);

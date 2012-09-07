@@ -26,31 +26,39 @@ public class RokkstarPreferences {
 	private RokkstarPreferences(){
 	}
 	
-	public void loadConfig(){
-		File dir=new File(this.SDKDir+File.separator+"compiler-source"+File.separator+"src"+File.separator+"config"+File.separator+"packageMaps");
-		//Load package map files
-		for (File xmlFile : dir.listFiles()) {
-			if (".".equals(xmlFile.getName()) || "..".equals(xmlFile.getName())) {
-				continue;  // Ignore the self and parent aliases.
-			}
-			if (!xmlFile.isDirectory()){
-				//Parsing package map
-					try{
-					PackageMapHandler handler=new PackageMapHandler();
-					handler.fileName=xmlFile.getPath();
-					XMLReader xr = XMLReaderFactory.createXMLReader();
-					xr.setContentHandler(handler);
-					FileReader r = new FileReader(xmlFile);
-					xr.parse(new InputSource(r));
-					
-					r.close();
-					packageMaps.put(handler.namespace, handler);
-				}catch(SAXException ex){
-					RokkstarOutput.WriteError(ex.getMessage(), new FileReference(xmlFile.getPath(), 0));
-				}catch(FileNotFoundException ex){
-					RokkstarOutput.WriteError(ex.getMessage(), new FileReference(xmlFile.getPath(), 0));
-				}catch(IOException ex){
-					RokkstarOutput.WriteError(ex.getMessage(), new FileReference(xmlFile.getPath(), 0));
+	public void loadMeta(String metaDir){
+		File dir=new File(metaDir);
+		if(dir.isDirectory()){
+			//Load package map files
+			for (File xmlFile : dir.listFiles()) {
+				if (".".equals(xmlFile.getName()) || "..".equals(xmlFile.getName())) {
+					continue;  // Ignore the self and parent aliases.
+				}
+				if (!xmlFile.isDirectory()){
+					String name=xmlFile.getName();
+					int pos=name.indexOf('.');
+					String ext=name.substring(pos+1);
+					ext=ext.toLowerCase();
+					if(ext.equals("map.xml")){
+					//Parsing package map
+						try{
+							PackageMapHandler handler=new PackageMapHandler();
+							handler.fileName=xmlFile.getPath();
+							XMLReader xr = XMLReaderFactory.createXMLReader();
+							xr.setContentHandler(handler);
+							FileReader r = new FileReader(xmlFile);
+							xr.parse(new InputSource(r));
+							
+							r.close();
+							packageMaps.put(handler.namespace, handler);
+						}catch(SAXException ex){
+							RokkstarOutput.WriteError(ex.getMessage(), new FileReference(xmlFile.getPath(), 0));
+						}catch(FileNotFoundException ex){
+							RokkstarOutput.WriteError(ex.getMessage(), new FileReference(xmlFile.getPath(), 0));
+						}catch(IOException ex){
+							RokkstarOutput.WriteError(ex.getMessage(), new FileReference(xmlFile.getPath(), 0));
+						}
+					}
 				}
 			}
 		}

@@ -125,6 +125,7 @@ core.EventDispatcher = Rokkstar.createClass('core.EventDispatcher', 'core.RokkOb
         this.domElement = document.createElement('div');
         this.domElement.style[Modernizr.prefixed('boxSizing')] = 'border-box';
         this.domElement.style.position = 'absolute';
+        this.domElement.className="noSelect";
     };
 
 
