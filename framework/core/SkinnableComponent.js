@@ -7,13 +7,14 @@
  * @class Ancestor class for components which are using skin system.
  * @augments core.VisualComponent
  * @borrows core.behaviours.SkinnableBehaviour#declareSkinPart
- * @constructor
  */
 core.SkinnableComponent = Rokkstar.createClass('core.SkinnableComponent', 'core.VisualComponent', function () {
-
+    "use strict";
 
     this.init = function () {
         this.callSuper('init');
+        this.setWidth("auto");
+        this.setHeight("auto");
         this.skinnableInit();
     };
 
@@ -25,7 +26,7 @@ core.SkinnableComponent = Rokkstar.createClass('core.SkinnableComponent', 'core.
     this.measure = function () {
         var mW = this.measuredWidth, mH = this.measuredHeight;
         this.skinnableMeasure();
-        if ((mH !== this.measuredHeight || mW !== this.measuredWidth) && this.parent !== null) {
+        if ((mH !== this.measuredHeight || mW !== this.measuredWidth || this.autoWidth || this.autoHeight) && this.parent !== null) {
             this.parent.invalidateLayout();
         }
     };

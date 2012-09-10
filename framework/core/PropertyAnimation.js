@@ -11,13 +11,22 @@
  * @class
  */
 core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.Animation', function () {
+    "use strict";
+
+    this.construct = function (property) {
+        this.callSuper('construct');
+        if (property !== undefined) {
+            this.setProperty(property);
+        }
+    };
+
     this.init = function () {
         this.callSuper('init');
-    }
+    };
 
     this.stop = function () {
         this.tween.stop();
-    }
+    };
 
     this.setUp = function (reversed) {
         if (this.transitionMode) {
@@ -95,10 +104,13 @@ core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.An
             }
         }
         this.tween.prop = this.getProperty();
-    }
+    };
 
     this.isPlaying = function () {
-        if (this.tween.isPlaying == undefined) return false;
-        else return this.tween.isPlaying;
-    }
+        if (this.tween.isPlaying === undefined || this.tween.isPlaying === null) {
+            return false;
+        } else {
+            return this.tween.isPlaying;
+        }
+    };
 }, [new Attr('property', '', 'string'), new Attr('start', undefined, 'string'), new Attr('end', 100, 'string'), new Attr('by', undefined, 'string')]);

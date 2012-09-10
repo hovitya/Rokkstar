@@ -58,10 +58,13 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
     };
 
     this.removeAllElements = function () {
-        for (var i in this.elements) {
-            this.deactivateElement(this.elements[i]);
-            this.elements[i].parent = null;
-            this.elements[i].triggerEvent("parentChanged");
+        var i;
+        for (i in this.elements) {
+            if (this.elements.hasOwnProperty(i)) {
+                this.deactivateElement(this.elements[i]);
+                this.elements[i].parent = null;
+                this.elements[i].triggerEvent("parentChanged");
+            }
         }
         this.elements = [];
         this.triggerEvent('elementsPropertyChanged');
@@ -69,8 +72,8 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
 
 
     this.addElement = function (element) {
-        if (this.elements.indexOf(element) == -1) {
-            if (element.parent != null) {
+        if (this.elements.indexOf(element) === -1) {
+            if (element.parent !== null) {
                 element.parent.removeElement(element);
             }
             this.elements.push(element);
@@ -88,8 +91,8 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
     };
 
     this.addElementAt = function (element, position) {
-        if (this.elements.indexOf(element) == -1) {
-            if (element.parent != null) {
+        if (this.elements.indexOf(element) === -1) {
+            if (element.parent !== null && element.parent !== undefined) {
                 element.parent.removeElement(element);
             }
             if (position < this.elements.length - 1) {
@@ -116,9 +119,9 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
 
     this.init = function () {
         this.callSuper('init');
-        for (var i in this.xmlContentArray) {
+        /*for (var i in this.xmlContentArray) {
             this.addElement(this.xmlContentArray[i]);
-        }
+        }*/
         this.createEventListener('elementsPropertyChanged', this.elementsChanged, this);
         this.createEventListener('layoutPropertyChanged', this.invalidateLayout, this);
         this.elementsChanged({});
@@ -139,34 +142,51 @@ core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.Visual
     };
 
     this.refreshLayout = function () {
-        if (this.getLayout() == null) this.layout = this.createComponent('core.layouts.ConstraintLayout');
+        if (this.getLayout() === null || this.getLayout() === undefined) {
+            this.___layout = this.createComponent('core.layouts.ConstraintLayout');
+        }
+        //Storing original content dimensions
+        var originalContentWidth = this.measuredContentWidth,
+            originalContentHeight = this.measuredContentHeight;
         this.layout.doLayout(this);
+        if (this.parent !== undefined && this.parent !== null) {
+            if (this.autoWidth && originalContentWidth !== this.measuredContentWidth) {
+                this.invalidateSize();
+            }
+            if (this.autoHeight && originalContentHeight !== this.measuredContentHeight) {
+                this.invalidateSize();
+            }
+        }
+
     };
     this.layoutInvalid = false;
 
     this.invalidateLayout = function () {
-        this.invalidateDisplayList();
         this.layoutInvalid = true;
+        this.invalidateDisplayList();
     };
 
     this.measure = function (predictedWidth, predictedHeight) {
-        var mW = this.measuredWidth;
-        var mH = this.measuredHeight;
+        var mW = this.measuredWidth,
+            mH = this.measuredHeight;
         this.callSuper('measure', predictedWidth, predictedHeight);
-        if (this.measuredHeight != mH || this.measuredWidth != mW) {
+        if (this.measuredHeight !== mH || this.measuredWidth !== mW || this.autoWidth || this.autoHeight) {
             this.invalidateLayout();
         }
     };
 
     this.tack = function () {
+        var i;
         if (this.componentInvalid) {
             this.callSuper('tack');
             if (this.layoutInvalid) {
                 this.refreshLayout();
                 this.layoutInvalid = false;
             }
-            for (var i in this.elements) {
-                this.elements[i].tack();
+            for (i in this.elements) {
+                if (this.elements.hasOwnProperty(i)) {
+                    this.elements[i].tack();
+                }
             }
         }
     };

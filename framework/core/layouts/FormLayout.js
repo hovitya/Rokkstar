@@ -4,10 +4,12 @@
 
 /**
  * @augments core.layouts.Layout
- * @constructor
+ * @class
+ * @name FormLayout
+ * @package core.layouts.FormLayout
  */
 core.layouts.FormLayout = Rokkstar.createClass('core.layouts.FormLayout', 'core.layouts.Layout', function () {
-
+    "use strict";
     this.init = function () {
         this.callSuper('init');
         this.createEventListener('labelPositionPropertyChanged', this.selfRefreshLayout, this);
@@ -92,4 +94,10 @@ core.layouts.FormLayout = Rokkstar.createClass('core.layouts.FormLayout', 'core.
 
         }
     }
-}, [new Attr('labelPosition', 'left', 'string'), new Attr('gap', 5, 'integer'), new Attr('labelPaddingLeft', 5, 'integer'), new Attr('labelPaddingRight', 5, 'integer'), new Attr('elementPaddingLeft', 5, 'integer'), new Attr('elementPaddingRight', 5, 'integer'), new Attr('elementPosition', 'left', 'string')]);
+}, [new Attr('labelPosition', 'left', 'string'),
+    new Attr('gap', 5, 'integer'),
+    new Attr('labelPaddingLeft', 5, 'integer'),
+    new Attr('labelPaddingRight', 5, 'integer'),
+    new Attr('elementPaddingLeft', 5, 'integer'),
+    new Attr('elementPaddingRight', 5, 'integer'),
+    new Attr('elementPosition', 'left', 'string')]);

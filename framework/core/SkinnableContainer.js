@@ -152,9 +152,9 @@ core.SkinnableContainer = Rokkstar.createClass('core.SkinnableContainer', 'core.
     this.init = function () {
         this.callSuper('init');
         this.skinnableInit();
-        for (var i in this.xmlContentArray) {
+        /*for (var i in this.xmlContentArray) {
             this.addElement(this.xmlContentArray[i]);
-        }
+        }*/
     };
 
     this.tack = function () {
@@ -163,10 +163,10 @@ core.SkinnableContainer = Rokkstar.createClass('core.SkinnableContainer', 'core.
     };
 
     this.measure = function () {
-        var mW = this.measuredWidth;
-        var mH = this.measuredHeight;
+        var mW = this.measuredWidth,
+            mH = this.measuredHeight;
         this.skinnableMeasure();
-        if ((mH !== this.measuredHeight || mW !== this.measuredWidth) && this.parent != null) {
+        if ((mH !== this.measuredHeight || mW !== this.measuredWidth || this.autoWidth || this.autoHeight) && this.parent !== null && this.parent !== undefined) {
             this.parent.invalidateLayout();
         }
     };

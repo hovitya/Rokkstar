@@ -49,18 +49,17 @@ Rokkstar.templates.callSuper=function(functionName){
     return ret;
 }
 
-Rokkstar.createClosure=function(func,sCls,absolute){
+Rokkstar.createClosure=function(func,sClass,absolute){
+    var superProto = sClass.prototype.superClass;
     if(absolute==undefined || absolute==false){
         return function(){
-            var sClass=sCls;
             var oldSuper=this.superClass;
-            this.superClass=sClass.prototype.superClass;
+            this.superClass=superProto;
             var ret=func.apply(this,arguments);
             this.superClass=oldSuper;
             return ret;};
     }else{
         return function(){
-            var sClass=sCls;
             var oldSuper=this.superClass;
             this.superClass=sClass;
             var ret=func.apply(this,arguments);

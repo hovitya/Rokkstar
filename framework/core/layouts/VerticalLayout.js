@@ -30,7 +30,8 @@ core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout'
                 paddingTop,
                 paddingBottom),
             i = 0, currentTop, currentBottom, width, height, element, widthString, heightString, space, correction;
-
+        div.measuredContentWidth = 0;
+        div.measuredContentHeight = paddingBottom + paddingTop + (elements.length - 1) * gap;
         if (verticalAlign === 'top' || verticalAlign === 'middle') {
             currentTop = paddingTop;
             i = 0;
@@ -64,6 +65,8 @@ core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout'
                 currentTop = currentTop + height + gap;
                 position.apply(element);
                 element.measure(width, height);
+                div.measuredContentWidth = Math.max(div.measuredContentWidth, element.measuredWidth + paddingLeft + paddingRight);
+                div.measuredContentHeight += element.measuredHeight;
                 i++;
             }
         } else if (verticalAlign === 'bottom') {
@@ -101,6 +104,8 @@ core.layouts.VerticalLayout = Rokkstar.createClass('core.layouts.VerticalLayout'
                 currentBottom = currentBottom + height + gap;
                 position.apply(element);
                 element.measure(width, height);
+                div.measuredContentWidth = Math.max(div.measuredContentWidth, element.measuredWidth + paddingLeft + paddingRight);
+                div.measuredContentHeight += element.measuredHeight;
                 i++;
             }
         }

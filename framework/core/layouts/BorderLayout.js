@@ -165,6 +165,8 @@ core.layouts.BorderLayout = Rokkstar.createClass('core.layouts.BorderLayout', 'c
             handle.parentPanel = bottomSlot;
             handle.addEventListener('mousedown', this.handleClickedProxy);
             bottomPosition = parseInt(bottomPadding, 10) + parseInt(bottomSlot.measuredHeight, 10) + parseInt(bottomGap, 10);
+            div.measuredContentHeight = topSlot.measuredHeight + bottomSlot.measuredHeight + parseInt(centerSlot.getHeight(), 10);
+            div.measuredContentWidth = leftSlot.measuredWidth + rightSlot.measuredWidth + parseInt(centerSlot.getWidth(), 10);
         }
 
         //Create left element

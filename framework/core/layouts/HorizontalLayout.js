@@ -43,6 +43,9 @@ core.layouts.HorizontalLayout = Rokkstar.createClass('core.layouts.HorizontalLay
             currentRight,
             correction;
 
+        div.measuredContentWidth = paddingLeft + paddingRight + (elements.length - 1) * gap;
+        div.measuredContentHeight = 0;
+
         if (horizontalAlign === 'left' || horizontalAlign === 'center') {
             for (i = elements.length - 1; i >= 0; i--) {
 
@@ -75,6 +78,8 @@ core.layouts.HorizontalLayout = Rokkstar.createClass('core.layouts.HorizontalLay
                 currentLeft = parseInt(currentLeft, 10) + parseInt(width, 10) + parseInt(gap, 10);
                 position.apply(element);
                 element.measure(width, height);
+                div.measuredContentHeight = Math.max(div.measuredContentHeight, element.measuredHeight + paddingBottom + paddingTop);
+                div.measuredContentWidth += element.measuredWidth;
 
             }
         } else if (horizontalAlign === 'right') {
@@ -106,6 +111,8 @@ core.layouts.HorizontalLayout = Rokkstar.createClass('core.layouts.HorizontalLay
                 currentRight = parseInt(currentRight, 10) + parseInt(width, 10) + parseInt(gap, 10);
                 position.apply(element);
                 element.measure(width, height);
+                div.measuredContentHeight = Math.max(div.measuredContentHeight, element.measuredHeight + paddingBottom + paddingTop);
+                div.measuredContentWidth += element.measuredWidth;
             }
         }
 
