@@ -30,10 +30,11 @@ core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.An
 
     this.setUp = function (reversed) {
         if (this.transitionMode) {
-            var start = this.getTarget().get(this.getProperty());
-            var end = this.getEnd();
-            var startProp = this.startState.properties;
-            var endProp = this.endState.properties;
+            var start = this.getTarget().get(this.getProperty()),
+                end = this.getEnd(),
+                startProp = this.startState.properties,
+                endProp = this.endState.properties,
+                i;
             //var i=startProp.length;
             /*var prop=this.getProperty();
              while(i--){
