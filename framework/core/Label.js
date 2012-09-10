@@ -12,8 +12,10 @@ core.Label = Rokkstar.createClass('core.Label', 'core.VisualComponent', function
         this.callSuper('init');
         this.createEventListener('textPropertyChanged', this._updateText, this);
         this.createEventListener('fontColorPropertyChanged', this.invalidateFont, this);
-        this.createEventListener('fontSizePropertyChanged', this.invalidateFont, this);
+        this.createEventListener('fontSizePropertyChanged', this.invalidateFontSize, this);
         this.createEventListener('fontFamilyPropertyChanged', this.invalidateFont, this);
+        this.createEventListener('fontWeightsPropertyChanged', this.invalidateFont, this);
+        this.measuredContentHeight = 12;
         this.setWidth('auto');
         this.setHeight('auto');
         this.domElement.innerHTML = this.getText();
@@ -27,6 +29,12 @@ core.Label = Rokkstar.createClass('core.Label', 'core.VisualComponent', function
         if (this.getWidth() === 'auto' || this.getHeight() === 'auto') {
             this.invalidateSize();
         }
+    };
+
+    this.invalidateFontSize = function () {
+        this.invalidateFont();
+        this.measuredContentHeight = this.getFontSize();
+        this.invalidateSize();
     };
 
     this.measure = function (pw, ph) {
@@ -48,6 +56,13 @@ core.Label = Rokkstar.createClass('core.Label', 'core.VisualComponent', function
             this.domElement.style.fontSize = this.getFontSize().toString() + "px";
             this.domElement.style.color = this.getFontColor();
             this.domElement.style.textAlign = this.getTextAlign();
+            this.domElement.style.fontWeight = this.getFontWeight();
         }
     };
-}, [new Attr('text', '', 'string'), new Attr('fontFamily', 'PTSansRegular', 'string'), new Attr('fontColor', '#000000', 'string'), new Attr('fontSize', 12, 'integer'), new Attr('textAlign', 'left', 'string')]);
+}, [
+    new Attr('text', '', 'string'),
+    new Attr('fontFamily', 'PTSansRegular', 'string'),
+    new Attr('fontColor', '#000000', 'string'),
+    new Attr('fontSize', 12, 'integer'),
+    new Attr('textAlign', 'left', 'string'),
+    new Attr('fontWeight', 'normal', 'string')]);
