@@ -27,9 +27,9 @@
  * @name ArrayCollection
  * @augments core.Component
  * @package core.data
- * @argument {Array} source
- * @argument {Function} sort
- * @argument {Function} filter
+ * @attribute {Array} source
+ * @attribute {Function} sort
+ * @attribute {Function} filter
  * @param {Array} source
  * @implements core.data.ICollectionView
  * @implements core.data.IList
