@@ -1,32 +1,37 @@
 package rokkstar.resources;
 
 import java.io.File;
-import java.net.URI;
-
 import rokkstar.entities.IPackageItem;
 
 public abstract class FileResource extends File {
 
-	public FileResource(String arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7726786558644284306L;
+
+	public FileResource(String pathname) {
+		super(pathname);
 	}
 
-	public FileResource(URI arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public FileResource(String arg0, String arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
-	}
-
-	public FileResource(File arg0, String arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
-	}
-	
 	public abstract IPackageItem toEntity();
+	
+	public static FileResource factory(File file){
+		String name=file.getName();
+		int pos=name.indexOf('.');
+		String ext=name.substring(pos+1);
+		ext=ext.toLowerCase();
+		if(file.isDirectory()){
+			DirectoryResource dirRes = new DirectoryResource(file.getPath()); 
+		}
+		switch(ext){
+			case "r.js":
+				return new JSResource(file.getPath());
+			case "r.xml":
+				return new XMLResource(file.getPath());
+			default:
+				return new OtherResource(file.getPath());
+		}
+	}
 
 }
