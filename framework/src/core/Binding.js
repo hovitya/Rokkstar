@@ -9,7 +9,7 @@
 
 /**
  * @class
- * @name core.Binding
+ * @name Binding
  * @package core
  */
 core.Binding = Rokkstar.createClass('core.Binding', 'core.Component', function () {

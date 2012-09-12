@@ -1,7 +1,9 @@
 /**
  * Focusable behaviour
  * This behaviour can be applied on core.VisualComponent based classes.
- * @constructor
+ * @behaviour
+ * @name FocusableBehaviour
+ * @package core.behaviours
  */
 core.behaviours.FocusableBehaviour = function () {
     "use strict";

@@ -2,6 +2,6 @@ package rokkstar.entities;
 
 import java.io.Serializable;
 
-public interface IEntry{
+public interface IEntry extends Serializable{
 
 }

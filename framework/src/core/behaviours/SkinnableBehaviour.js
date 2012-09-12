@@ -1,3 +1,10 @@
+/**
+ * Skinnable behaviour
+ * This behaviour can be applied on core.VisualComponent based classes.
+ * @behaviour
+ * @name SkinnableBehaviour
+ * @package core.behaviours
+ */
 core.behaviours.SkinnableBehaviour = function () {
     "use strict";
 

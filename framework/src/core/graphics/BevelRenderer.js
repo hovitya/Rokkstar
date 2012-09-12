@@ -1,3 +1,8 @@
+/**
+ * @class
+ * @name BevelRenderer
+ * @package core.graphics
+ */
 core.BevelRenderer = function () {
     extend(this, 'core.FilterRenderer');
     this.length = 2;

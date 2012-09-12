@@ -1,3 +1,8 @@
+/**
+ * @class
+ * @name RedCyan3DRenderer
+ * @package core.graphics
+ */
 core.RedCyan3DRenderer = function () {
     extend(this, 'core.FilterRenderer');
     this.applyOperation = "source-over";

@@ -1,7 +1,13 @@
 (function () {
     "use strict";
 }());
-
+/**
+ * Container behaviour
+ * This behaviour can be applied on core.VisualComponent based classes.
+ * @behaviour
+ * @name ContainerBehaviour
+ * @package core.behaviours
+ */
 core.behaviours.ContainerBehaviour = function () {
     "use strict";
 

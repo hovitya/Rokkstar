@@ -1,3 +1,8 @@
+/**
+ * @class
+ * @name GlowRenderer
+ * @package core.graphics
+ */
 core.GlowRenderer = function () {
     extend(this, 'core.DropshadowRenderer');
     this.color = "red";

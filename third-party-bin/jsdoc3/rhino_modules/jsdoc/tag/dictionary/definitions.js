@@ -675,4 +675,12 @@ exports.defineTags = function(dictionary) {
             setDocletNameToValue(doclet, tag);
         }
     });
+
+    dictionary.defineTag('behaviour', {
+        onTagged: function(doclet, tag) {
+            doclet.addTag('kind', 'behaviour');
+
+            setDocletNameToValue(doclet, tag);
+        }
+    });
 };

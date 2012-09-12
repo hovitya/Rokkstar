@@ -1,3 +1,10 @@
+/**
+ * Form Item behaviour
+ * This behaviour can be applied on core.VisualComponent based classes.
+ * @behaviour
+ * @name FormItemBehaviour
+ * @package core.behaviours
+ */
 core.behaviours.FormItemBehaviour = function () {
     "use strict";
 

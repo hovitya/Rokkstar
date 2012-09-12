@@ -1,7 +1,9 @@
 /**
  * Button behaviour
  * This behaviour can be applied on core.VisualComponent based classes.
- * @constructor
+ * @behaviour
+ * @name ButtonBehaviour
+ * @package core.behaviours
  */
 core.behaviours.ButtonBehaviour = function () {
     "use strict";

@@ -9,6 +9,8 @@
 
 /**
  * @class
+ * @name Animation
+ * @package core
  */
 core.Animation = Rokkstar.createClass('core.Animation', 'core.helpers.AnimationBase', function () {
     "use strict";

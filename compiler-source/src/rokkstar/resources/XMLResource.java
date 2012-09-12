@@ -2,6 +2,7 @@ package rokkstar.resources;
 
 
 import rokkstar.entities.IPackageItem;
+import rokkstar.entities.Type;
 
 public class XMLResource extends FileResource {
 
@@ -20,7 +21,7 @@ public class XMLResource extends FileResource {
 	@Override
 	public IPackageItem toEntity() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Type(this.getName());
 	}
 
 }

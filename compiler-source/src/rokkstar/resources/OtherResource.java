@@ -1,6 +1,7 @@
 package rokkstar.resources;
 
 import rokkstar.entities.IPackageItem;
+import rokkstar.entities.Type;
 
 public class OtherResource extends FileResource {
 
@@ -15,7 +16,7 @@ public class OtherResource extends FileResource {
 	}
 
 	public IPackageItem toEntity() {
-		return null;
+		return new Type(this.getName());
 	}
 
 }

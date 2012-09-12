@@ -1,3 +1,8 @@
+/**
+ * @class
+ * @name Application
+ * @package core
+ */
 core.Application = Rokkstar.createClass('core.Application', 'core.VisualContainer', function () {
     "use strict";
 

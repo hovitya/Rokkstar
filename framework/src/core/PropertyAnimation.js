@@ -29,12 +29,18 @@ core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.An
     };
 
     this.setUp = function (reversed) {
+        var start,
+            end,
+            i,
+            startProp,
+            endProp,
+            prop,
+            by;
         if (this.transitionMode) {
-            var start = this.getTarget().get(this.getProperty()),
-                end = this.getEnd(),
-                startProp = this.startState.properties,
-                endProp = this.endState.properties,
-                i;
+            start = this.getTarget().get(this.getProperty());
+            end = this.getEnd();
+            startProp = this.startState.properties;
+            endProp = this.endState.properties;
             //var i=startProp.length;
             /*var prop=this.getProperty();
              while(i--){
@@ -44,15 +50,15 @@ core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.An
              }*/
 
             i = endProp.length;
-            var prop = this.getProperty();
+            prop = this.getProperty();
             while (i--) {
                 if (endProp[i].property === prop && endProp[i].target === this.getTarget()) {
                     end = endProp[i].value;
                 }
             }
-            if (this.getType() == 'integer') {
-                start = parseInt(start);
-                end = parseInt(end);
+            if (this.getType() === 'integer') {
+                start = parseInt(start, 10);
+                end = parseInt(end, 10);
             } else {
                 start = parseFloat(start);
                 end = parseFloat(end);
@@ -64,16 +70,16 @@ core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.An
                 this.tween.begin = end;
                 this.tween.setFinish(start);
             }
-        } else if (this.getBy() == undefined) {
-            var start = this.getStart();
-            var end = this.getEnd();
-            if (start == undefined) {
+        } else if (this.getBy() === undefined || this.getBy() === null) {
+            start = this.getStart();
+            end = this.getEnd();
+            if (start === undefined || start === null) {
                 start = this.getTarget().get(this.getProperty());
                 this.setStart(start);
             }
-            if (this.getType() == 'integer') {
-                start = parseInt(start);
-                end = parseInt(end);
+            if (this.getType() === 'integer') {
+                start = parseInt(start, 10);
+                end = parseInt(end, 10);
             } else {
                 start = parseFloat(start);
                 end = parseFloat(end);
@@ -86,11 +92,11 @@ core.PropertyAnimation = Rokkstar.createClass('core.PropertyAnimation', 'core.An
                 this.tween.setFinish(start);
             }
         } else {
-            var start = this.getTarget().get(this.getProperty());
-            var by = this.getBy();
-            if (this.getType() == 'integer') {
-                start = parseInt(start);
-                by = parseInt(by);
+            start = this.getTarget().get(this.getProperty());
+            by = this.getBy();
+            if (this.getType() === 'integer') {
+                start = parseInt(start, 10);
+                by = parseInt(by, 10);
             } else {
                 start = parseFloat(start);
                 by = parseFloat(by);

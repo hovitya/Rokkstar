@@ -142,13 +142,14 @@ function graft(parentNode, childNodes, parentLongname, parentName) {
         }
         else if (element.kind === 'class') {
             if (! parentNode.classes) {
-                parentNode.classes = [];
+                parentNode.classes = {};
             }
             
             var thisClass = {
                 'name': element.name,
                 'description': element.classdesc || '',
 				'package': element.package || '',
+                'type': 'class',
                 'extends': element.augments || [],
                 'access': element.access || '',
                 'virtual': !!element.virtual,
@@ -163,7 +164,7 @@ function graft(parentNode, childNodes, parentLongname, parentName) {
                 arguments:element.arguments || []
             };
 
-            parentNode.classes.push(thisClass);
+            parentNode.classes[thisClass.package+"."+thisClass.name]=thisClass;
             
             if (element.examples) {
                 for (var i = 0, len = element.examples.length; i < len; i++) {
@@ -198,18 +199,78 @@ function graft(parentNode, childNodes, parentLongname, parentName) {
             }*/
             
             graft(thisClass, childNodes, element.longname, element.name);
-       }else if (element.kind === 'interface'){
-            if (! parentNode.interfaces) {
-                parentNode.interfaces = [];
+       }        else if (element.kind === 'behaviour') {
+            if (! parentNode.classes) {
+                parentNode.classes = {};
             }
 
             var thisClass = {
                 'name': element.name,
                 'description': element.classdesc || '',
                 'package': element.package || '',
+                'type': 'behaviour',
+                'extends': element.augments || [],
+                'access': element.access || '',
+                'virtual': !!element.virtual,
+                'fires': element.fires || '',
+                'constructor': {
+                    'name': element.name,
+                    'description': element.description || '',
+                    'parameters': [
+                    ],
+                    'examples': []
+                },
+                arguments:element.arguments || []
+            };
+
+            parentNode.classes[thisClass.package+"."+thisClass.name]=thisClass;
+
+            if (element.examples) {
+                for (var i = 0, len = element.examples.length; i < len; i++) {
+                    thisClass.constructor.examples.push(element.examples[i]);
+                }
+            }
+
+            if (element.params) {
+                for (var i = 0, len = element.params.length; i < len; i++) {
+                    thisClass.constructor.parameters.push({
+                        'name': element.params[i].name,
+                        'type': element.params[i].type? (element.params[i].type.names.length === 1? element.params[i].type.names[0] : element.params[i].type.names) : '',
+                        'description': element.params[i].description || '',
+                        'default': element.params[i].defaultvalue || '',
+                        'optional': typeof element.params[i].optional === 'boolean'? element.params[i].optional : '',
+                        'nullable': typeof element.params[i].nullable === 'boolean'? element.params[i].nullable : ''
+                    });
+                }
+            }
+
+            /*if (element.arguments) {
+             for (var i = 0, len = element.arguments.length; i < len; i++) {
+             thisClass.arguments.push({
+             'name': element.params[i].name,
+             'type': element.arguments[i].type? (element.arguments[i].type.names.length === 1? element.arguments[i].type.names[0] : element.arguments[i].type.names) : '',
+             'description': element.arguments[i].description || '',
+             'default': element.arguments[i].defaultvalue || '',
+             'optional': typeof element.arguments[i].optional === 'boolean'? element.arguments[i].optional : '',
+             'nullable': typeof element.arguments[i].nullable === 'boolean'? element.arguments[i].nullable : ''
+             });
+             }
+             }*/
+
+            graft(thisClass, childNodes, element.longname, element.name);
+        }else if (element.kind === 'interface'){
+            if (! parentNode.classes) {
+                parentNode.classes = {};
+            }
+
+            var thisClass = {
+                'name': element.name,
+                'description': element.classdesc || '',
+                'package': element.package || '',
+                'type': 'interface',
                 'extends': element.augments || []
             };
-            parentNode.interfaces.push(thisClass);
+            parentNode.classes[thisClass.package+"."+thisClass.name]=thisClass;
             graft(thisClass, childNodes, element.longname, element.name);
             
         }

@@ -10,6 +10,11 @@ public class Interface implements IPackageItem {
 	 */
 	private static final long serialVersionUID = -2365065920956107475L;
 	public String name;
+	
+	public Interface(String name){
+		this.name=name;
+	}
+	
 	public ArrayList<Interface> superInterfaces = new ArrayList<Interface>();
 	public ArrayList<Function> functions = new ArrayList<Function>();
 	public String getName(){

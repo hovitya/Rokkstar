@@ -1,32 +1,32 @@
 package rokkstar.exceptions;
 
-public class ParameterException extends Exception {
+public class JSDocException extends Exception {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3617746150780584395L;
+	private static final long serialVersionUID = 2688761392171439675L;
 
-	public ParameterException() {
+	public JSDocException() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ParameterException(String arg0) {
+	public JSDocException(String arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ParameterException(Throwable arg0) {
+	public JSDocException(Throwable arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ParameterException(String arg0, Throwable arg1) {
+	public JSDocException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ParameterException(String arg0, Throwable arg1, boolean arg2,
+	public JSDocException(String arg0, Throwable arg1, boolean arg2,
 			boolean arg3) {
 		super(arg0, arg1, arg2, arg3);
 		// TODO Auto-generated constructor stub

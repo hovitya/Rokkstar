@@ -1,4 +1,12 @@
+/**
+ *
+ * @class
+ * @name Box
+ * @package core
+ */
 core.Box = Rokkstar.createClass('core.Box', 'core.VisualComponent', function () {
+    "use strict";
+
     this.init = function () {
         this.callSuper('init');
 
