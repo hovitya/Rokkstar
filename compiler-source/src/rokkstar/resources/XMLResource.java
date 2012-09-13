@@ -1,6 +1,9 @@
 package rokkstar.resources;
 
 
+import java.io.IOException;
+
+import rokkstar.Tools;
 import rokkstar.entities.IPackageItem;
 import rokkstar.entities.Type;
 
@@ -19,9 +22,9 @@ public class XMLResource extends FileResource {
 
 
 	@Override
-	public IPackageItem toEntity() {
+	public IPackageItem toEntity() throws IOException {
 		// TODO Auto-generated method stub
-		return new Type(this.getName());
+		return new Type(this.getName(),Tools.deserializeString(this));
 	}
 
 }

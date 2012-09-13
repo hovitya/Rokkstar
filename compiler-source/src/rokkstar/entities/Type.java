@@ -18,13 +18,16 @@ public class Type implements IPackageItem{
 		
 	}
 	
-	public Type(String name) {
+	public Type(String name, String payload) {
 		this.name = name;
+		this.payload = payload;
 	}
 	
 	public String getName(){
 		return this.name;
 	}
+	
+	public String payload;
 	
 	private FileReference source;
 	@Override

@@ -40,9 +40,9 @@ public class JSResource extends FileResource {
 		try {
 			jsData = Compiler.getInstance().classDefinitions.getJSONObject(this.getQualifiedClassName());
 			if(jsData.getString("type").equals("interface")){
-				return new Interface(this.getClassName());
+				return new Interface(this.getClassName(),Tools.deserializeString(this));
 			}else{
-				return new Type(this.getClassName());
+				return new Type(this.getClassName(),Tools.deserializeString(this));
 			}
 		}catch(JSONException e){
 			RokkstarOutput.WriteError("RokkDoc is not or incorrectly specified for class '"+this.getQualifiedClassName()+"'. @name and @package tag has to be specified correctly and type has to be marked as @class or @interface.", new FileReference(this.getPath(), 0));
