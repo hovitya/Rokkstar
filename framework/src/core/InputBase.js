@@ -5,7 +5,9 @@
 
 /**
  * @augments core.VisualComponent
- * @constructor
+ * @class
+ * @name InputBase
+ * @package core
  */
 core.InputBase = Rokkstar.createClass('core.InputBase', 'core.VisualComponent', function () {
     "use strict";

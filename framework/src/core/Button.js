@@ -4,7 +4,9 @@
 
 /**
  * @augments core.SkinnableComponent
- * @constructor
+ * @class
+ * @name Button
+ * @package core
  */
 core.Button = Rokkstar.createClass('core.Button', 'core.SkinnableComponent', function () {
         "use strict";

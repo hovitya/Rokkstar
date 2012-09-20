@@ -4,7 +4,7 @@
 
 /**
  * @augments core.Panel
- * @constructor
+ * @class
  */
 core.TitlePanel = Rokkstar.createClass('core.TitlePanel', 'core.Panel', function () {
 

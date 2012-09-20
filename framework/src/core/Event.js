@@ -1,3 +1,9 @@
+/**
+ *
+ * @class
+ * @name Event
+ * @package core
+ */
 core.Event = Rokkstar.createClass('core.Event', undefined, function () {
     "use strict";
     this.type = null;

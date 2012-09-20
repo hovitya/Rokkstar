@@ -1,5 +1,6 @@
 package rokkstar.entities;
 
+import rokkstar.ICopyHandler;
 import helpers.FileReference;
 
 public class EmbeddedCode implements IPackageItem {
@@ -32,6 +33,16 @@ public class EmbeddedCode implements IPackageItem {
 	@Override
 	public FileReference getSource() {
 		return this.fr;
+	}
+	
+	public String parse(){
+		return "";
+		//return this.payload;
+	}
+	
+	@Override
+	public void copy(ICopyHandler handler) {
+		// Do nothing
 	}
 
 }

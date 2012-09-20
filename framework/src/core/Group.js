@@ -4,7 +4,9 @@
 
 /**
  * @augments core.VisualContainer
- * @constructor
+ * @class
+ * @name VisualContainer
+ * @package core
  */
 core.Group = Rokkstar.createClass('core.Group', 'core.VisualContainer', function () {
 

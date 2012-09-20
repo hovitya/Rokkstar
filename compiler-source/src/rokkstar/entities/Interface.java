@@ -4,7 +4,9 @@ import helpers.FileReference;
 
 import java.util.ArrayList;
 
-public class Interface implements IPackageItem {
+import rokkstar.ICopyHandler;
+
+public class Interface implements IPackageItem, IClassLike{
 	/**
 	 * 
 	 */
@@ -33,6 +35,24 @@ public class Interface implements IPackageItem {
 	@Override
 	public FileReference getSource() {
 		return this.source;
+	}
+	
+	public String parse(){
+		return this.payload;
+	}
+	
+	@Override
+	public void copy(ICopyHandler handler) {
+		// Do nothing
+	}
+	@Override
+	public void addFunction(Function func) {
+		this.functions.add(func);
+		
+	}
+	@Override
+	public ArrayList<Function> getFunctions() {
+		return this.functions;
 	}
 	
 	

@@ -4,7 +4,7 @@
 
 /**
  * @augments core.Group
- * @constructor
+ * @class
  */
 core.Skin = Rokkstar.createClass('core.Skin', 'core.Group', function () {
     extend(this, 'core.Group');

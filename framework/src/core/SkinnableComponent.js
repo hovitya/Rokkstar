@@ -4,7 +4,9 @@
 
 /**
  * Creates new SkinnableComponent instance
- * @class Ancestor class for components which are using skin system.
+ * @class
+ * @classdesc
+ * Ancestor class for components which are using skinning system.
  * @augments core.VisualComponent
  * @borrows core.behaviours.SkinnableBehaviour#declareSkinPart
  */

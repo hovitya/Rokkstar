@@ -1,9 +1,12 @@
 /**
  * Creates new event dispatcher instance.
- * @class Super class for event handlers.
+ * @class
+ * @classdesc
+ * Super class for event handlers.
  * @author Horváth Viktor
  * @augments core.RokkObject
- * @constructor
+ * @name EventDispatcher
+ * @package core
  */
 core.EventDispatcher = Rokkstar.createClass('core.EventDispatcher', 'core.RokkObject', function () {
     "use strict";

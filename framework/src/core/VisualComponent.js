@@ -4,10 +4,11 @@
 
 /**
  * Creates new VisualComponent instance.
- * @class Base class for visible components. Add view state functionality.
+ * @classdesc
+ * Base class for visible components. Add view state functionality.
  * @author Horváth Viktor
  * @augments core.Component
- * @constructor
+ * @class
  */
 core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Component', function () {
     "use strict";

@@ -6,36 +6,7 @@
  * Creates new Skinnable Container instance.
  * @classdesc Super class for Skinnable Container instances.
  * @augments core.VisualContainer
- * @borrows core.behaviours.SkinnableBehaviour#addSkin as addSkin
- * @borrows core.behaviours.SkinnableBehaviour#attachSkin as attachSKin
- * @borrows core.behaviours.SkinnableBehaviour#createFocusRectangle as createFocusRectangle
- * @borrows core.behaviours.SkinnableBehaviour#declareSkinPart as declareSkinPart
- * @borrows core.behaviours.SkinnableBehaviour#definedSkinParts as definedSkinParts
- * @borrows core.behaviours.SkinnableBehaviour#detachSkin as detachSkin
- * @borrows core.behaviours.SkinnableBehaviour#getHeight as getHeight
- * @borrows core.behaviours.SkinnableBehaviour#getSkin as getSkin
- * @borrows core.behaviours.SkinnableBehaviour#getSkinPart as getSkinPart
- * @borrows core.behaviours.SkinnableBehaviour#getSkinState as getSkinState
- * @borrows core.behaviours.SkinnableBehaviour#getWidth as getWidth
- * @borrows core.behaviours.SkinnableBehaviour#hasSkinPart as hasSkinPart
- * @borrows core.behaviours.SkinnableBehaviour#invalidateSize as invalidateSize
- * @borrows core.behaviours.SkinnableBehaviour#invalidateSkin as invalidateSkin
- * @borrows core.behaviours.SkinnableBehaviour#invalidateSkinState as invalidateSkinState
- * @borrows core.behaviours.SkinnableBehaviour#partAdded as partAdded
- * @borrows core.behaviours.SkinnableBehaviour#partRemoved as partRemoved
- * @borrows core.behaviours.SkinnableBehaviour#removeFocusRectangle as removeFocusRectangle
- * @borrows core.behaviours.SkinnableBehaviour#removeSkin as removeSkin
- * @borrows core.behaviours.SkinnableBehaviour#skin as skin
- * @borrows core.behaviours.SkinnableBehaviour#skinInvalid as skinInvalid
- * @borrows core.behaviours.SkinnableBehaviour#skinnableCommitProperties as skinnableCommitProperties
- * @borrows core.behaviours.SkinnableBehaviour#skinnableCreateAttributes as skinnableCreateAttributes
- * @borrows core.behaviours.SkinnableBehaviour#skinnableInit as skinnableInit
- * @borrows core.behaviours.SkinnableBehaviour#skinnableMeasure as skinnableMeasure
- * @borrows core.behaviours.SkinnableBehaviour#skinnableTack as skinnableTack
- * @borrows core.behaviours.SkinnableBehaviour#skinParts as skinParts
- * @borrows core.behaviours.SkinnableBehaviour#skinStateInvalid as skinStateInvalid
- * @borrows core.behaviours.SkinnableBehaviour#_changeSkin as _changeSkin
- * @constructor
+ * @class
  */
 core.SkinnableContainer = Rokkstar.createClass('core.SkinnableContainer', 'core.VisualContainer', function () {
     "use strict";

@@ -9,7 +9,7 @@
 
 /**
  * @class
- * @name core.ChangeWatcher
+ * @name ChangeWatcher
  * @package core
  */
 core.ChangeWatcher = Rokkstar.createClass('core.ChangeWatcher', undefined, function () {

@@ -1,3 +1,9 @@
+/**
+ *
+ * @class
+ * @name PopUpManager
+ * @package core
+ */
 core.PopUpManager = {
     defaults:{componentAnimator:undefined, modalAnimator:undefined},
 

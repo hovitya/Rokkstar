@@ -2,9 +2,12 @@ package rokkstar.entities;
 
 import helpers.FileReference;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
+import rokkstar.ICopyHandler;
 import rokkstar.Output;
 
 public class Package implements IPackageItem{
@@ -18,8 +21,9 @@ public class Package implements IPackageItem{
 		
 	}
 	
-	public Package(String name){
+	public Package(String name, String packageName){
 		this.name=name;
+		this.packageName=packageName;
 	}
 	
 	public String getName(){
@@ -38,9 +42,10 @@ public class Package implements IPackageItem{
 	}
 	
 	public void merge(Package pack){
-		Iterator it = pack.items.entrySet().iterator();
+		Iterator<Map.Entry<String,IPackageItem>> it = pack.items.entrySet().iterator();
 		while (it.hasNext()) {
-			this.addItem((IPackageItem) it.next());
+			Map.Entry<String,IPackageItem> pairs = it.next();
+			this.addItem((IPackageItem) pairs.getValue());
 		}
 	}
 	
@@ -54,4 +59,34 @@ public class Package implements IPackageItem{
 	public FileReference getSource() {
 		return this.source;
 	}
+	
+	public String packageName;
+	
+	
+	public String parse(){
+		String returnValue="";
+		Iterator<Map.Entry<String,IPackageItem>> it = this.items.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String,IPackageItem> pairs = it.next();
+			IPackageItem item = (IPackageItem) pairs.getValue();
+			returnValue+=item.parse();
+		}
+		if(returnValue.equals("")){
+			return "";
+		}else{
+			if(this.packageName==null || this.packageName.equals("")) return this.name+"={};\n"+returnValue;
+			return  this.packageName+"."+this.name+"={};\n"+returnValue;
+		}
+		
+	}
+	
+	public void copy(ICopyHandler handler) throws IOException {
+		Iterator<Map.Entry<String,IPackageItem>> it = this.items.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String,IPackageItem> pairs = it.next();
+			IPackageItem item = (IPackageItem) pairs.getValue();
+			item.copy(handler);
+		}
+	}
+
 }

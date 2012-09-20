@@ -17,14 +17,12 @@ public class XMLResource extends FileResource {
 
 	public XMLResource(String arg0) {
 		super(arg0);
-		// TODO Auto-generated constructor stub
 	}
 
 
 	@Override
 	public IPackageItem toEntity() throws IOException {
-		// TODO Auto-generated method stub
-		return new Type(this.getName(),Tools.deserializeString(this));
+		return new Type(this.getName(),Tools.deserializeString(this),Tools.implode(this.packageHierarchy.toArray(), "."),"","","public");
 	}
 
 }

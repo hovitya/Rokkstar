@@ -6,7 +6,7 @@
 /**
  * @class Superclass for container type components.
  * @augments core.VisualComponent
- * @constructor
+ * @class
  */
 core.VisualContainer = Rokkstar.createClass('core.VisualContainer', 'core.VisualComponent', function () {
     "use strict";

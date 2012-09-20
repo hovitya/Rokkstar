@@ -1,7 +1,8 @@
 /**
  * @classdesc Represents transformation matrix.
  * @class
- * @name core.Matrix
+ * @name Matrix
+ * @package core
  * @param a
  * @param b
  * @param c

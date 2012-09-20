@@ -1,3 +1,9 @@
+/**
+ *
+ * @class
+ * @name Parallel
+ * @package core
+ */
 core.Parallel = Rokkstar.createClass('core.Parallel', 'core.Sequence', function () {
     "use strict";
 

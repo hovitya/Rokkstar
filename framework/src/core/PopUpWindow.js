@@ -1,3 +1,7 @@
+/**
+ *
+ * @class
+ */
 core.PopUpWindow = function () {
     extend(this, "core.TitlePanel");
     this.resize = "";

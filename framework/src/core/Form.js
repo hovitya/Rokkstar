@@ -10,7 +10,9 @@
  * @borrows core.behaviours.FormItemBehaviour#formItemCreateAttributes
  * @borrows core.behaviours.FormItemBehaviour#formItemInit
  * @borrows core.behaviours.FormItemBehaviour#labelNode
- * @constructor
+ * @class
+ * @name Form
+ * @package core
  */
 core.Form = Rokkstar.createClass('core.Form', 'core.SkinnableContainer', function () {
 

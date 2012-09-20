@@ -1,28 +1,23 @@
 package rokkstar.entities;
 
-import rokkstar.entities.javascript.Any;
+import java.util.ArrayList;
 
 public class Parameter {
 	public String name;
 	public Boolean required;
 	public String defaultValue;
-	public Type type;
+	public ArrayList<String> type;
 	public String description;
 	
-	public Parameter(String name, Boolean required, String defaultValue, Type type) {
+
+	public Parameter(String name, Boolean required, String defaultValue,
+			ArrayList<String> type, String description) {
 		super();
 		this.name = name;
 		this.required = required;
 		this.defaultValue = defaultValue;
 		this.type = type;
-	}
-	
-	public Parameter(String name, Boolean required, String defaultValue) {
-		super();
-		this.name = name;
-		this.required = required;
-		this.defaultValue = defaultValue;
-		this.type = Any.getInstance();
+		this.description = description;
 	}
 	
 }

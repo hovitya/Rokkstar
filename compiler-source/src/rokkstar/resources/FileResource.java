@@ -41,8 +41,9 @@ public abstract class FileResource extends File {
 		}
 		switch(ext){
 			case "r.js":
-			case "js":
 				return new JSResource(file.getPath());
+			case "js":
+				return new EmbedResource(file.getPath());
 			case "r.xml":
 				return new XMLResource(file.getPath());
 			default:

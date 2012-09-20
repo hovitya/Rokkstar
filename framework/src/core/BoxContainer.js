@@ -1,3 +1,9 @@
+/**
+ *
+ * @class
+ * @name BoxContainer
+ * @package core
+ */
 core.BoxContainer = Rokkstar.createClass('core.BoxContainer', 'core.Group', function () {
     this.init = function () {
         this.callSuper('init');

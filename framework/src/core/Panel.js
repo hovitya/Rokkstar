@@ -4,7 +4,9 @@
 
 /**
  * @augments core.SkinnableContainer
- * @constructor
+ * @class
+ * @name Panel
+ * @package core
  */
 core.Panel = Rokkstar.createClass('core.Panel', 'core.SkinnableContainer', function () {
 

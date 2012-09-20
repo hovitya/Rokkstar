@@ -4,7 +4,9 @@
 
 /**
  * @augments core.VisualComponent
- * @constructor
+ * @class
+ * @name VisualComponent
+ * @package core
  */
 core.Label = Rokkstar.createClass('core.Label', 'core.VisualComponent', function () {
     "use strict";

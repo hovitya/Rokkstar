@@ -1,5 +1,8 @@
 package rokkstar;
 
+import helpers.FileReference;
+import helpers.RokkstarOutput;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -39,5 +42,21 @@ public class Tools {
 			      }
 			      return buffer.toString();
 	}
+	  
+		public static void createDirs(String dir) {
+
+			File file = new File(dir);
+
+			if (file.exists()) {
+				//System.out.println("Directory : " + dir + " already exists");
+			} else {
+				boolean retval = file.mkdirs();
+				if (retval) {
+				} else {
+					RokkstarOutput.WriteError("Directory : " + dir + " creation failed", new FileReference("",0));
+				}
+			}
+
+		}
 
 }

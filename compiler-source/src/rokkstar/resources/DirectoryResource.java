@@ -3,6 +3,7 @@ package rokkstar.resources;
 import java.io.File;
 import java.io.IOException;
 
+import rokkstar.Tools;
 import rokkstar.entities.IPackageItem;
 import rokkstar.entities.Package;
 import rokkstar.exceptions.JSDocException;
@@ -26,7 +27,8 @@ public class DirectoryResource extends FileResource {
 
 	@Override
 	public IPackageItem toEntity() throws IOException, JSDocException {
-		Package pack = new Package(this.getName());
+		Package pack = new Package(this.getName(),Tools.implode(this.packageHierarchy.toArray(), "."));
+		pack.packageName=Tools.implode(this.packageHierarchy.toArray(), ".");
 		for (File child : this.listFiles()) {
 			if (".".equals(child.getName()) || "..".equals(child.getName()) || "_meta".equals(child.getName())) {
 				continue;  // Ignore the self and parent aliases.

@@ -4,13 +4,10 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -22,10 +19,11 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 
 import rokkstar.entities.IPackageItem;
 import rokkstar.entities.Library;
@@ -42,45 +40,51 @@ public class Compiler {
                 FileOutputStream(target);
         ZipOutputStream out = new ZipOutputStream(new 
                 BufferedOutputStream(dest));
-        File sourceDir = new File(source);
-        //Copy metadata
-        File metaDir = new File(source + File.separator + "_meta");
-        if (metaDir.exists() && metaDir.isDirectory()) {
-        	this.writeDirToZip(metaDir, out, "_meta");
-        }
-        
-        if (includeSource) {
-        	this.writeDirToZip(sourceDir, out, "src");
-        }
-        
-        Library lib = this.compileLibrary(source);
-        out.putNextEntry(new ZipEntry("payload"));
-        ObjectOutputStream objout = new ObjectOutputStream(out);
-        objout.writeObject(lib);
-        out.closeEntry();
-        //Execute jsdoc
-        out.putNextEntry(new ZipEntry("jsdoc.json"));
-        out.write(this.runJSDoc(source).getBytes());
-        out.closeEntry();
+        ZipCopyHandler handler = new ZipCopyHandler(out);
+        this.compile(source, "compiled.js", handler);
         out.close();
 	}
 	
-	public String runJSDoc(String path) throws IOException, JSDocException{
+	public void compileToDir(String source, String target) throws IOException, JSDocException, JSONException{
+		FSCopyHandler fs =  new FSCopyHandler(target);
+		this.compile(source, "app.js", fs);
+		//Copy Rokkstar base
+		fs.writeFile("", "rokkstar.js", Tools.deserializeString(new File(this.sdkDir+File.separator+"framework"+File.separator+"rokkstar.js")));
+		
+	}
+	
+	protected void compile(String source, String targetName, ICopyHandler copyHandler) throws IOException, JSDocException, JSONException{
+        //Process the library
+		Library lib = this.compileLibrary(source);
+        //Copy assets
+        lib.copy(copyHandler);
+        //Parse code
+        copyHandler.writeFile("", targetName, lib.parse());
+	}
+	
+	public String workDir;
+	
+	public String writeWorkDir(String data,String filename) throws IOException{
+		FSCopyHandler fs =  new FSCopyHandler(workDir);
+		fs.writeFile("", filename, data);
+		return workDir + File.separator + filename;
+	}
+	
+	
+	
+ 	public JSONObject runJSDoc(String path) throws IOException, JSDocException, JSONException{
 		String line;
 		String returnValue="";
 		String errorValue="";
-		OutputStream stdin = null;
 	    InputStream stderr = null;
 	    InputStream stdout = null;
 	    
 	    String jsdoc=this.sdkDir+File.separator+"third-party-bin"+File.separator+"jsdoc3";
 	    String jar=jsdoc+File.separator+"lib"+File.separator+"js.jar";
 	    String urlPath="file:/"+jsdoc.replaceAll("\\\\","/");
-	    String args = "\""+path+"\" --template \"templates/rokkstar\" --destination \"console\" --recurse";
+	    String args = "\""+path+"\" --template \"templates/rokkstar\" --destination \"console\" --recurse --lenient";
 	    line=" -classpath \""+jar+"\" org.mozilla.javascript.tools.shell.Main -modules \""+urlPath+"/nodejs_modules\"  -modules \""+urlPath+"/rhino_modules\"  -modules \""+urlPath+"/rhino_modules\" -modules \""+urlPath+"\" \""+jsdoc+"/jsdoc.js\" "+args+" --dirname=\""+jsdoc+"/\"";
-
 		Process process = Runtime.getRuntime().exec ("java"+line);
-	    stdin = process.getOutputStream ();
 	    stderr = process.getErrorStream ();
 	    stdout = process.getInputStream ();
 	    System.out.println(line);
@@ -92,6 +96,7 @@ public class Compiler {
 	        new BufferedReader (new InputStreamReader(stdout));
 	      while ((line = brCleanUp.readLine ()) != null) {
 	    	  returnValue+=line;
+	    	  System.out.println(line);
 	      }
 	      brCleanUp.close();
 
@@ -107,9 +112,11 @@ public class Compiler {
 	    	  throw new JSDocException(errorValue);
 	      }
 	      brCleanUp.close();
-	      return returnValue;
+	      System.out.println(returnValue);
+	      return new JSONObject(returnValue);
 	    
 	}
+
 	
 	private void writeDirToZip(File dir, ZipOutputStream zip, String prefix) throws IOException{
 		byte[] buffer = new byte[1024];
@@ -139,8 +146,9 @@ public class Compiler {
 	public JSONObject classDefinitions;
 	
 	private Library compileLibrary(String source, Library sourceLibrary) throws IOException, JSDocException, JSONException{
-		JSONObject obj = new JSONObject(this.runJSDoc(source));
-		this.classDefinitions=obj.getJSONObject("classes");
+		//JSONObject obj = new JSONObject(this.runJSDoc(source));
+		//System.out.println(obj.toString());
+		//this.classDefinitions=this.runJSDoc(source).getJSONObject("classes");
 		File sourceDir=new File(source);
 		IPackageItem item = FileResource.factory(sourceDir,true).toEntity();
 		if(item instanceof Package){
@@ -215,8 +223,31 @@ public class Compiler {
 					if(!line.hasOption("sdk") ){
 						throw new ParameterException("Error: Parameter is missing: 'sdk'");
 					}
+					String workDir = line.getOptionValue("sdk")+File.separator+"_work";
+					if(line.hasOption("work") ){
+						workDir = line.getOptionValue("work");
+					}
 					compiler.sdkDir=line.getOptionValue("sdk");
+					compiler.workDir=workDir;
 					compiler.createLibrary(line.getOptionValue("source"), line.getOptionValue("target"),line.hasOption("includeSource"));
+				}else if(!line.hasOption("library") && !line.hasOption("compile") && line.hasOption("debug")){
+					//Creating library
+					if(!line.hasOption("target") ){
+						throw new ParameterException("Error: Parameter is missing: 'target'");
+					}
+					if(!line.hasOption("source") ){
+						throw new ParameterException("Error: Parameter is missing: 'source'");
+					}
+					if(!line.hasOption("sdk") ){
+						throw new ParameterException("Error: Parameter is missing: 'sdk'");
+					}
+					String workDir = line.getOptionValue("sdk")+File.separator+"_work";
+					if(line.hasOption("work") ){
+						workDir = line.getOptionValue("work");
+					}
+					compiler.sdkDir=line.getOptionValue("sdk");
+					compiler.workDir=workDir;
+					compiler.compileToDir(line.getOptionValue("source"), line.getOptionValue("target"));
 				}
 			}
 		}catch(ParameterException e){
