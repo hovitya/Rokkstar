@@ -1,12 +1,18 @@
 package rokkstar.entities;
 
 import helpers.FileReference;
+import helpers.RokkstarOutput;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import rokkstar.ICopyHandler;
+import exceptions.CompilerException;
 
-public class Type implements IPackageItem, IClassLike{
+import rokkstar.ICopyHandler;
+import rokkstar.Output;
+import rokkstar.Tools;
+
+public class Type implements IPackageItem, IClassLike, Serializable{
 	/**
 	 * 
 	 */
@@ -15,9 +21,11 @@ public class Type implements IPackageItem, IClassLike{
 	public String superType;
 	public ArrayList<String> implementedInterfaces = new ArrayList<String>();
 	public ArrayList<Function> functions = new ArrayList<Function>();
+	public ArrayList<Property> properties = new ArrayList<Property>();
 	public String description;
 	public Function construct;
 	public String access;
+	protected Boolean parsed = false;
 	
 	public Type(){
 		
@@ -31,6 +39,39 @@ public class Type implements IPackageItem, IClassLike{
 		this.description = description;
 		this.access = access;
 		
+	
+	}
+	
+	protected Type parsedSuperType;
+	public Type getSuperType(Library lib) throws CompilerException{
+		if(parsedSuperType!=null) return parsedSuperType;
+		if(this.superType!=null && this.superType!=""){
+			IPackageItem superObj = lib.lookUpItem(this.superType);
+			if(!(superObj instanceof Type)){
+				Output.WriteError("Only classes can be extended. Component "+this.getQualifiedName()+" is trying to extend " + this.superType, this.source);
+				throw new CompilerException();
+			}
+			return (Type) superObj;
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<String> collectDynamicTypeNames(Library lib) throws CompilerException{
+		Type superObject = this.getSuperType(lib);
+		ArrayList<String> ret;
+		if(superObject==null){
+			ret=new ArrayList<String>();
+		}else{
+			ret=(ArrayList<String>) superObject.collectDynamicTypeNames(lib).clone();
+		}
+		ret.add(this.getQualifiedName());
+		return ret;
+	}
+	
+	public String getQualifiedName() {
+		if(this.packageName!=null && this.packageName!="") return this.packageName+"."+this.name;
+		else return this.name;
 	}
 	
 	public void addInterface(String interf){
@@ -56,17 +97,126 @@ public class Type implements IPackageItem, IClassLike{
 		return this.source;
 	}
 	
-	public String parse(){
-		String superName="undefined";
-		if(this.superType!=null){
-			superName=this.superType;
+	private ArrayList<Function> processedFunctions;
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<Function> getFunctions(Library lib) throws CompilerException{
+		if(this.processedFunctions!=null) return this.processedFunctions;
+		ArrayList<Function> ret;
+		if(this.superType!=null && this.superType!=""){
+			IPackageItem superObj = lib.lookUpItem(this.superType);
+			if(!(superObj instanceof Type)){
+				Output.WriteError("Only classes can be extended. Class "+this.getQualifiedName() + " is trying to extend "+this.superType+".", this.source);
+				throw new CompilerException();
+			}
+			ret = (ArrayList<Function>) ((Type) superObj).getFunctions(lib).clone();
+		}else{
+			ret = new ArrayList<Function>();
 		}
-		String pack = "";
-		if(this.packageName!="" && this.packageName!=null){
-			pack=this.packageName+".";
+		for (int i = 0; i < this.functions.size(); i++) {
+			Function func = this.functions.get(i);
+			int override = -1;
+			for (int j = 0; j < ret.size(); j++) {
+				if(ret.get(j).name.equals(func.name)){
+					override = j;
+				}
+			}
+			if(override!=-1){
+				func.overrideParent=ret.get(override);
+				ret.remove(override);
+				if(!func.isOverride){
+					Output.WriteWarning("Overriding a function (" + func.name + ") that is not marked for override.", this.source);
+				}
+				if(!func.overrideParent.checkCompatibility(func)){
+					Output.WriteWarning("Incompatible override (" + func.name + ").", this.source);
+				}
+			}
+			ret.add(func);
+		}
+		this.processedFunctions = ret;
+		return ret;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList <Property> getProperties(Library lib) throws CompilerException{
+		Type superObj = this.getSuperType(lib);
+		ArrayList<Property> prop;
+		if(superObj==null){
+			prop = new ArrayList<Property>();
+		}else{
+			prop=(ArrayList<Property>) superObj.getProperties(lib).clone();
 		}
 		
-		return pack+this.getName()+"=Rokkstar.createClass('"+pack+this.getName()+"',"+superName+","+this.payload.substring(this.payload.indexOf('=')+1,this.payload.lastIndexOf(';'))+");";
+		for (int i = 0; i < this.properties.size(); i++) {
+			int override = -1;
+			
+			Property property = this.properties.get(i);
+		    for (int j = 0; j < prop.size(); j++) {
+				if(prop.get(j).name.equals(property.name)){
+					override = j;
+				}
+			}
+		    
+			if(override!=-1){
+				Output.WriteWarning("Redefining inherited property " + prop.get(override).name + "in class " + this.getQualifiedName(), this.source);
+				prop.remove(override);	
+			}
+			prop.add(property);
+		}
+		
+
+		
+		return prop;
+	}
+	
+	public String parse(Library lib) throws CompilerException{
+		if(this.parsed) return "";
+		ArrayList<Function> funcs = this.getFunctions(lib);
+		ArrayList<Property> props = this.getProperties(lib);
+		
+		String head = this.getQualifiedName() + " = function () {\n";
+		String proto = this.getQualifiedName() + ".prototype = Object.create({},{\n";
+		String stat = "";
+		
+		//Compiling properties
+		for(int i = 0; i < props.size(); i++){
+			if(props.get(i).isStatic){
+				stat += "Object.defineProperty("+this.getQualifiedName() + ",\"" + props.get(i).name + "\", " + props.get(i).getParsedValue() + ");\n"; 
+			}else{
+				head += "Object.defineProperty(this,\"" + props.get(i).name + "\", " + props.get(i).getParsedValue() + ");\n"; 				
+			}
+		}
+		
+		
+		//Compiling functions
+		Boolean protomod = false;
+		for (int i = 0; i < funcs.size(); i++) {
+			if(funcs.get(i).name.equals(this.name) && this.functions.contains(funcs.get(i))){
+				head += "("+funcs.get(i).payload+").apply(this,arguments);";
+			}else if(!funcs.get(i).isStatic){
+				if(protomod) proto += ",\n";
+				protomod = true;
+				proto += funcs.get(i).name+":{value: "+funcs.get(i).getPayloadFor(this.getQualifiedName())+",writable: false, enumerable: false, configurable: false}";
+			}else{
+				stat+= this.getQualifiedName() + "." + funcs.get(i).name + " = " + funcs.get(i).getPayloadFor(this.getQualifiedName()) + ";\n";
+			}
+		}
+		
+		//Polymorphism
+		if(protomod) proto += ",\n";
+		proto += "__staticType:{value: \""+this.getQualifiedName()+"\",writable: false, enumerable: false, configurable: false},\n";
+		proto += "__dynamicTypes:{value: [\""+Tools.implode(this.collectDynamicTypeNames(lib).toArray(), "\",\"")+"\"],writable: false, enumerable: false, configurable: false}\n";
+		proto += "\n});";
+		head += "};";
+		this.parsed = true;
+		Type superObj = this.getSuperType(lib);
+		if(superObj == null){
+			return head + "\n" + proto + "\n" + stat;
+		}else{
+			return superObj.parse(lib) + "\n" + head + "\n" + proto + "\n" + stat;
+		}
+		
+		
 	}
 	
 	@Override
@@ -76,12 +226,9 @@ public class Type implements IPackageItem, IClassLike{
 
 	@Override
 	public void addFunction(Function func) {
+		func.originalOwner = this.getQualifiedName();
 		this.functions.add(func);
 	}
 
-	@Override
-	public ArrayList<Function> getFunctions() {
-		return this.functions;
-	}
 	
 }

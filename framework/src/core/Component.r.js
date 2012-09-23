@@ -6,7 +6,7 @@
  * Create new Component instance
  * @class
  * @author Horváth Viktor
- * @augments core.EventDispatcher
+ * @extends core.EventDispatcher
  * @attribute {String} id
  */
 core.Component =  function () {
@@ -42,7 +42,7 @@ core.Component =  function () {
     /**
      * Master component
      * This component defines this instance
-     * @type {core.VisualComponent}
+     * @type core.VisualComponent
      */
     this.master = null;
 
@@ -102,7 +102,9 @@ core.Component =  function () {
      * @param {String} name Component class
      * @return {*} Component instance
      */
-    this.createComponent = Rokkstar.createComponent;
+    this.createComponent = "Hello world";
+
+    this.aBool = true;
 
     /**
      * Make the given class name unique for this object instance
@@ -123,6 +125,13 @@ core.Component =  function () {
     this.construct = function () {
         this.init();
         this.triggerEvent('initialized');
+    };
+
+    /**
+     * @static
+     */
+    this.staticFunc = function(){
+        alert("Hi!");
     };
 
 };

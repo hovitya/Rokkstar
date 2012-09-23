@@ -566,8 +566,23 @@ exports.defineTags = function(dictionary) {
     });
     
     dictionary.defineTag('static', {
+        mustNotHaveValue: true,
         onTagged: function(doclet, tag) {
-            setDocletScopeToTitle(doclet, tag);
+            doclet.static = true;
+        }
+    });
+
+    dictionary.defineTag('override', {
+        mustNotHaveValue: true,
+        onTagged: function(doclet, tag) {
+            doclet.isOverride = true;
+        }
+    });
+
+    dictionary.defineTag('bindable', {
+        mustNotHaveValue: true,
+        onTagged: function(doclet, tag) {
+            doclet.bindable = true;
         }
     });
     

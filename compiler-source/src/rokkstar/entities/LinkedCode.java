@@ -2,14 +2,17 @@ package rokkstar.entities;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+
+import exceptions.CompilerException;
 
 import rokkstar.ICopyHandler;
 import rokkstar.Tools;
 
 import helpers.FileReference;
 
-public class LinkedCode implements IPackageItem {
+public class LinkedCode implements IPackageItem, Serializable {
 	/**
 	 * 
 	 */
@@ -49,6 +52,12 @@ public class LinkedCode implements IPackageItem {
 	@Override
 	public void copy(ICopyHandler handler) throws IOException {
 		handler.writeFile(Tools.implode(this.packages.toArray(), File.separator),this.name, this.payload);
+	}
+
+	@Override
+	public String parse(Library lib) throws CompilerException {
+		// TODO Auto-generated method stub
+		return "";
 	}
 
 }

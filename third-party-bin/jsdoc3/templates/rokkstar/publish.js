@@ -47,7 +47,7 @@ function graft(parentNode, childNodes, parentLongname, parentName) {
         }
         else if (element.kind === 'function') {
             if (! parentNode.functions) {
-                parentNode.functions = [];
+                parentNode.functions = {};
             }
             
             var thisFunction = {
@@ -56,10 +56,12 @@ function graft(parentNode, childNodes, parentLongname, parentName) {
                 'virtual': !!element.virtual,
                 'description': element.description || '',
                 'parameters': [ ],
-                'examples': []
+                'examples': [],
+                'isOverride': !!element.isOverride,
+                'static': !!element.static
             };
 
-            parentNode.functions.push(thisFunction);
+            parentNode.functions[thisFunction.name]=thisFunction;
 
             if (element.returns) {
                 thisFunction.returns = {
@@ -91,15 +93,18 @@ function graft(parentNode, childNodes, parentLongname, parentName) {
         }
         else if (element.kind === 'member') {
             if (! parentNode.properties) {
-                parentNode.properties = [];
+                parentNode.properties = {};
             }
-            parentNode.properties.push({
+            parentNode.properties[element.name]={
                 'name': element.name,
-                'access': element.access || '',
+                'access': element.access || 'public',
                 'virtual': !!element.virtual,
                 'description': element.description || '',
-                'type': element.type? (element.type.length === 1? element.type[0] : element.type) : ''
-            });
+                'type': element.type? (element.type.length === 1? element.type[0] : element.type) : '',
+                'static': !!element.static,
+                'notNull': !!element.notNull,
+                'bindable': !!element.bindable
+            };
         }
         
         else if (element.kind === 'event') {

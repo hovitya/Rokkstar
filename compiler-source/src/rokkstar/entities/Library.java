@@ -1,7 +1,9 @@
 package rokkstar.entities;
 
+import java.io.Serializable;
 
-public class Library extends Package{
+
+public class Library extends Package implements Serializable{
 
 	/**
 	 * 

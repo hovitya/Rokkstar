@@ -1,9 +1,13 @@
 package rokkstar.entities;
 
+import java.io.Serializable;
+
+import exceptions.CompilerException;
+
 import rokkstar.ICopyHandler;
 import helpers.FileReference;
 
-public class EmbeddedCode implements IPackageItem {
+public class EmbeddedCode implements IPackageItem, Serializable {
 
 	/**
 	 * 
@@ -43,6 +47,11 @@ public class EmbeddedCode implements IPackageItem {
 	@Override
 	public void copy(ICopyHandler handler) {
 		// Do nothing
+	}
+
+	@Override
+	public String parse(Library lib) throws CompilerException {
+		return "";
 	}
 
 }

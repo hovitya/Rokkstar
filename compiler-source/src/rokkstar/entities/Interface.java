@@ -4,6 +4,8 @@ import helpers.FileReference;
 
 import java.util.ArrayList;
 
+import exceptions.CompilerException;
+
 import rokkstar.ICopyHandler;
 
 public class Interface implements IPackageItem, IClassLike{
@@ -51,8 +53,13 @@ public class Interface implements IPackageItem, IClassLike{
 		
 	}
 	@Override
-	public ArrayList<Function> getFunctions() {
+	public ArrayList<Function> getFunctions(Library lib) {
 		return this.functions;
+	}
+	@Override
+	public String parse(Library lib) throws CompilerException {
+		// TODO Auto-generated method stub
+		return "";
 	}
 	
 	

@@ -1,14 +1,20 @@
-/**
- * Creates new event dispatcher instance.
+/* Rokkstar JavaScript Framework
+ *
+ * Copyright © 2012 Viktor Horvath
+ * Licensed under the MPL 2.0 license
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+ /**
  * @class
  * @classdesc
  * Super class for event handlers.
- * @author Horváth Viktor
- * @augments core.RokkObject
- * @name EventDispatcher
- * @package core
+ * @author Viktor Horvath <a href="mailto:hovitya@gmail.com">hovitya@gmail.com</a>
+ * @version 1.0
  */
-core.EventDispatcher = Rokkstar.createClass('core.EventDispatcher', 'core.RokkObject', function () {
+core.EventDispatcher = function () {
     "use strict";
 
     /**
@@ -16,10 +22,13 @@ core.EventDispatcher = Rokkstar.createClass('core.EventDispatcher', 'core.RokkOb
      * @type {Object}
      */
     this.handlers = {};
-
+    /**
+     * @private
+     * @type {Array}
+     */
     this.registeredDOMEvents = [];
 
-    this.construct = function () {
+    this.EventDispatcher = function () {
     };
 
 
@@ -34,9 +43,9 @@ core.EventDispatcher = Rokkstar.createClass('core.EventDispatcher', 'core.RokkOb
      * @see core.EventDispatcher#removeEventListener
      * @see core.EventDispatcher#triggerEvent
      * @param {String} event Event name
-     * @param {Function} listener Function to call
+     * @param {Function} listenerF Function to call
      * @param {Object} scope Scope for callback function
-     * @param {Boolean} once Optional. Will dismiss event listener after the first trigger if this value is true
+     * @param {Boolean} once Optional. Dismiss the event listener after the first trigger.
      */
     this.createEventListener = function (event, listenerF, scope, once) {
         if (once === undefined) {
@@ -52,15 +61,27 @@ core.EventDispatcher = Rokkstar.createClass('core.EventDispatcher', 'core.RokkOb
         this.handlers[event].push({func: listenerF, scope: scope, once: once});
     };
 
+    /**
+     * Alias for createEvent listener
+     * @see core.EventDispatcher#addEventListener
+     */
+    this.addEventListener  = function (event, listenerF, scope, once) {
+        this.createEventListener(event, listenerF, scope, once);
+    };
+
+    /**
+     * @private
+     * @param {core.Event} event
+     */
     this.registerDOMEvent = function (event) {
-        if (this.registeredDOMEvents.indexOf(event) == -1) {
+        if (this.registeredDOMEvents.indexOf(event) === -1) {
             this.domElement.addEventListener(event, $.proxy(this.triggerDOMEvent, this));
             this.registeredDOMEvents.push(event);
         }
     };
 
     /**
-     *
+     * @private
      * @param {Event} event
      */
     this.triggerDOMEvent = function (event) {
@@ -77,18 +98,23 @@ core.EventDispatcher = Rokkstar.createClass('core.EventDispatcher', 'core.RokkOb
      * @param {String|core.Event} event Event name.
      */
     this.triggerEvent = function (event, bubbling, cancellable) {
-        if (this.domElement == null) this.createDomElement();
+        if (this.domElement === null || this.domElement === undefined) {
+            this.createDomElement();
+        }
         if (typeof event === "string") {
             event = new core.Event(event);
         }
-        var handlers = this.handlers[event.type];
-        var remove = [];
+        var handlers = this.handlers[event.type],
+            remove = [],
+            i;
         event.currentTarget = this;
-        if (handlers != undefined) {
-            var i = handlers.length;
+        if (handlers !== undefined && handlers !== null) {
+            i = handlers.length;
             while (--i >= 0) {
                 handlers[i].func.apply(handlers[i].scope, [event]);
-                if (handlers[i].once) remove.push(handlers[i]);
+                if (handlers[i].once) {
+                    remove.push(handlers[i]);
+                }
             }
             i = remove.length;
             while (--i >= 0) {
@@ -106,32 +132,42 @@ core.EventDispatcher = Rokkstar.createClass('core.EventDispatcher', 'core.RokkOb
      * @param scope
      */
     this.deleteEventListener = function (event, listener, scope) {
-        if (this.domElement == null) this.createDomElement();
-        var eventsToRemove = [];
-        if (this.handlers[event] != undefined) {
+        if (this.domElement === null || this.domElement === undefined) {
+            this.createDomElement();
+        }
+        var eventsToRemove = [],
+            i;
+        if (this.handlers[event] !== undefined && this.handlers[event] !== null) {
             //Search events to delete
-            for (var i in this.handlers[event]) {
-                if (this.handlers[event][i].func === listener && this.handlers[event][i].scope === scope) {
-                    eventsToRemove.push(this.handlers[event][i]);
+            for (i in this.handlers[event]) {
+                if (this.handlers[event].hasOwnProperty(i)) {
+                    if (this.handlers[event][i].func === listener && this.handlers[event][i].scope === scope) {
+                        eventsToRemove.push(this.handlers[event][i]);
+                    }
                 }
             }
             //Delete events from array
-            for (var i in eventsToRemove) {
-                this.handlers[event].splice(this.handlers[event].indexOf(eventsToRemove[i]), 1);
+            for (i in eventsToRemove) {
+                if (eventsToRemove.hasOwnProperty(i)) {
+                    this.handlers[event].splice(this.handlers[event].indexOf(eventsToRemove[i]), 1);
+                }
             }
         }
     };
 
     this.domElement = null;
 
+    /**
+     * @protected
+     */
     this.createDomElement = function () {
         this.domElement = document.createElement('div');
         this.domElement.style[Modernizr.prefixed('boxSizing')] = 'border-box';
         this.domElement.style.position = 'absolute';
-        this.domElement.className="noSelect";
+        this.domElement.className = "noSelect";
     };
 
 
 
 
-});
+};

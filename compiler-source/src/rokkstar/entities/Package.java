@@ -3,14 +3,18 @@ package rokkstar.entities;
 import helpers.FileReference;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import exceptions.CompilerException;
+
 import rokkstar.ICopyHandler;
 import rokkstar.Output;
+import rokkstar.Tools;
 
-public class Package implements IPackageItem{
+public class Package implements IPackageItem, Serializable{
 	/**
 	 * 
 	 */
@@ -62,14 +66,29 @@ public class Package implements IPackageItem{
 	
 	public String packageName;
 	
+	public IPackageItem lookUpItem(String qualifiedName){
+		String itemName = Tools.substringBeforeFirst(qualifiedName, ".");
+		if(!items.containsKey(itemName)){
+			return null;
+		}
+		IPackageItem item = items.get(itemName); 
+		if(qualifiedName.contains(".")){
+			if(!(item instanceof Package)){
+				return null;
+			}
+			return ((Package) item).lookUpItem(Tools.substringAfterFirst(qualifiedName, "."));
+		}
+		return item;
+	}
 	
-	public String parse(){
+	
+	public String parse(Library lib) throws CompilerException{
 		String returnValue="";
 		Iterator<Map.Entry<String,IPackageItem>> it = this.items.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String,IPackageItem> pairs = it.next();
 			IPackageItem item = (IPackageItem) pairs.getValue();
-			returnValue+=item.parse();
+			returnValue+=item.parse(lib);
 		}
 		if(returnValue.equals("")){
 			return "";

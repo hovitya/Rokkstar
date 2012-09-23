@@ -1,8 +1,9 @@
 package rokkstar.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Parameter {
+public class Parameter implements Serializable{
 	public String name;
 	public Boolean required;
 	public String defaultValue;

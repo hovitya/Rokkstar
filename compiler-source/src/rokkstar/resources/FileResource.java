@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import exceptions.CompilerException;
+
 import rokkstar.Tools;
 import rokkstar.entities.IPackageItem;
 import rokkstar.exceptions.JSDocException;
@@ -28,7 +30,7 @@ public abstract class FileResource extends File {
 		return Tools.implode(this.packageHierarchy.toArray(),".")+"."+this.getClassName();
 	}
 
-	public abstract IPackageItem toEntity() throws IOException, JSDocException;
+	public abstract IPackageItem toEntity() throws IOException, JSDocException, CompilerException;
 	
 	public static FileResource factory(File file, Boolean isInitial){
 		String name=file.getName();

@@ -21,12 +21,11 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
+import exceptions.CompilerException;
 
 import rokkstar.entities.IPackageItem;
 import rokkstar.entities.Library;
+import rokkstar.entities.Package;
 import rokkstar.exceptions.JSDocException;
 import rokkstar.exceptions.ParameterException;
 import rokkstar.resources.FileResource;
@@ -35,7 +34,7 @@ public class Compiler {
 	
 	public String sdkDir;
 	
-	public void createLibrary(String source, String target, Boolean includeSource) throws IOException, JSDocException, JSONException{
+	public void createLibrary(String source, String target, Boolean includeSource) throws IOException, JSDocException, JSONException, CompilerException{
         FileOutputStream dest = new 
                 FileOutputStream(target);
         ZipOutputStream out = new ZipOutputStream(new 
@@ -45,7 +44,7 @@ public class Compiler {
         out.close();
 	}
 	
-	public void compileToDir(String source, String target) throws IOException, JSDocException, JSONException{
+	public void compileToDir(String source, String target) throws IOException, JSDocException, JSONException, CompilerException{
 		FSCopyHandler fs =  new FSCopyHandler(target);
 		this.compile(source, "app.js", fs);
 		//Copy Rokkstar base
@@ -53,13 +52,13 @@ public class Compiler {
 		
 	}
 	
-	protected void compile(String source, String targetName, ICopyHandler copyHandler) throws IOException, JSDocException, JSONException{
+	protected void compile(String source, String targetName, ICopyHandler copyHandler) throws IOException, JSDocException, JSONException, CompilerException{
         //Process the library
 		Library lib = this.compileLibrary(source);
         //Copy assets
         lib.copy(copyHandler);
         //Parse code
-        copyHandler.writeFile("", targetName, lib.parse());
+        copyHandler.writeFile("", targetName, lib.parse(lib));
 	}
 	
 	public String workDir;
@@ -68,6 +67,15 @@ public class Compiler {
 		FSCopyHandler fs =  new FSCopyHandler(workDir);
 		fs.writeFile("", filename, data);
 		return workDir + File.separator + filename;
+	}
+	
+	public Boolean isInWorkDir(String filename){
+		File file = new File(workDir + File.separator + filename);
+		return file.exists();
+	}
+	
+	public File readFromWorkDir(String filename){
+		return new File(workDir + File.separator + filename);
 	}
 	
 	
@@ -96,7 +104,7 @@ public class Compiler {
 	        new BufferedReader (new InputStreamReader(stdout));
 	      while ((line = brCleanUp.readLine ()) != null) {
 	    	  returnValue+=line;
-	    	  System.out.println(line);
+	    	  //System.out.println(line);
 	      }
 	      brCleanUp.close();
 
@@ -112,12 +120,13 @@ public class Compiler {
 	    	  throw new JSDocException(errorValue);
 	      }
 	      brCleanUp.close();
-	      System.out.println(returnValue);
+	      //System.out.println(returnValue);
 	      return new JSONObject(returnValue);
 	    
 	}
 
 	
+	@SuppressWarnings("unused")
 	private void writeDirToZip(File dir, ZipOutputStream zip, String prefix) throws IOException{
 		byte[] buffer = new byte[1024];
 		for (File child : dir.listFiles()) {
@@ -145,10 +154,7 @@ public class Compiler {
 	
 	public JSONObject classDefinitions;
 	
-	private Library compileLibrary(String source, Library sourceLibrary) throws IOException, JSDocException, JSONException{
-		//JSONObject obj = new JSONObject(this.runJSDoc(source));
-		//System.out.println(obj.toString());
-		//this.classDefinitions=this.runJSDoc(source).getJSONObject("classes");
+	private Library compileLibrary(String source, Library sourceLibrary) throws IOException, JSDocException, JSONException, CompilerException{
 		File sourceDir=new File(source);
 		IPackageItem item = FileResource.factory(sourceDir,true).toEntity();
 		if(item instanceof Package){
@@ -160,7 +166,7 @@ public class Compiler {
 		return sourceLibrary;
 	}
 	
-	private Library compileLibrary(String source) throws IOException, JSDocException, JSONException{
+	private Library compileLibrary(String source) throws IOException, JSDocException, JSONException, CompilerException{
 		return this.compileLibrary(source, new Library());
 	}
 	
