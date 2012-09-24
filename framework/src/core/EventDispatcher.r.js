@@ -28,6 +28,9 @@ core.EventDispatcher = function () {
      */
     this.registeredDOMEvents = [];
 
+    /**
+     * Create new EventDispatcher instance.
+     */
     this.EventDispatcher = function () {
     };
 
@@ -45,9 +48,10 @@ core.EventDispatcher = function () {
      * @param {String} event Event name
      * @param {Function} listenerF Function to call
      * @param {Object} scope Scope for callback function
-     * @param {Boolean} once Optional. Dismiss the event listener after the first trigger.
+     * @param {Boolean} once Optional. Dismiss the event listener after the first trigger. The default value is false.
+     * @param {Boolean} useCapture Optional. Determines whether the listener works in the capture phase or the target and bubbling phases. If useCapture is set to true, the listener processes the event only during the capture phase and not in the target or bubbling phase. If useCapture is false, the listener processes the event only during the target or bubbling phase. To listen for the event in all three phases, call addEventListener twice, once with useCapture set to true, then again with useCapture set to false. The default value is false.
      */
-    this.createEventListener = function (event, listenerF, scope, once) {
+    this.createEventListener = function (event, listenerF, scope, once, useCapture) {
         if (once === undefined) {
             once = false;
         }
@@ -58,7 +62,7 @@ core.EventDispatcher = function () {
         if (this.handlers[event] === undefined) {
             this.handlers[event] = [];
         }
-        this.handlers[event].push({func: listenerF, scope: scope, once: once});
+        this.handlers[event].push({func: listenerF, scope: scope, once: once, useCapture: useCapture});
     };
 
     /**
@@ -97,13 +101,22 @@ core.EventDispatcher = function () {
      * </code>
      * @param {String|core.Event} event Event name.
      */
-    this.triggerEvent = function (event, bubbling, cancellable) {
+    this.triggerEvent = function (event) {
         if (this.domElement === null || this.domElement === undefined) {
             this.createDomElement();
         }
         if (typeof event === "string") {
-            event = new core.Event(event);
+            event = new core.Event(event, false, false);
         }
+        event.target = this;
+
+    };
+
+    /**
+     * Executes handlers assigned to this event.
+     * @param {core.Event} event
+     */
+    this.executeHandlers = function (event) {
         var handlers = this.handlers[event.type],
             remove = [],
             i;
@@ -111,7 +124,11 @@ core.EventDispatcher = function () {
         if (handlers !== undefined && handlers !== null) {
             i = handlers.length;
             while (--i >= 0) {
-                handlers[i].func.apply(handlers[i].scope, [event]);
+                if (event.eventPhase === core.events.EventPhase.CAPTURE_PHASE && handlers[i].useCapture) {
+                    handlers[i].func.apply(handlers[i].scope, [event]);
+                } else if (!handlers[i].useCapture && (event.eventPhase === core.events.EventPhase.BUBBLING_PHASE || event.eventPhase === core.events.EventPhase.TARGET_PHASE)) {
+                    handlers[i].func.apply(handlers[i].scope, [event]);
+                }
                 if (handlers[i].once) {
                     remove.push(handlers[i]);
                 }
@@ -124,7 +141,6 @@ core.EventDispatcher = function () {
     };
 
     /**
-     * Destroys previously created event listener.
      * @description
      * The specified handler will be removed and never will be called again.
      * @param event
