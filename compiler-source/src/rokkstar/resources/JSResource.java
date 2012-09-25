@@ -50,9 +50,11 @@ public class JSResource extends FileResource {
 	@Override
 	public IPackageItem toEntity() throws IOException, JSDocException,
 			CompilerException {
+		System.out.print(this.getQualifiedClassName() + ": ");
 		File cache = Compiler.getInstance().readFromWorkDir(
 				this.getQualifiedClassName().replaceAll("\\.", "_"));
 		if (!cache.exists() || cache.lastModified() < this.lastModified()) {
+			System.out.print("reading file, ");
 			// Look up jsdoc
 			JSONObject jsData;
 			try {
@@ -102,7 +104,7 @@ public class JSResource extends FileResource {
 							extend, jsData.getString("description"),
 							jsData.getString("access"));
 
-					this.parseType((Type) object, jsData);
+					this.parseType((Type) object, jsData, Compiler.getInstance().readFromWorkDir("current_source.r.js"));
 					// Parsing interfaces
 					if (jsData.has("implements")) {
 						JSONArray impls = jsData.getJSONArray("implements");
@@ -117,6 +119,7 @@ public class JSResource extends FileResource {
 				out.writeObject(object);
 				out.close();
 				fileOut.close();
+				System.out.println("done.");
 				return object;
 			} catch (JSONException e) {
 				RokkstarOutput.WriteError(
@@ -127,6 +130,7 @@ public class JSResource extends FileResource {
 				throw new JSDocException("Incorrect RokkDoc.");
 			}
 		} else {
+			System.out.println("from cache.");
 			try {
 		  FileInputStream fileIn =
                     new FileInputStream(cache);
@@ -146,7 +150,7 @@ public class JSResource extends FileResource {
 		}
 	}
 
-	protected void parseType(Type type, JSONObject rokkDoc)
+	protected void parseType(Type type, JSONObject rokkDoc, File file)
 			throws JSONException, CompilerException {
 		// Creates and enters a Context. The Context stores information
 		// about the execution environment of a script.
@@ -165,9 +169,8 @@ public class JSResource extends FileResource {
 		try {
 			result = cx.evaluateString(
 					scope,
-					"Rokkstar={createComponent:''}; core={}; "
-							+ Tools.deserializeString(this) + "; obj = new "
-							+ this.getQualifiedClassName() + "();", "<cmd>", 1,
+					       Tools.deserializeString(file) + "; obj = new "
+							+ this.getQualifiedClassName() + "();", this.getPath(), 1,
 					null);
 			ScriptableObject obj = (ScriptableObject) scope.get("obj", scope);
 			Object[] keys = obj.getAllIds();

@@ -44,7 +44,7 @@ public class Property implements Serializable{
 	}
 	
 	protected String createGetter(){
-		String ret = "function() { if(this.___" + this.name + " === undefined) {return " + this.getValue() + ";} else { return this.___" + this.name + "; } }";
+		String ret = "function() { if(this.___" + this.name + " === undefined) {return this.___"+this.name+" = " + this.getValue() + ";} else { return this.___" + this.name + "; } }";
 		return ret;
 	}
 	

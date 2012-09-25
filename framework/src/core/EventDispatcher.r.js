@@ -22,11 +22,8 @@ core.EventDispatcher = function () {
      * @type {Object}
      */
     this.handlers = {};
-    /**
-     * @private
-     * @type {Array}
-     */
-    this.registeredDOMEvents = [];
+
+
 
     /**
      * Create new EventDispatcher instance.
@@ -55,6 +52,9 @@ core.EventDispatcher = function () {
         if (once === undefined) {
             once = false;
         }
+        if (useCapture === undefined) {
+            useCapture = false;
+        }
         if (Rokkstar.globals.DOMEvents.indexOf(event) !== -1) {
             this.registerDOMEvent(event);
         }
@@ -68,9 +68,14 @@ core.EventDispatcher = function () {
     /**
      * Alias for createEvent listener
      * @see core.EventDispatcher#addEventListener
+     * @param {String} event Event name
+     * @param {Function} listenerF Function to call
+     * @param {Object} scope Scope for callback function
+     * @param {Boolean} once Optional. Dismiss the event listener after the first trigger. The default value is false.
+     * @param {Boolean} useCapture Optional. Determines whether the listener works in the capture phase or the target and bubbling phases. If useCapture is set to true, the listener processes the event only during the capture phase and not in the target or bubbling phase. If useCapture is false, the listener processes the event only during the target or bubbling phase. To listen for the event in all three phases, call addEventListener twice, once with useCapture set to true, then again with useCapture set to false. The default value is false.
      */
-    this.addEventListener  = function (event, listenerF, scope, once) {
-        this.createEventListener(event, listenerF, scope, once);
+    this.addEventListener  = function (event, listenerF, scope, once, useCapture) {
+        this.createEventListener(event, listenerF, scope, once, useCapture);
     };
 
     /**
@@ -82,6 +87,14 @@ core.EventDispatcher = function () {
             this.domElement.addEventListener(event, $.proxy(this.triggerDOMEvent, this));
             this.registeredDOMEvents.push(event);
         }
+    };
+
+    /**
+     * Alias for trigger event.
+     * @param {core.Event} event
+     */
+    this.dispatchEvent = function (event) {
+        this.triggerEvent(event);
     };
 
     /**
@@ -110,6 +123,53 @@ core.EventDispatcher = function () {
         }
         event.target = this;
 
+        //Collect activation list
+        var lastParent = this.getPropagationParent(),
+            activationList = [],
+            j = 0;
+        while (lastParent !== null && lastParent !== undefined) {
+            activationList.push(lastParent);
+            lastParent = lastParent.getPropagationParent();
+        }
+
+        //Capture phase
+        event.eventPhase = core.events.EventPhase.CAPTURE_PHASE;
+        j = activationList.length;
+        while (j > 0) {
+            j = j - 1;
+            activationList[j].executeHandlers(event);
+            if (!event.isImmediatePropagating || !event.isPropagating) {
+                break;
+            }
+        }
+
+        //At target
+        if (event.isImmediatePropagating && event.isPropagating) {
+            event.eventPhase = core.events.EventPhase.AT_TARGET;
+            this.executeHandlers(event);
+        }
+
+        //Bubble phase
+        if (event.bubbles && event.isImmediatePropagating && event.isPropagating) {
+            event.eventPhase = core.events.EventPhase.BUBBLING_PHASE;
+            j = 0;
+            while (j < activationList.length) {
+                activationList[j].executeHandlers(event);
+                if (!event.isImmediatePropagating || !event.isPropagating) {
+                    break;
+                }
+                j = j + 1;
+            }
+        }
+    };
+
+    /**
+     * Override this method if you want to create propagation list.
+     * @protected
+     * @return {core.EventDispatcher}
+     */
+    this.getPropagationParent = function () {
+        return null;
     };
 
     /**
@@ -126,11 +186,14 @@ core.EventDispatcher = function () {
             while (--i >= 0) {
                 if (event.eventPhase === core.events.EventPhase.CAPTURE_PHASE && handlers[i].useCapture) {
                     handlers[i].func.apply(handlers[i].scope, [event]);
-                } else if (!handlers[i].useCapture && (event.eventPhase === core.events.EventPhase.BUBBLING_PHASE || event.eventPhase === core.events.EventPhase.TARGET_PHASE)) {
+                } else if (!handlers[i].useCapture && (event.eventPhase === core.events.EventPhase.BUBBLING_PHASE || event.eventPhase === core.events.EventPhase.AT_TARGET)) {
                     handlers[i].func.apply(handlers[i].scope, [event]);
                 }
                 if (handlers[i].once) {
                     remove.push(handlers[i]);
+                }
+                if (!event.isImmediatePropagating) {
+                    break;
                 }
             }
             i = remove.length;

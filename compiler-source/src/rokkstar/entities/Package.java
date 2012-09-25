@@ -93,7 +93,7 @@ public class Package implements IPackageItem, Serializable{
 		if(returnValue.equals("")){
 			return "";
 		}else{
-			if(this.packageName==null || this.packageName.equals("")) return this.name+"={};\n"+returnValue;
+			if(this.packageName==null || this.packageName.equals("")) return "var "+this.name+"={};\n"+returnValue;
 			return  this.packageName+"."+this.name+"={};\n"+returnValue;
 		}
 		

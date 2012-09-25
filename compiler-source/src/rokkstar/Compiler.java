@@ -4,7 +4,10 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,8 +50,22 @@ public class Compiler {
 	public void compileToDir(String source, String target) throws IOException, JSDocException, JSONException, CompilerException{
 		FSCopyHandler fs =  new FSCopyHandler(target);
 		this.compile(source, "app.js", fs);
+		//Copy third party script
+		String thirdParty = "";
+		File tpDir = new File(this.sdkDir + File.separator + "framework" + File.separator + "third-party");
+		
+		
+		for (File child : tpDir.listFiles()) {
+			if (".".equals(child.getName()) || "..".equals(child.getName()) || "_meta".equals(child.getName())) {
+				continue;  // Ignore the self and parent aliases.
+			}
+			thirdParty += Tools.deserializeString(child);
+		}
+		fs.writeFile("", "third-party.js", thirdParty);
+		
 		//Copy Rokkstar base
-		fs.writeFile("", "rokkstar.js", Tools.deserializeString(new File(this.sdkDir+File.separator+"framework"+File.separator+"rokkstar.js")));
+		//fs.writeFile("", "rokkstar.js", Tools.deserializeString(new File(this.sdkDir+File.separator+"framework"+File.separator+"rokkstar.js")));
+		this.generateHtml(new File(target));
 		
 	}
 	
@@ -62,6 +79,8 @@ public class Compiler {
 	}
 	
 	public String workDir;
+	
+	public String templateFile;
 	
 	public String writeWorkDir(String data,String filename) throws IOException{
 		FSCopyHandler fs =  new FSCopyHandler(workDir);
@@ -95,7 +114,7 @@ public class Compiler {
 		Process process = Runtime.getRuntime().exec ("java"+line);
 	    stderr = process.getErrorStream ();
 	    stdout = process.getInputStream ();
-	    System.out.println(line);
+	    //System.out.println(line);
 	    //stdin.write(line.getBytes() );
 	    //stdin.flush();
 	    //stdin.close();
@@ -168,6 +187,43 @@ public class Compiler {
 	
 	private Library compileLibrary(String source) throws IOException, JSDocException, JSONException, CompilerException{
 		return this.compileLibrary(source, new Library());
+	}
+	
+	public void generateHtml(File target) throws CompilerException {
+		File file=new File(this.templateFile);
+		StringBuilder  stringBuilder = new StringBuilder();
+		try{
+			BufferedReader reader = new BufferedReader( new FileReader (file));
+			String         line = null;
+			
+			String         ls = System.getProperty("line.separator");
+	
+	
+				while( ( line = reader.readLine() ) != null ) {
+					stringBuilder.append( line );
+					stringBuilder.append( ls );
+				}
+	
+			
+			reader.close();
+			
+
+		String template=stringBuilder.toString();
+		template=template.replaceAll("\\{\\{app_file\\}\\}", "app.js");
+		//template=template.replaceAll("\\{\\{app_class\\}\\}", this.appClass);
+		//template=template.replaceAll("\\{\\{css_import\\}\\}", this.cssValue);
+		FileWriter fw=new FileWriter(target+File.separator+file.getName());
+		fw.write(template);
+		fw.flush();
+		fw.close();
+		
+		}catch(FileNotFoundException ex){
+			System.err.println("File not found: "+file.getPath());
+			throw new CompilerException();
+		}catch(IOException ex){
+			System.err.println("File not readable: "+file.getPath());
+			throw new CompilerException();
+		}
 	}
 	
 	private static Compiler instance;
@@ -247,12 +303,17 @@ public class Compiler {
 					if(!line.hasOption("sdk") ){
 						throw new ParameterException("Error: Parameter is missing: 'sdk'");
 					}
-					String workDir = line.getOptionValue("sdk")+File.separator+"_work";
+					String workDir = line.getOptionValue("target")+File.separator+"_work";
 					if(line.hasOption("work") ){
 						workDir = line.getOptionValue("work");
 					}
-					compiler.sdkDir=line.getOptionValue("sdk");
-					compiler.workDir=workDir;
+					String templateFile = line.getOptionValue("sdk") + File.separator + "framework" + File.separator + "html-template" + File.separator + "index.html";
+					if(line.hasOption("template") ){
+						templateFile = line.getOptionValue("template");
+					}
+					compiler.sdkDir = line.getOptionValue("sdk");
+					compiler.workDir = workDir;
+					compiler.templateFile = templateFile;
 					compiler.compileToDir(line.getOptionValue("source"), line.getOptionValue("target"));
 				}
 			}

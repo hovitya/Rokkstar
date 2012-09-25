@@ -46,13 +46,13 @@ core.Event = function () {
      * Indicates whether an event is a bubbling event.
      * @type {Boolean}
      */
-    this.bubbles = true;
+    this.bubbles = false;
 
     /**
      * Indicates whether the behavior associated with the event can be prevented.
      * @type {Boolean}
      */
-    this.cancelable = true;
+    this.cancelable = false;
 
     /**
      * Original event target
