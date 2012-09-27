@@ -55,10 +55,7 @@ core.EventDispatcher = function () {
         if (useCapture === undefined) {
             useCapture = false;
         }
-        if (Rokkstar.globals.DOMEvents.indexOf(event) !== -1) {
-            this.registerDOMEvent(event);
-        }
-        if (this.domElement === null) { this.createDomElement(); }
+
         if (this.handlers[event] === undefined) {
             this.handlers[event] = [];
         }
@@ -78,16 +75,7 @@ core.EventDispatcher = function () {
         this.createEventListener(event, listenerF, scope, once, useCapture);
     };
 
-    /**
-     * @private
-     * @param {core.Event} event
-     */
-    this.registerDOMEvent = function (event) {
-        if (this.registeredDOMEvents.indexOf(event) === -1) {
-            this.domElement.addEventListener(event, $.proxy(this.triggerDOMEvent, this));
-            this.registeredDOMEvents.push(event);
-        }
-    };
+
 
     /**
      * Alias for trigger event.
@@ -97,13 +85,7 @@ core.EventDispatcher = function () {
         this.triggerEvent(event);
     };
 
-    /**
-     * @private
-     * @param {Event} event
-     */
-    this.triggerDOMEvent = function (event) {
-        this.triggerEvent(event);
-    };
+
 
     /**
      * Triggers new event.
@@ -115,9 +97,6 @@ core.EventDispatcher = function () {
      * @param {String|core.Event} event Event name.
      */
     this.triggerEvent = function (event) {
-        if (this.domElement === null || this.domElement === undefined) {
-            this.createDomElement();
-        }
         if (typeof event === "string") {
             event = new core.Event(event, false, false);
         }
@@ -211,9 +190,6 @@ core.EventDispatcher = function () {
      * @param scope
      */
     this.deleteEventListener = function (event, listener, scope) {
-        if (this.domElement === null || this.domElement === undefined) {
-            this.createDomElement();
-        }
         var eventsToRemove = [],
             i;
         if (this.handlers[event] !== undefined && this.handlers[event] !== null) {
@@ -234,17 +210,7 @@ core.EventDispatcher = function () {
         }
     };
 
-    this.domElement = null;
 
-    /**
-     * @protected
-     */
-    this.createDomElement = function () {
-        this.domElement = document.createElement('div');
-        this.domElement.style[Modernizr.prefixed('boxSizing')] = 'border-box';
-        this.domElement.style.position = 'absolute';
-        this.domElement.className = "noSelect";
-    };
 
 
 

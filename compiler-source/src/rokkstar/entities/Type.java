@@ -196,9 +196,9 @@ public class Type implements IPackageItem, IClassLike, Serializable{
 			}else if(!funcs.get(i).isStatic){
 				if(protomod) proto += ",\n";
 				protomod = true;
-				proto += funcs.get(i).name+":{value: "+funcs.get(i).getPayloadFor(this.getQualifiedName())+",writable: false, enumerable: false, configurable: false}";
+				proto += funcs.get(i).name+":{value: "+funcs.get(i).getPayloadFor(this.getQualifiedName(),lib)+",writable: false, enumerable: false, configurable: false}";
 			}else{
-				stat+= this.getQualifiedName() + "." + funcs.get(i).name + " = " + funcs.get(i).getPayloadFor(this.getQualifiedName()) + ";\n";
+				stat+= this.getQualifiedName() + "." + funcs.get(i).name + " = " + funcs.get(i).getPayloadFor(this.getQualifiedName(),lib) + ";\n";
 			}
 		}
 		

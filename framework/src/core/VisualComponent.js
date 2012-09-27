@@ -1,21 +1,26 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
+/* Rokkstar JavaScript Framework
+ *
+ * Copyright © 2012 Viktor Horvath
+ * Licensed under the MPL 2.0 license
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /**
- * Creates new VisualComponent instance.
- * @classdesc
- * Base class for visible components. Add view state functionality.
- * @author Horváth Viktor
- * @augments core.Component
  * @class
+ * @classdesc
+ * The VisualComponent class is the abstract base class for all display objects.
+ * @author Viktor Horvath <a href="mailto:hovitya@gmail.com">hovitya@gmail.com</a>
+ * @extends core.EventDispatcher
+ * @version 1.0
  */
 core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Component', function () {
     "use strict";
 
     /**
      *
-     * @type {core.Container}
+     * @type {core.VisualContainer}
      */
     this.parent = null;
 
@@ -52,16 +57,7 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
     };
 
 
-    /**
-     * Removes all child element
-     */
-    this.empty = function () {
-        $(this).empty();
-    };
 
-    this.xmlContentArray = [];
-
-    //this.states={};
 
     this.init = function () {
         var i;
@@ -110,8 +106,16 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
         this.createEventListener('currentStatePropertyChanged', this.stateChanged, this);
     };
 
-
+    /**
+     *
+     * @type {Number}
+     */
     this.measuredWidth = 0;
+
+    /**
+     *
+     * @type {Number}
+     */
     this.measuredHeight = 0;
 
 
@@ -137,17 +141,35 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
 
     };
 
-
+    /**
+     * @protected
+     * @type {Boolean}
+     */
     this.componentInvalid = true;
 
+    /**
+     * @protected
+     * @type {Boolean}
+     */
     this.propertiesInvalid = true;
+
+    /**
+     * @protected
+     * @type {Boolean}
+     */
     this.sizeInvalid = true;
 
+    /**
+     * Force layout manager to recalculate component size.
+     */
     this.invalidateSize = function () {
         this.sizeInvalid = true;
         this.invalidateDisplayList();
     };
 
+    /**
+     * Invalidates whole display list.
+     */
     this.invalidateDisplayList = function () {
         this.componentInvalid = true;
         if (this.parent !== null) {
@@ -155,12 +177,17 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
         }
     };
 
-
+    /**
+     * Force application manager to call commitProperties during the next screen update.
+     */
     this.invalidateProperties = function () {
         this.invalidateDisplayList();
         this.propertiesInvalid = true;
     };
 
+    /**
+     * Override this to set changed properties. Always call super method!
+     */
     this.commitProperties = function () {
         if (this._matrixInvalid) {
             this._matrixInvalid = false;
@@ -180,6 +207,10 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
         }
     };
 
+    /**
+     * @protected
+     * @internal
+     */
     this.tack = function () {
         if (this.componentInvalid) {
             this.componentInvalid = false;
@@ -202,7 +233,6 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
      * @param {core.Event} event
      */
     this.widthChanged = function (event) {
-        event.stopPropagation();
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
@@ -212,7 +242,6 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
      * @param {core.Event} event
      */
     this.heightChanged = function (event) {
-        event.stopPropagation();
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
@@ -222,7 +251,6 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
      * @param {core.Event} event
      */
     this.xChanged = function (event) {
-        event.stopPropagation();
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
@@ -232,7 +260,6 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
      * @param {core.Event} event
      */
     this.yChanged = function (event) {
-        event.stopPropagation();
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
@@ -242,7 +269,6 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
      * @param {core.Event} event
      */
     this.leftChanged = function (event) {
-        event.stopPropagation();
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
@@ -252,7 +278,6 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
      * @param {core.Event} event
      */
     this.rightChanged = function (event) {
-        event.stopPropagation();
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
@@ -262,7 +287,6 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
      * @param {core.Event} event
      */
     this.topChanged = function (event) {
-        event.stopPropagation();
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
@@ -272,17 +296,14 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
      * @param {core.Event} event
      */
     this.bottomChanged = function (event) {
-        event.stopPropagation();
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
     this.positionChanged = function (event) {
-        event.stopPropagation();
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
     this.classChanged = function (event) {
-        event.stopPropagation();
         this.domElement.className = this.getClass();
     };
 
@@ -292,7 +313,6 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
      * @param {core.Event} event
      */
     this.__gridChanged = function (event) {
-        event.stopPropagation();
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 

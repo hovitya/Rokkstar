@@ -2,6 +2,10 @@ package rokkstar.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import sun.misc.Regexp;
 
 public class Function implements Serializable{
 	/**
@@ -50,9 +54,26 @@ public class Function implements Serializable{
 		return true;
 	}
 	
-	public String getPayloadFor(String className){
+	protected String compilePayload(Library lib){
+		//Get super
+		Type type = (Type) lib.lookUpItem(this.originalOwner);
+		
+		Pattern reg = Pattern.compile("([A-Za-z0-9_]+)\\.superClass\\.([A-Za-z0-9_]+)\\(([^\\)]+)\\)");
+		Matcher match = reg.matcher(this.payload);
+		String output = "";
+		int currentEnd = 0;
+		while(match.find()){
+			output  += this.payload.subSequence(currentEnd, match.start());
+			output += type.superType + ".prototype." + match.group(2) + ".apply(" + match.group(1) + ",[" + match.group(3) + "])";
+			currentEnd = match.end();
+		}
+		output += this.payload.substring(currentEnd);
+		return output;
+	}
+	
+	public String getPayloadFor(String className, Library lib){
 		if(className.equals(this.originalOwner)){
-			return this.payload;
+			return this.compilePayload(lib);
 		}else{
 			return this.originalOwner+".prototype."+this.name;
 		}
