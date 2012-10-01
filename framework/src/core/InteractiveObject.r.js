@@ -58,10 +58,10 @@ core.InteractiveObject = function () {
     };
 
     /**
-     * @override
      * @description
      * Overrides createEventListener.
      * @see core.EventDispatcher#createEventListener
+     * @override
      * @param {String} event Event name
      * @param {Function} listenerF Function to call
      * @param {Object} scope Scope for callback function

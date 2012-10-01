@@ -155,12 +155,10 @@ exports.defineTags = function(dictionary) {
     dictionary.defineTag('implements', {
         mustHaveValue: true,
         onTagText: function(text) {
-            var type = require('jsdoc/tag/type'),
-                tagType = type.getTagType(text);
-            return tagType.type || text;
+            return text;
         },
         onTagged: function(doclet, tag) {
-            doclet.implements( firstWordOf(tag.value) );
+            doclet.implsFrom( firstWordOf(tag.value) );
         }
     });
 
@@ -185,6 +183,12 @@ exports.defineTags = function(dictionary) {
     dictionary.defineTag('class', {
         onTagged: function(doclet, tag) {
             doclet.addTag('kind', 'class');
+            if(tag.originalTitle === 'interface'){
+                doclet.isInterface = true;
+            }else{
+                doclet.isInterface = false;
+            }
+
             
             // handle special case where both @class and @constructor tags exist in same doclet
             if (tag.originalTitle === 'class') {
@@ -198,7 +202,7 @@ exports.defineTags = function(dictionary) {
             setDocletNameToValue(doclet, tag);
         }
     })
-    .synonym('constructor');
+    .synonym('constructor').synonym('interface');
     
     dictionary.defineTag('classdesc', {
         onTagged: function(doclet, tag) {
@@ -696,13 +700,15 @@ exports.defineTags = function(dictionary) {
     })
     .synonym('arg');
 
-    dictionary.defineTag('interface', {
+  /*  dictionary.defineTag('interface', {
         onTagged: function(doclet, tag) {
             doclet.addTag('kind', 'interface');
 
             setDocletNameToValue(doclet, tag);
         }
-    });
+    });*/
+
+
 
     dictionary.defineTag('behaviour', {
         onTagged: function(doclet, tag) {

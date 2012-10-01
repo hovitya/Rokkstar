@@ -44,7 +44,6 @@ public class JSResource extends FileResource {
 
 	public JSResource(String arg0) {
 		super(arg0);
-
 	}
 
 	@Override
@@ -82,21 +81,31 @@ public class JSResource extends FileResource {
 						.getJSONObject(this.getQualifiedClassName());
 				IClassLike object;
 				
-				if (jsData.getString("type").equals("interface")) {
+				if (jsData.getBoolean("isInterface")) {
 					object = new Interface(this.getClassName(),
-							Tools.deserializeString(this));
+							Tools.deserializeString(this),Tools.implode(
+									this.packageHierarchy.toArray(), ".") );
+					if (jsData.has("extends")) {
+						ArrayList<String> extend = Tools.extractType(jsData, "extends");
+						for (int i = 0; i < extend.size(); i++) {
+							((Interface) object).superInterfaces.add(extend.get(i));
+						}
+					} 
+					this.parseInterface((Interface) object, jsData, Compiler.getInstance().readFromWorkDir("current_source.r.js"));
 				} else {
 					String extend = null;
 					// Looking for super class
-					if (jsData.has("extends")
-							&& jsData.getJSONArray("extends").length() == 1) {
-						extend = jsData.getJSONArray("extends").getString(0);
-					} else if (jsData.has("extends")
-							&& jsData.getJSONArray("extends").length() > 1) {
-						Output.WriteWarning(
-								"Class is extending more than one class: "
-										+ this.getQualifiedClassName(),
-								this.getPath(), -1);
+					if (jsData.has("extends")) {
+						
+						if (Tools.extractType(jsData,"extends").size() > 1) {
+							Output.WriteWarning(
+									"Class is extending more than one class: "
+											+ this.getQualifiedClassName() + " Extensions omitted.",
+									this.getPath(), -1);
+							extend = Tools.extractType(jsData,"extends").get(0);
+						}else if(Tools.extractType(jsData,"extends").size() == 1){
+							extend = Tools.extractType(jsData,"extends").get(0);
+						}
 					}
 					object = new Type(this.getClassName(),
 							Tools.deserializeString(this), Tools.implode(
@@ -106,8 +115,8 @@ public class JSResource extends FileResource {
 
 					this.parseType((Type) object, jsData, Compiler.getInstance().readFromWorkDir("current_source.r.js"));
 					// Parsing interfaces
-					if (jsData.has("implements")) {
-						JSONArray impls = jsData.getJSONArray("implements");
+					if (jsData.has("impls")) {
+						JSONArray impls = jsData.getJSONArray("impls");
 						for (int i = 0; i < impls.length(); i++) {
 							((Type) object).addInterface(impls.getString(i));
 						}
@@ -147,6 +156,119 @@ public class JSResource extends FileResource {
 			return this.toEntity();
 		}
 
+		}
+	}
+	
+	protected void parseInterface(Interface iface, JSONObject rokkDoc, File file) throws JSONException{
+		Context cx = Context.enter();
+		Scriptable scope = cx.initStandardObjects();
+		cx.setLanguageVersion(Context.VERSION_1_2);
+		@SuppressWarnings("unused")
+		Object result;
+		try {
+			result = cx.evaluateString(
+					scope,
+					       Tools.deserializeString(file) + "; obj = new "
+							+ this.getQualifiedClassName() + "();", this.getPath(), 1,
+					null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ScriptableObject obj = (ScriptableObject) scope.get("obj", scope);
+		Object[] keys = obj.getAllIds();
+
+		// Parsing parameters
+		JSONObject funcs = new JSONObject();
+		if (rokkDoc.has("functions")) {
+			funcs = rokkDoc.getJSONObject("functions");
+		}
+		
+		for (int i = 0; i < keys.length; i++) {
+			Object value = obj.get(keys[i]);
+			if(value instanceof ScriptableObject
+						&& ((ScriptableObject) value).getTypeOf().equals(
+								"function")) {
+				// Parse as function
+				int param = ((BaseFunction) value).getArity();
+				// Looking for documentation
+				JSONObject functionDoc = null;
+				if (funcs.has(keys[i].toString())) {
+					functionDoc = funcs.getJSONObject(keys[i].toString());
+				}
+
+				ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+				for (int j = 0; j < param; j++) {
+					ArrayList<String> types = new ArrayList<String>();
+
+					if (functionDoc != null
+							&& functionDoc.has("parameters")
+							&& functionDoc.getJSONArray("parameters")
+									.length() > j) {
+						// Get parameter types
+						types = Tools.extractType(
+								functionDoc.getJSONArray("parameters")
+										.getJSONObject(j), "type");
+						parameters.add(new Parameter("arg" + j,
+								!functionDoc.getJSONArray("parameters")
+										.getJSONObject(j)
+										.getBoolean("optional"),
+								functionDoc.getJSONArray("parameters")
+										.getJSONObject(j)
+										.getString("default"), types,
+								functionDoc.getJSONArray("parameters")
+										.getJSONObject(j)
+										.getString("description")));
+					} else {
+						// Undocumented parameter
+						types.add("*");
+						parameters.add(new Parameter("arg" + j, false, "",
+								types, ""));
+					}
+
+				}
+
+				Function func;
+				ArrayList<String> returnType = new ArrayList<String>();
+				if (functionDoc == null) {
+					returnType.add("void");
+					func = new Function(keys[i].toString(), parameters,
+							returnType, "", "public", false, "", false);
+				} else {
+					String retDesc = "";
+					if (functionDoc.has("returns")) {
+						retDesc = functionDoc.getJSONObject("returns")
+								.getString("description");
+						returnType = Tools.extractType(
+								functionDoc.getJSONObject("returns"),
+								"type");
+					} else {
+						returnType.add("void");
+					}
+					
+					String access = functionDoc.getString("access");
+					if(access.equals("private")){
+						access = "protected";
+						Output.WriteWarning("Interface function access cannot be private. "+this.getQualifiedClassName()+"#"+keys[i].toString()+" is private. Access is modified to protected.", this.getPath(), 0);
+					}
+
+					func = new Function(keys[i].toString(), parameters,
+							returnType, retDesc,
+							access,
+							functionDoc.getBoolean("static"),
+							functionDoc.getString("description"),
+							functionDoc.getBoolean("isOverride"));
+				}
+
+				func.payload = cx
+						.decompileFunction((BaseFunction) value, 0);
+				func.payloadBody = cx.decompileFunctionBody(
+						(BaseFunction) value, 0);
+				iface.addFunction(func);
+
+			} else {
+				Output.WriteWarning("Interfaces can contain only function definitions. "+this.getQualifiedClassName()+"#"+keys[i].toString() + "is not a function. Declaration omitted.", this.getPath(), 0);
+			}
 		}
 	}
 

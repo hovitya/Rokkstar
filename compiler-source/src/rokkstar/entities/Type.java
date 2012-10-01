@@ -38,8 +38,6 @@ public class Type implements IPackageItem, IClassLike, Serializable{
 		this.superType = superType;
 		this.description = description;
 		this.access = access;
-		
-	
 	}
 	
 	protected Type parsedSuperType;
@@ -66,11 +64,21 @@ public class Type implements IPackageItem, IClassLike, Serializable{
 			ret=(ArrayList<String>) superObject.collectDynamicTypeNames(lib).clone();
 		}
 		ret.add(this.getQualifiedName());
+		//Add interfaces
+		for (int i = 0; i < this.implementedInterfaces.size(); i++) {
+			IPackageItem iface = lib.lookUpItem(this.implementedInterfaces.get(i));
+			if(iface == null || !(iface instanceof Interface)) {
+				Output.WriteError("Interface is not found: "+this.implementedInterfaces.get(i), this.getSource());
+				throw new CompilerException();
+			}else{
+				ret.addAll(((Interface) iface).collectDynamicTypes(lib));
+			}
+		}
 		return ret;
 	}
 	
 	public String getQualifiedName() {
-		if(this.packageName!=null && this.packageName!="") return this.packageName+"."+this.name;
+		if(this.packageName!=null && !this.packageName.equals("")) return this.packageName+"."+this.name;
 		else return this.name;
 	}
 	
@@ -125,15 +133,41 @@ public class Type implements IPackageItem, IClassLike, Serializable{
 				func.overrideParent=ret.get(override);
 				ret.remove(override);
 				if(!func.isOverride){
-					Output.WriteWarning("Overriding a function (" + func.name + ") that is not marked for override.", this.source);
+					Output.WriteWarning("Overriding a function ("+func.originalOwner+"#" + func.name + ") that is not marked for override.", this.source);
 				}
 				if(!func.overrideParent.checkCompatibility(func)){
-					Output.WriteWarning("Incompatible override (" + func.name + ").", this.source);
+					Output.WriteWarning("Incompatible override ("+func.originalOwner+"#" + func.name + ").", this.source);
 				}
 			}
 			ret.add(func);
 		}
+		//Checking interfaces
+		for (int i = 0; i < this.implementedInterfaces.size(); i++) {
+			Interface iface = (Interface) lib.lookUpItem(this.implementedInterfaces.get(i));
+			if(iface == null) {
+				Output.WriteError("Interface is not found: "+this.implementedInterfaces.get(i), this.getSource());
+				throw new CompilerException();
+			}
+			ArrayList<Function> ifunctions= iface.getFunctions(lib);
+			for (int j = 0; j < ifunctions.size(); j++) {
+				Boolean found = false;
+				for (int j2 = 0; j2 < ret.size(); j2++) {
+					if(ret.get(j2).name.equals(ifunctions.get(j).name)){
+						found = true;
+						if(!ret.get(j2).checkCompatibility(ifunctions.get(j))){
+							Output.WriteWarning("Implemented function is not compatible with the one declared in the interface. " +
+												this.getQualifiedName()+"#"+ret.get(j2).name+" is not compatible with "+iface.getQualifiedName()+"#"+ifunctions.get(j).name, this.source);
+						}
+					}
+				}
+				if(!found){
+					Output.WriteError("Interface function is not implemented: "+iface.getQualifiedName()+"#"+ifunctions.get(j).name, this.source);
+					throw new CompilerException();
+				}
+			}
+		}
 		this.processedFunctions = ret;
+		
 		return ret;
 	}
 	

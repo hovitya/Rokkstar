@@ -38,6 +38,11 @@ public class Function implements Serializable{
 		this.isOverride = isOverride;
 	}
 	
+	/**
+	 * Test compatibility with given function.
+	 * @param func
+	 * @return
+	 */
 	public Boolean checkCompatibility(Function func){
 		if(func.parameters.size()!=this.parameters.size()) return false;
 		for (int i = 0; i < this.parameters.size(); i++) {
@@ -51,10 +56,27 @@ public class Function implements Serializable{
 				}
 			}
 		}
+		if(!this.scope.equals(func.scope)){
+			return false;
+		}
+		
+		if((func.isStatic && !this.isStatic) || (!func.isStatic && this.isStatic)){
+			return false;
+		}
+		
+		//Test return type
 		return true;
 	}
 	
+	protected String compiledPayload;
+	
+	/**
+	 * Returns the compiled function definition.
+	 * @param lib
+	 * @return
+	 */
 	protected String compilePayload(Library lib){
+		if(this.compiledPayload!=null) return this.compiledPayload;
 		//Get super
 		Type type = (Type) lib.lookUpItem(this.originalOwner);
 		
@@ -68,9 +90,16 @@ public class Function implements Serializable{
 			currentEnd = match.end();
 		}
 		output += this.payload.substring(currentEnd);
+		this.compiledPayload = output;
 		return output;
 	}
 	
+	/**
+	 * Returns compiled payload for the given class.
+	 * @param className
+	 * @param lib
+	 * @return
+	 */
 	public String getPayloadFor(String className, Library lib){
 		if(className.equals(this.originalOwner)){
 			return this.compilePayload(lib);

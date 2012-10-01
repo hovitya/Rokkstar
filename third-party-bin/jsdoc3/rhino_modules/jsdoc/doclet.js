@@ -265,15 +265,15 @@ exports.Doclet.prototype.augment = function(base) {
     this.augments.push(base);
 };
 
-exports.Doclet.prototype.implements = function(base) {
-    if (!this.implements) {
+exports.Doclet.prototype.implsFrom = function(base) {
+    if (!this.impls) {
         /**
          A list of symbols that are augmented by this one, if any.
          @type Array.<string>
          */
-        this.implements = [];
+        this.impls = [];
     }
-    this.implements.push(base);
+    this.impls.push(base);
 };
 
 /**

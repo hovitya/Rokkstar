@@ -10,9 +10,9 @@
 /**
  * @class
  * @classdesc
- * The VisualComponent class is the abstract base class for all display objects.
+ * The VisualComponent class is the base class for all display objects.
  * @author Viktor Horvath <a href="mailto:hovitya@gmail.com">hovitya@gmail.com</a>
- * @extends core.EventDispatcher
+ * @extends core.InteractiveObject
  * @version 1.0
  */
 core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Component', function () {

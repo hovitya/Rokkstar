@@ -11,6 +11,7 @@
  * @class
  * @classdesc
  * Super class for event handlers.
+ * @implements core.IEventDispatcher
  * @author Viktor Horvath <a href="mailto:hovitya@gmail.com">hovitya@gmail.com</a>
  * @version 1.0
  */
@@ -40,8 +41,6 @@ core.EventDispatcher = function () {
      * <code>
      *      myEventDispatcher.createEventListener('layoutChange',this.onLayoutChange,this);
      * </code>
-     * @see core.EventDispatcher#removeEventListener
-     * @see core.EventDispatcher#triggerEvent
      * @param {String} event Event name
      * @param {Function} listenerF Function to call
      * @param {Object} scope Scope for callback function
@@ -64,7 +63,6 @@ core.EventDispatcher = function () {
 
     /**
      * Alias for createEvent listener
-     * @see core.EventDispatcher#addEventListener
      * @param {String} event Event name
      * @param {Function} listenerF Function to call
      * @param {Object} scope Scope for callback function
@@ -181,6 +179,7 @@ core.EventDispatcher = function () {
             }
         }
     };
+
 
     /**
      * @description

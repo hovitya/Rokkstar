@@ -3,7 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /**
- * Create new Component instance
+ * @classdesc
+ * Super class for Rokkstar components.
  * @class
  * @author Horváth Viktor
  * @extends core.EventDispatcher
