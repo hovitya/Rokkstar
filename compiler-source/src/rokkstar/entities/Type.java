@@ -25,19 +25,21 @@ public class Type implements IPackageItem, IClassLike, Serializable{
 	public String description;
 	public Function construct;
 	public String access;
+	public String defproperty;
 	protected Boolean parsed = false;
 	
 	public Type(){
 		
 	}
 	
-	public Type(String name, String payload,String packageName,String superType,String description,String access) {
+	public Type(String name, String payload,String packageName,String superType,String description,String access,String defproperty) {
 		this.name = name;
 		this.payload = payload;
 		this.packageName=packageName;
 		this.superType = superType;
 		this.description = description;
 		this.access = access;
+		this.defproperty = defproperty;
 	}
 	
 	protected Type parsedSuperType;

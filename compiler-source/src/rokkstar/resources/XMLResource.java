@@ -22,7 +22,7 @@ public class XMLResource extends FileResource {
 
 	@Override
 	public IPackageItem toEntity() throws IOException {
-		return new Type(this.getName(),Tools.deserializeString(this),Tools.implode(this.packageHierarchy.toArray(), "."),"","","public");
+		return new Type(this.getName(),Tools.deserializeString(this),Tools.implode(this.packageHierarchy.toArray(), "."),"","","public","");
 	}
 
 }

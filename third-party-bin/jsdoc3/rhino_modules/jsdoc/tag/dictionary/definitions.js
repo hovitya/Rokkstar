@@ -184,6 +184,16 @@ exports.defineTags = function(dictionary) {
         }
     });
 
+    // ROKK: Add @defproperty tag
+    dictionary.defineTag('defproperty', {
+        mustHaveValue: true,
+        onTagText: function(text) {
+            return text;
+        },
+        onTagged: function(doclet, tag) {
+            doclet.defproperty = firstWordOf(tag.value);
+        }
+    });
 
     // that adds on to me
     dictionary.defineTag('borrows', {

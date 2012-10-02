@@ -111,7 +111,7 @@ public class JSResource extends FileResource {
 							Tools.deserializeString(this), Tools.implode(
 									this.packageHierarchy.toArray(), "."),
 							extend, jsData.getString("description"),
-							jsData.getString("access"));
+							jsData.getString("access"),jsData.getString("defproperty"));
 
 					this.parseType((Type) object, jsData, Compiler.getInstance().readFromWorkDir("current_source.r.js"));
 					// Parsing interfaces

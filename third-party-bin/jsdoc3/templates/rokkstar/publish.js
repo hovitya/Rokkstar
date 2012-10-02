@@ -169,6 +169,7 @@ function graft(parentNode, childNodes, parentLongname, parentName) {
                 'isInterface' : !!element.isInterface,
                 'access': element.access || 'public',
                 'virtual': !!element.virtual,
+                'defproperty': element.defproperty || '',
                 'fires': element.fires || '',
                 'constructor': {
                     'name': element.name,
