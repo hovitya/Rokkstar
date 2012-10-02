@@ -40,8 +40,8 @@ core.components.Application = function () {
     this.processId = -1;
 
     /**
-     * @public
      * Starts application.
+     * @public
      */
     this.start = function () {
         this.processId = setTimeout(this.callTick, Math.round(1000 / parseInt(this.fps, 10)));
@@ -59,7 +59,9 @@ core.components.Application = function () {
         this.processId = setTimeout(this.callTick, Math.round(1000.0 / parseFloat(this.fps, 10) - elapsed));
     };
 
-
+    /**
+     * @override
+     */
     this.tack = function () {
         if (this.componentInvalid) {
             //console.profile();
