@@ -1,8 +1,22 @@
+/* Rokkstar JavaScript Framework
+ *
+ * Copyright © 2012 Viktor Horvath
+ * Licensed under the MPL 2.0 license
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 /**
- * @augments core.layouts.Layout
- * @construct
+ * @class
+ * @component layout
+ * @classdesc
+ * Default layout. Elements can be aligned by x, y, width, height or left, right, top, bottom, width, height properties.
+ * @author Viktor Horvath <a href="mailto:hovitya@gmail.com">hovitya@gmail.com</a>
+ * @extends core.layouts.Layout
+ * @version 1.0
  */
-core.layouts.ConstraintLayout = Rokkstar.createClass('core.layouts.ConstraintLayout', 'core.layouts.Layout', function () {
+core.layouts.ConstraintLayout = function () {
     "use strict";
 
     /**
@@ -10,15 +24,15 @@ core.layouts.ConstraintLayout = Rokkstar.createClass('core.layouts.ConstraintLay
      * @param {core.VisualComponent} div Target component
      */
     this.doLayout = function (div) {
-        this.callSuper('doLayout', div);
+        this.superClass.doLayout(div);
         var layout = this,
             i = div.elements.length,
             containerWidth = parseInt(div.measuredWidth, 10),
             containerHeight = parseInt(div.measuredHeight, 10),
-            paddingLeft = parseInt(this.getPaddingLeft(), 10),
-            paddingRight = parseInt(this.getPaddingRight(), 10),
-            paddingTop = parseInt(this.getPaddingTop(), 10),
-            paddingBottom = parseInt(this.getPaddingBottom(), 10),
+            paddingLeft = parseInt(this.paddingLeft, 10),
+            paddingRight = parseInt(this.paddingRight, 10),
+            paddingTop = parseInt(this.paddingTop, 10),
+            paddingBottom = parseInt(this.paddingBottom, 10),
             position = new core.helpers.LayoutPosition(containerWidth, containerHeight, paddingLeft, paddingRight,
                 paddingTop, paddingBottom),
             element,
@@ -33,14 +47,14 @@ core.layouts.ConstraintLayout = Rokkstar.createClass('core.layouts.ConstraintLay
 
         while (--i >= 0) {
             element = div.elements[i];
-            left = element.getLeft();
-            right = element.getRight();
-            top = element.getTop();
-            bottom = element.getBottom();
-            x = element.getX();
-            y = element.getY();
-            width = element.getWidth();
-            height = element.getHeight();
+            left = element.left;
+            right = element.right;
+            top = element.top;
+            bottom = element.bottom;
+            x = element.x;
+            y = element.y;
+            width = element.width;
+            height = element.height;
             position.clear();
             if ((left === undefined || left === null || isNaN(left)) || (right === undefined || right === null || isNaN(right))) {
                 if (width !== undefined && width !== null) { position.width = layout.stringToPixel(width, containerWidth,
@@ -58,14 +72,14 @@ core.layouts.ConstraintLayout = Rokkstar.createClass('core.layouts.ConstraintLay
             if (top !== undefined && top !== null && !isNaN(top)) { position.top = top + paddingTop; }
             if (bottom !== undefined && bottom !== null && !isNaN(bottom)) { position.bottom = bottom + paddingBottom; }
 
-            position.minWidth = element.getMinWidth();
-            position.minHeight = element.getMinHeight();
-            position.maxWidth = element.getMaxWidth();
-            position.maxHeight = element.getMaxWidth();
+            position.minWidth = element.minWidth;
+            position.minHeight = element.minHeight;
+            position.maxWidth = element.maxWidth;
+            position.maxHeight = element.maxWidth;
 
             position.apply(element);
             element.measure(position.getPredictedWidth(), position.getPredictedHeight());
 
         }
     };
-});
+};

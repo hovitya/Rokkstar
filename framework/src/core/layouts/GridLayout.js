@@ -176,7 +176,7 @@ core.layouts.GridLayout = Rokkstar.createClass('core.layouts.GridLayout', 'core.
             verticallyPositioned = false;
             horizontallyPositioned = false;
 
-            //SECTION FROM ConstraintLayout.js
+            //SECTION FROM ConstraintLayout.r.js
             //Positioning inside grid area like a constraint layout
             //Modified with horizontally and vertically positioned flags
 

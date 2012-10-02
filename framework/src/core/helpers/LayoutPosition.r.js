@@ -1,10 +1,20 @@
+/* Rokkstar JavaScript Framework
+ *
+ * Copyright © 2012 Viktor Horvath
+ * Licensed under the MPL 2.0 license
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 /**
- * @constructor
- * @name core.helpers.LayoutPosition
- * @param parentWidth
- * @param parentHeight
+ * @class
+ * @classdesc
+ * Helper class for layout positioning.
+ * @author Viktor Horvath <a href="mailto:hovitya@gmail.com">hovitya@gmail.com</a>
+ * @version 1.0
  */
-core.helpers.LayoutPosition = Rokkstar.createClass('core.helpers.LayoutPosition', undefined, function () {
+core.helpers.LayoutPosition =  function () {
     "use strict";
 
     this.left = undefined;
@@ -146,4 +156,4 @@ core.helpers.LayoutPosition = Rokkstar.createClass('core.helpers.LayoutPosition'
         }
     };
 
-});
+};

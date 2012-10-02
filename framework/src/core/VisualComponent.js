@@ -15,7 +15,7 @@
  * @extends core.InteractiveObject
  * @version 1.0
  */
-core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Component', function () {
+core.VisualComponent = function () {
     "use strict";
 
     /**
@@ -511,11 +511,225 @@ core.VisualComponent = Rokkstar.createClass('core.VisualComponent', 'core.Compon
         }
     };
 
-}, [new Attr('currentState', undefined), new Attr('class'), new Attr('x', undefined, 'integer'), new Attr('y', undefined, 'integer'), new Attr('left', undefined, 'integer'), new Attr('right', undefined, 'integer'), new Attr('top', undefined, 'integer'), new Attr('bottom', undefined, 'integer'), new Attr('position', 'center', 'string'), new Attr('height', undefined, 'string'),
-    new Attr('width', undefined, "string"), new Attr('distance', 0, 'integer'), new Attr('distanceX', undefined, 'integer'), new Attr('distanceY', undefined, 'integer'), new Attr('matrix', undefined), new Attr('rotation', 0, 'float'), new Attr('scaleX', 1.0, 'float'), new Attr('scaleY', 1.0, 'float'), new Attr('skewX', 0, 'float'), new Attr('skewY', 0, 'float'), new Attr('translateX', 0, 'integer'), new Attr('translateY', 0, 'integer'), new Attr('alpha', 1.0, 'float'),
-    new Attr('visible', true, 'boolean'), new Attr('minWidth', NaN, 'integer'), new Attr('minHeight', NaN, 'integer'),
-    new Attr('maxWidth', NaN, 'integer'), new Attr('maxHeight', NaN, 'integer'), new Attr('gridColumn', 1, 'integer'),
-    new Attr('gridRow', 1, 'integer'), new Attr('gridColumnSpan', NaN, 'integer'),
-    new Attr('gridRowSpan', NaN, 'integer'), new Attr('gridVerticalAlign', 'left', 'string'),
-    new Attr('gridHorizontalAlign', 'top', 'string')]);
+    /**
+     * Current state
+     * @bindable
+     * @type {String}
+     */
+    this.currentState = undefined;
+
+    /**
+     * X position in pixels
+     * @bindable
+     * @type {Number}
+     */
+    this.x = undefined;
+
+    /**
+     * Y position in pixels
+     * @bindable
+     * @type {Number}
+     */
+    this.y = undefined;
+
+    /**
+     * Left position in pixels
+     * @bindable
+     * @type {Number}
+     */
+    this.left = undefined;
+
+    /**
+     * Right position in pixels
+     * @bindable
+     * @type {Number}
+     */
+    this.right = undefined;
+
+    /**
+     * Top position in pixels
+     * @bindable
+     * @type {Number}
+     */
+    this.left = undefined;
+
+    /**
+     * Bottom position in pixels
+     * @bindable
+     * @type {Number}
+     */
+    this.right = undefined;
+
+    /**
+     * Position in a border container. Default is center.
+     * Correct values are left,right,top,bottom,center.
+     * @bindable
+     * @type {String}
+     */
+    this.position = 'center';
+
+    /**
+     * Component height in pixel (120px) or percent (80%) representation or auto.
+     * @bindable
+     * @type {String}
+     */
+    this.height = undefined;
+
+    /**
+     * Component width in pixel (120px) or percent (80%) representation or auto.
+     * @bindable
+     * @type {String}
+     */
+    this.width = undefined;
+
+    /**
+     * Set both distanceX and distanceY value for parallax layout.
+     * @bindable
+     * @type {Number}
+     */
+    this.distance = 0;
+
+    /**
+     * Horizontal distance for parallax layout.
+     * @bindable
+     * @type {Number}
+     */
+    this.distanceX = 0;
+
+    /**
+     * Vertical distance for parallax layout.
+     * @bindable
+     * @type {Number}
+     */
+    this.distanceY = 0;
+
+    /**
+     * Current tansformation matrix
+     * @bindable
+     * @type {core.Matrix}
+     */
+    this.matrix = undefined;
+
+    /**
+     * Component rotation. Default is 0.0.
+     * @bindable
+     * @type {Number}
+     */
+    this.rotation = 0.0;
+
+    /**
+     * Horizontal scale
+     * @bindable
+     * @type {Number}
+     */
+    this.scaleX = 1.0;
+
+    /**
+     * Vertical scale
+     * @bindable
+     * @type {Number}
+     */
+    this.scaleY = 1.0;
+
+
+    /**
+     * Horizontal skew. Default is 0.
+     * @bindable
+     * @type {Number}
+     */
+    this.skewX = 0;
+
+    /**
+     * Vertical skew. Default is 0.
+     * @bindable
+     * @type {Number}
+     */
+    this.skewY = 0;
+
+    /**
+     * Translates component along x axis. It does not modify the layout.
+     * @bindable
+     * @type {Number}
+     */
+    this.translateX = 0;
+
+    /**
+     * Translates component along y axis. It does not modify the layout.
+     * @bindable
+     * @type {Number}
+     */
+    this.translateY = 0;
+
+    /**
+     * Sets component opacity. Default is 1.0.
+     * @bindable
+     * @type {Number}
+     */
+    this.alpha = 1.0;
+
+    /**
+     * Sets component visibility. Default is true.
+     * @bindable
+     * @type {Boolean}
+     */
+    this.visible = true;
+
+    /**
+     * Component minimum height in pixel.
+     * @bindable
+     * @type {Number}
+     */
+    this.minHeight = undefined;
+
+    /**
+     * Component minimum width in pixel.
+     * @bindable
+     * @type {Number}
+     */
+    this.minWidth = undefined;
+
+    /**
+     * Component maximum height in pixel.
+     * @bindable
+     * @type {Number}
+     */
+    this.maxHeight = undefined;
+
+    /**
+     * Component maximum width in pixel.
+     * @bindable
+     * @type {Number}
+     */
+    this.maxWidth = undefined;
+
+    /**
+     * Column number for grid layout. Default is 1.
+     * @bindable
+     * @type {Number}
+     */
+    this.gridColumn = 1;
+
+    /**
+     * Row number for grid layout. Default is 1.
+     * @bindable
+     * @type {Number}
+     */
+    this.gridRow = 1;
+
+    /**
+     * Column span for grid layout. Default is 1.
+     * @bindable
+     * @type {Number}
+     */
+    this.gridColumnSpan = 1;
+
+    /**
+     * Row span for grid layout. Default is 1.
+     * @bindable
+     * @type {Number}
+     */
+    this.gridRowSpan = 1;
+
+}; [ new Attr('gridVerticalAlign', 'left', 'string'),
+    new Attr('gridHorizontalAlign', 'top', 'string')];
 
