@@ -84,7 +84,7 @@ public class Function implements Serializable{
 		//Get super
 		Type type = (Type) lib.lookUpItem(this.originalOwner);
 		
-		Pattern reg = Pattern.compile("([A-Za-z0-9_]+)\\.superClass\\.([A-Za-z0-9_]+)\\(([^\\)]+)\\)");
+		Pattern reg = Pattern.compile("([A-Za-z0-9_]+)\\.superClass\\.([A-Za-z0-9_]+)\\(([^\\)]*)\\)");
 		Matcher match = reg.matcher(this.payload);
 		String output = "";
 		int currentEnd = 0;
