@@ -13,6 +13,7 @@
  * Base class for container type visual components. Supports layout managers.
  * @author Viktor Horvath <a href="mailto:hovitya@gmail.com">hovitya@gmail.com</a>
  * @extends core.VisualComponent
+ * @defproperty elements
  * @version 1.0
  */
 core.VisualContainer = function () {
@@ -150,7 +151,9 @@ core.VisualContainer = function () {
         this.triggerEvent('elementsPropertyChanged');
     };
 
-
+    /**
+     * @override
+     */
     this.init = function () {
         this.superClass.init();
         /*for (var i in this.xmlContentArray) {
@@ -177,7 +180,7 @@ core.VisualContainer = function () {
 
     this.refreshLayout = function () {
         if (this.layout === null || this.layout === undefined) {
-            this.___layout = this.createComponent('core.layouts.ConstraintLayout');
+            this.___layout = new core.layouts.ConstraintLayout();
         }
         //Storing original content dimensions
         var originalContentWidth = this.measuredContentWidth,
@@ -211,6 +214,7 @@ core.VisualContainer = function () {
     /**
      * Measures component and sets measuredWidth and measuredHeight properties. Invalidates layout if component size
      * changed.
+     * @override
      * @param {Number} predictedWidth
      * @param {Number} predictedHeight
      */
@@ -225,6 +229,7 @@ core.VisualContainer = function () {
     /**
      * Application call this function before every screen update.
      * @public
+     * @override
      */
     this.tack = function () {
         var i;
