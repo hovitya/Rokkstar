@@ -212,6 +212,9 @@ core.EventDispatcher = function () {
 
 
 
+    this.toString = function () {
+        return this.__staticType;
+    };
 
 
 };
