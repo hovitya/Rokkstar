@@ -57,12 +57,12 @@ core.VisualComponent = function () {
     };
 
 
-
-
+    /**
+     * @override
+     */
     this.init = function () {
         var i;
         if (this.domElement === null) { this.createDomElement(); }
-        this.superClass.init();
         this._buildDOM();
 
         //Registering event listeners
@@ -118,7 +118,13 @@ core.VisualComponent = function () {
      */
     this.measuredHeight = 0;
 
-
+    /**
+     * Measures component and sets measuredWidth and measuredHeight properties. Invalidates layout if component size
+     * changed.
+     * @override
+     * @param {Number} predictedWidth
+     * @param {Number} predictedHeight
+     */
     this.measure = function (predictedWidth, predictedHeight) {
         var mW = this.measuredWidth, mH = this.measuredHeight;
 
@@ -208,7 +214,6 @@ core.VisualComponent = function () {
     };
 
     /**
-     * @protected
      * @internal
      */
     this.tack = function () {
