@@ -317,14 +317,15 @@ public class JSResource extends FileResource {
 						JSONObject propDoc = props.getJSONObject(keys[i]
 								.toString());
 						types = Tools.extractType(propDoc, "type");
-						type.properties.add(new Property(keys[i].toString(),
+						type.addProperty(new Property(keys[i].toString(),
 								propDoc.getBoolean("static"), null, types,
 								propDoc.getString("access"), propDoc
-										.getString("description"),"null",propDoc.getBoolean("notNull"), propDoc.getBoolean("bindable")));
+										.getString("description"),"null",propDoc.getBoolean("notNull"), propDoc.getBoolean("bindable"), 
+										propDoc.getString("getter"),propDoc.getString("setter")));
 					} else {
 						types.add("*");
-						type.properties.add(new Property(keys[i].toString(),
-								false, null, types, "public", "","null",false,false));
+						type.addProperty(new Property(keys[i].toString(),
+								false, null, types, "public", "","null",false,false,"",""));
 					}
 				} else if (value instanceof ScriptableObject
 						&& ((ScriptableObject) value).getTypeOf().equals(
@@ -417,16 +418,17 @@ public class JSResource extends FileResource {
 							JSONObject propDoc = props.getJSONObject(keys[i]
 									.toString());
 							types = Tools.extractType(propDoc, "type");
-							type.properties.add(new Property(
+							type.addProperty(new Property(
 									keys[i].toString(), propDoc
 											.getBoolean("static"), null,
 									types, propDoc.getString("access"), propDoc
-											.getString("description"), "array", propDoc.getBoolean("notNull"), propDoc.getBoolean("bindable")));
+											.getString("description"), "array", propDoc.getBoolean("notNull"), propDoc.getBoolean("bindable"), 
+											propDoc.getString("getter"),propDoc.getString("setter")));
 						} else {
 							types.add("*");
-							type.properties.add(new Property(
+							type.addProperty(new Property(
 									keys[i].toString(), false, null, types,
-									"public", "", "array", false, false));
+									"public", "", "array", false, false, "", ""));
 						}
 					} else if (value instanceof NativeObject) {
 						if (!((NativeObject) value).isEmpty()) {
@@ -443,17 +445,18 @@ public class JSResource extends FileResource {
 							JSONObject propDoc = props.getJSONObject(keys[i]
 									.toString());
 							types = Tools.extractType(propDoc, "type");
-							type.properties.add(new Property(
+							type.addProperty(new Property(
 									keys[i].toString(), propDoc
 											.getBoolean("static"),
 									"", types, propDoc
 											.getString("access"), propDoc
-											.getString("description"),"object",propDoc.getBoolean("notNull"), propDoc.getBoolean("bindable")));
+											.getString("description"),"object",propDoc.getBoolean("notNull"), propDoc.getBoolean("bindable"), 
+											propDoc.getString("getter"),propDoc.getString("setter")));
 						} else {
 							types.add("*");
-							type.properties.add(new Property(
+							type.addProperty(new Property(
 									keys[i].toString(), false, "",
-									types, "public", "","object",false,false));
+									types, "public", "","object",false,false,"",""));
 						}
 					} else {
 						Output.WriteError(
@@ -494,14 +497,15 @@ public class JSResource extends FileResource {
 						JSONObject propDoc = props.getJSONObject(keys[i]
 								.toString());
 						types = Tools.extractType(propDoc, "type");
-						type.properties.add(new Property(keys[i].toString(),
+						type.addProperty(new Property(keys[i].toString(),
 								propDoc.getBoolean("static"), val, types,
 								propDoc.getString("access"), propDoc
-										.getString("description"),typ,propDoc.getBoolean("notNull"), propDoc.getBoolean("bindable")));
+										.getString("description"),typ,propDoc.getBoolean("notNull"), propDoc.getBoolean("bindable"), 
+										propDoc.getString("getter"),propDoc.getString("setter")));
 					} else {
 						types.add("*");
-						type.properties.add(new Property(keys[i].toString(),
-								false, val, types, "public", "", typ,false,false));
+						type.addProperty(new Property(keys[i].toString(),
+								false, val, types, "public", "", typ,false,false,"",""));
 					}
 				}
 			}

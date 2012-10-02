@@ -21,7 +21,7 @@ public class Type implements IPackageItem, IClassLike, Serializable{
 	public String superType;
 	public ArrayList<String> implementedInterfaces = new ArrayList<String>();
 	public ArrayList<Function> functions = new ArrayList<Function>();
-	public ArrayList<Property> properties = new ArrayList<Property>();
+	protected ArrayList<Property> properties = new ArrayList<Property>();
 	public String description;
 	public Function construct;
 	public String access;
@@ -215,9 +215,9 @@ public class Type implements IPackageItem, IClassLike, Serializable{
 		//Compiling properties
 		for(int i = 0; i < props.size(); i++){
 			if(props.get(i).isStatic){
-				stat += "Object.defineProperty("+this.getQualifiedName() + ",\"" + props.get(i).name + "\", " + props.get(i).getParsedValue() + ");\n"; 
+				stat += "Object.defineProperty("+this.getQualifiedName() + ",\"" + props.get(i).name + "\", " + props.get(i).getParsedValue(lib) + ");\n"; 
 			}else{
-				head += "Object.defineProperty(this,\"" + props.get(i).name + "\", " + props.get(i).getParsedValue() + ");\n"; 				
+				head += "Object.defineProperty(this,\"" + props.get(i).name + "\", " + props.get(i).getParsedValue(lib) + ");\n"; 				
 			}
 		}
 		
@@ -263,6 +263,24 @@ public class Type implements IPackageItem, IClassLike, Serializable{
 		func.originalOwner = this.getQualifiedName();
 		this.functions.add(func);
 	}
+	
 
+	public void addProperty(Property p) {
+		p.originalOwner = this.getQualifiedName();
+		this.properties.add(p);
+	}
+	
+	public ArrayList<Property> getProperties(){
+		return this.properties;
+	}
+
+	@Override
+	public Boolean hasFunction(String name, Library lib) throws CompilerException {
+		ArrayList<Function> funcs = this.getFunctions(lib);
+		for (int i = 0; i < funcs.size(); i++) {
+			if(name.equals(funcs.get(i).name)) return true;
+		}
+		return false;
+	}
 	
 }

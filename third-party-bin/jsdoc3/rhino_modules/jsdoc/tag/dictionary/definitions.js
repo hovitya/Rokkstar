@@ -162,6 +162,29 @@ exports.defineTags = function(dictionary) {
         }
     });
 
+    // ROKK: Add @getter tag
+    dictionary.defineTag('getter', {
+        mustHaveValue: true,
+        onTagText: function(text) {
+            return text;
+        },
+        onTagged: function(doclet, tag) {
+            doclet.getter = firstWordOf(tag.value);
+        }
+    });
+
+    // ROKK: Add @setter tag
+    dictionary.defineTag('setter', {
+        mustHaveValue: true,
+        onTagText: function(text) {
+            return text;
+        },
+        onTagged: function(doclet, tag) {
+            doclet.setter = firstWordOf(tag.value);
+        }
+    });
+
+
     // that adds on to me
     dictionary.defineTag('borrows', {
         mustHaveValue: true,

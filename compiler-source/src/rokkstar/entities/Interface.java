@@ -134,6 +134,15 @@ public class Interface implements IPackageItem, IClassLike{
 	public String parse(Library lib) throws CompilerException {
 		return this.getQualifiedName()+" = Object.create({},{__staticType:{value:'"+this.getQualifiedName()+"',writable:false,enumerable:false,configurable:false}});\n";
 	}
+
+	@Override
+	public Boolean hasFunction(String name, Library lib) {
+		ArrayList<Function> funcs = this.getFunctions(lib);
+		for (int i = 0; i < funcs.size(); i++) {
+			if(name.equals(funcs.get(i).name)) return true;
+		}
+		return false;
+	}
 	
 	
 }

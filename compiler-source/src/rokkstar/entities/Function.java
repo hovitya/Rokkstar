@@ -38,6 +38,10 @@ public class Function implements Serializable{
 		this.isOverride = isOverride;
 	}
 	
+	public IClassLike getOriginalOwner(Library lib){
+		return (IClassLike) lib.lookUpItem(this.originalOwner);
+	}
+	
 	/**
 	 * Test compatibility with given function.
 	 * @param func

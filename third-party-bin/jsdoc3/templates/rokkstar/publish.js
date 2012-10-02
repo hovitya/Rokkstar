@@ -103,7 +103,9 @@ function graft(parentNode, childNodes, parentLongname, parentName) {
                 'type': element.type? (element.type.length === 1? element.type[0] : element.type) : '',
                 'static': !!element.static,
                 'notNull': !!element.notNull,
-                'bindable': !!element.bindable
+                'bindable': !!element.bindable,
+                'getter': element.getter || '',
+                'setter': element.setter || ''
             };
         }
         
