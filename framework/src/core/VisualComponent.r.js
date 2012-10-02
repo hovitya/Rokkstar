@@ -62,7 +62,7 @@ core.VisualComponent = function () {
     this.init = function () {
         var i;
         if (this.domElement === null) { this.createDomElement(); }
-        this.callSuper('init');
+        this.superClass.init();
         this._buildDOM();
 
         //Registering event listeners
@@ -191,7 +191,7 @@ core.VisualComponent = function () {
     this.commitProperties = function () {
         if (this._matrixInvalid) {
             this._matrixInvalid = false;
-            this.domElement.style[Modernizr.prefixed('transform')] = this.getMatrix().toString();
+            this.domElement.style[Modernizr.prefixed('transform')] = this.matrix.toString();
         }
         if (this._styleInvalid) {
             this._styleInvalid = false;
@@ -199,7 +199,7 @@ core.VisualComponent = function () {
         }
         if (this._visibilityInvalid) {
             this._visibilityInvalid = false;
-            if (this.getVisible()) {
+            if (this.visible) {
                 this.domElement.style.display = 'block';
             } else {
                 this.domElement.style.display = 'none';
@@ -303,9 +303,6 @@ core.VisualComponent = function () {
         if (this.parent !== null) { this.parent.invalidateLayout(); }
     };
 
-    this.classChanged = function (event) {
-        this.domElement.className = this.getClass();
-    };
 
     /**
      * Grid change handler
@@ -336,7 +333,7 @@ core.VisualComponent = function () {
                 if (this._runningTransitions.hasOwnProperty(i)) { this._runningTransitions[i].interrupt(); }
             }
             event.stopPropagation();
-            if (this.states[this.getCurrentState()] !== undefined) {
+            if (this.states[this.currentState] !== undefined) {
                 from = event.oldValue;
                 to = event.newValue;
                 i = this.transitions.length;
@@ -344,7 +341,7 @@ core.VisualComponent = function () {
 
                 //Searching for applicable transition
                 while (i--) {
-                    if ((this.transitions[i].getFrom() === from || this.transitions[i].getFrom() === '*') && (this.transitions[i].getTo() === to || this.transitions[i].getTo() === '*')) {
+                    if ((this.transitions[i].from === from || this.transitions[i].from === '*') && (this.transitions[i].to === to || this.transitions[i].to === '*')) {
                         trans = this.transitions[i];
                         i = 0;
                     }
@@ -387,7 +384,7 @@ core.VisualComponent = function () {
     };
 
     this._commitStyle = function () {
-        this.domElement.style.opacity = this.getAlpha();
+        this.domElement.style.opacity = this.alpha;
     };
 
     this._matrixInvalid = false;
@@ -400,11 +397,11 @@ core.VisualComponent = function () {
 
     this._createMatrix = function () {
         var m = new core.Matrix();
-        m.translate(this.getTranslateX(), this.getTranslateY());
-        m.shear(this.getSkewX() / 100.0, this.getSkewY() / 100.0);
-        m.scale(this.getScaleX(), this.getScaleY());
-        m.rotate(this.getRotation());
-        this.setMatrix(m);
+        m.translate(this.translateX, this.translateY);
+        m.shear(this.skewX / 100.0, this.skewY / 100.0);
+        m.scale(this.scaleX, this.scaleY);
+        m.rotate(this.rotation);
+        this.matrix = m;
     };
 
     this._visibilityInvalid = false;
@@ -571,6 +568,8 @@ core.VisualComponent = function () {
     /**
      * Component height in pixel (120px) or percent (80%) representation or auto.
      * @bindable
+     * @setter setHeight
+     * @getter getHeight
      * @type {String}
      */
     this.height = undefined;
@@ -578,6 +577,8 @@ core.VisualComponent = function () {
     /**
      * Component width in pixel (120px) or percent (80%) representation or auto.
      * @bindable
+     * @setter setWidth
+     * @getter getWidth
      * @type {String}
      */
     this.width = undefined;
@@ -719,6 +720,7 @@ core.VisualComponent = function () {
     /**
      * Column span for grid layout. Default is 1.
      * @bindable
+     * @getter getGridColumnSpan
      * @type {Number}
      */
     this.gridColumnSpan = 1;
@@ -726,10 +728,28 @@ core.VisualComponent = function () {
     /**
      * Row span for grid layout. Default is 1.
      * @bindable
+     * @getter getGridRowSpan
      * @type {Number}
      */
     this.gridRowSpan = 1;
 
-}; [ new Attr('gridVerticalAlign', 'left', 'string'),
-    new Attr('gridHorizontalAlign', 'top', 'string')];
+    /**
+     * Verical align in a grid column. Default is left.
+     * Correct values are left,right,center.
+     * @bindable
+     * @getter getGridVerticalAlign
+     * @type {String}
+     */
+    this.gridVerticalAlign = 'left';
+
+    /**
+     * Horizontal align in a grid column. Default is top.
+     * Correct values are top,bottom,middle.
+     * @bindable
+     * @getter getGridHorizontalAlign
+     * @type {String}
+     */
+    this.gridHorizontalAlign = 'top';
+
+};
 

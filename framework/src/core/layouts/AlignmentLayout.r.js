@@ -41,7 +41,9 @@ core.layouts.AlignmentLayout =  function () {
      */
     this.gap = 0;
 
-
+    /**
+     * @override
+     */
     this.init = function () {
         this.superClass.init();
         this.createEventListener('gapPropertyChanged', this.selfRefreshLayout, this);

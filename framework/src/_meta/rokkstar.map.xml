@@ -31,5 +31,6 @@
     <package name="core.components">
     	<component>DataGroup</component>
     	<component>ItemRenderer</component>
+        <component>Application</component>
     </package>
 </packageMap>

@@ -46,7 +46,9 @@ core.layouts.Layout = function () {
      * @type {Number}
      */
     this.paddingBottom = 0;
-
+    /**
+     * @override
+     */
     this.init = function () {
         this.superClass.init();
         //this.createEventListener('paddingLeftPropertyChanged',this.);
@@ -72,7 +74,7 @@ core.layouts.Layout = function () {
 
     /**
      * Applies layout to given div.
-     * @param {core.VisualContainer} div The layout object applies layout format to this div.
+     * @param {core.VisualComponent} div Target component
      */
     this.doLayout = function (div) {
         this.lastDiv = div;

@@ -12,6 +12,7 @@
  * @component layout
  * @classdesc
  * Default layout. Elements can be aligned by x, y, width, height or left, right, top, bottom, width, height properties.
+ * @override
  * @author Viktor Horvath <a href="mailto:hovitya@gmail.com">hovitya@gmail.com</a>
  * @extends core.layouts.Layout
  * @version 1.0
@@ -20,7 +21,7 @@ core.layouts.ConstraintLayout = function () {
     "use strict";
 
     /**
-     *
+     * @override
      * @param {core.VisualComponent} div Target component
      */
     this.doLayout = function (div) {
