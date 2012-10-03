@@ -13,6 +13,7 @@
  * Base class for container type visual components. Supports layout managers.
  * @author Viktor Horvath <a href="mailto:hovitya@gmail.com">hovitya@gmail.com</a>
  * @extends core.VisualComponent
+ * @implements core.IContainer
  * @defproperty elements
  * @version 1.0
  */
@@ -44,17 +45,19 @@ core.VisualContainer = function () {
      * Holds elements
      * @public
      * @bindable
-     * @type {core.layouts.Layout}
+     * @type {Array}
      */
     this.elements = [];
 
-
+    /**
+     * @return {Number}
+     */
     this.getElementsNum = function () {
         return this.elements.length;
     };
 
     /**
-     *
+     * Returns the element at the given index.
      * @param position
      * @return {core.VisualComponent}
      */
@@ -62,10 +65,19 @@ core.VisualContainer = function () {
         return this.elements[position];
     };
 
+    /**
+     * Determines element index.
+     * @param {core.VisualComponent} element
+     * @return {Number}
+     */
     this.getElementIndex = function (element) {
         return this.elements.indexOf(element);
     };
 
+    /**
+     * Removes given element.
+     * @param {core.VisualComponent} element
+     */
     this.removeElement = function (element) {
         if (this.getElementIndex(element) !== -1) {
             if (this.domElement === element.domElement.parentNode) {
@@ -79,6 +91,10 @@ core.VisualContainer = function () {
         }
     };
 
+    /**
+     * Removes the element at the given index.
+     * @param {Number} position
+     */
     this.removeElementAt = function (position) {
         if (position >= 0 && position <= this.elements.length) {
             if (this.domElement === this.elements[position].domElement.parentNode) {
@@ -92,6 +108,9 @@ core.VisualContainer = function () {
         }
     };
 
+    /**
+     * Removes all elements.
+     */
     this.removeAllElements = function () {
         var i;
         for (i in this.elements) {
@@ -105,7 +124,10 @@ core.VisualContainer = function () {
         this.triggerEvent('elementsPropertyChanged');
     };
 
-
+    /**
+     * Adds element.
+     * @param {core.VisualComponent} element
+     */
     this.addElement = function (element) {
         if (this.elements.indexOf(element) === -1) {
             if (element.parent !== null) {
@@ -125,6 +147,11 @@ core.VisualContainer = function () {
         this.triggerEvent('elementsPropertyChanged');
     };
 
+    /**
+     * Push element into the given position.
+     * @param {core.VisualComponent} element
+     * @param {Number} position
+     */
     this.addElementAt = function (element, position) {
         if (this.elements.indexOf(element) === -1) {
             if (element.parent !== null && element.parent !== undefined) {
