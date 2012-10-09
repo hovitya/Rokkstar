@@ -10,16 +10,20 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mozilla.javascript.BaseFunction;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.NativeArray;
-import org.mozilla.javascript.NativeObject;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
+
+import com.google.javascript.jscomp.parsing.Config.LanguageMode;
+import com.google.javascript.jscomp.parsing.ParserRunner;
+import com.google.javascript.rhino.Node;
+import com.google.javascript.rhino.head.ErrorReporter;
+import com.google.javascript.rhino.jstype.StaticSourceFile;
+
 
 import exceptions.CompilerException;
 
@@ -35,7 +39,7 @@ import rokkstar.entities.Property;
 import rokkstar.entities.Type;
 import rokkstar.exceptions.JSDocException;
 
-public class JSResource extends FileResource {
+public class JSResource extends FileResource implements StaticSourceFile{
 
 	/**
 	 * 
@@ -45,9 +49,26 @@ public class JSResource extends FileResource {
 	public JSResource(String arg0) {
 		super(arg0);
 	}
-
+	
 	@Override
 	public IPackageItem toEntity() throws IOException, JSDocException,
+	CompilerException {
+		//Building AST 
+		Node root = ParserRunner.parse(this, Tools.deserializeString(this), ParserRunner.createConfig(true, LanguageMode.ECMASCRIPT3, false, this.createAnnotations()),Output.getInstance(), Logger.global);
+		this.visit(root);
+		
+		return null;
+	}
+	
+	protected void visit(Node node){
+		for (Node child : node.children()) {
+			System.out.println(child.toString());
+			this.visit(child);
+		}
+	}
+
+	
+	public IPackageItem toEntity2() throws IOException, JSDocException,
 			CompilerException {
 		System.out.print(this.getQualifiedClassName() + ": ");
 		File cache = Compiler.getInstance().readFromWorkDir(
@@ -160,7 +181,8 @@ public class JSResource extends FileResource {
 	}
 	
 	protected void parseInterface(Interface iface, JSONObject rokkDoc, File file) throws JSONException{
-		Context cx = Context.enter();
+		
+		/*Context cx = Context.enter();
 		Scriptable scope = cx.initStandardObjects();
 		cx.setLanguageVersion(Context.VERSION_1_2);
 		@SuppressWarnings("unused")
@@ -269,14 +291,14 @@ public class JSResource extends FileResource {
 			} else {
 				Output.WriteWarning("Interfaces can contain only function definitions. "+this.getQualifiedClassName()+"#"+keys[i].toString() + "is not a function. Declaration omitted.", this.getPath(), 0);
 			}
-		}
+		}*/
 	}
 
 	protected void parseType(Type type, JSONObject rokkDoc, File file)
 			throws JSONException, CompilerException {
 		// Creates and enters a Context. The Context stores information
 		// about the execution environment of a script.
-		Context cx = Context.enter();
+		/*Context cx = Context.enter();
 		// try {
 		// Initialize the standard objects (Object, Function, etc.)
 		// This must be done before scripts can be executed. Returns
@@ -519,7 +541,38 @@ public class JSResource extends FileResource {
 		// }
 		// Exit from the context.
 		Context.exit();
+		 */
+	}
+	
+	protected Set<String> createAnnotations(){
+		Set<String> ret = new HashSet<String>();
+		ret.add("interface");
+		ret.add("class");
+		return ret;
+	}
 
+	@Override
+	public int getColumnOfOffset(int arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getLineOfOffset(int arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getLineOffset(int arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isExtern() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
